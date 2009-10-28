@@ -24,6 +24,8 @@ namespace Task1 {
 	public:
 		Form1(void)
 		{
+      
+      InitializeOpenFileDialog();
 			InitializeComponent();
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
@@ -41,6 +43,10 @@ namespace Task1 {
 				delete components;
 			}
 		}
+  private: 
+    System::Windows::Forms::Button^  btOpen;
+    System::Windows::Forms::OpenFileDialog^ OpenFileDialog1;
+  protected: 
 
 	private:
 		/// <summary>
@@ -55,13 +61,47 @@ namespace Task1 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"Form1";
-			this->Padding = System::Windows::Forms::Padding(0);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-		}
+      this->btOpen = (gcnew System::Windows::Forms::Button());
+      this->SuspendLayout();
+      // 
+      // btOpen
+      // 
+      this->btOpen->Location = System::Drawing::Point(7, 5);
+      this->btOpen->Name = L"btOpen";
+      this->btOpen->Size = System::Drawing::Size(130, 29);
+      this->btOpen->TabIndex = 0;
+      this->btOpen->Text = L"Open Audio";
+      this->btOpen->UseVisualStyleBackColor = true;
+      this->btOpen->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
+      // 
+      // Form1
+      // 
+      this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+      this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+      this->ClientSize = System::Drawing::Size(292, 266);
+      this->Controls->Add(this->btOpen);
+      this->Name = L"Form1";
+      this->Text = L"MP3 Tagger";
+      this->ResumeLayout(false);
+
+    }
 #pragma endregion
-	};
+    void InitializeOpenFileDialog()
+    {
+       this->OpenFileDialog1 = gcnew System::Windows::Forms::OpenFileDialog;
+       
+       // Set the file dialog to filter for mp3 files.
+       this->OpenFileDialog1->Filter = "MP3 Audio (*.MP3)|*.MP3";
+       
+       // Allow the user to select one audio.
+       this->OpenFileDialog1->Multiselect = false;
+       this->OpenFileDialog1->Title = "My MP3 Browser";
+    }
+
+
+  private: System::Void btOpen_Click(System::Object^  sender, System::EventArgs^  e) {
+    OpenFileDialog1->ShowDialog();
+           }
+  };
 }
 
