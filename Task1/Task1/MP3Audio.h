@@ -3,7 +3,7 @@
 class MP3Audio
 {
 private:
-  const char* file_name;
+  const char* filename;
   const char* title;
   const char* interpret;
   const char* album;
@@ -12,6 +12,17 @@ private:
   
 
 public:
-  MP3Audio(void);
-  ~MP3Audio(void);
+  MP3Audio(const char* pfilename, 
+    const char* ptitle, 
+    const char* pinterpret, 
+    const char* palbum,
+    const char* pgenre): 
+      filename(pfilename), 
+      title(ptitle),
+      interpret(pinterpret), 
+      album(palbum),
+      genre(pgenre) {};
+  ~MP3Audio(void) {};
+
+  static MP3Audio* read(const char* file);
 };
