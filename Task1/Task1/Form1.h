@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdio.h>
+#include "MP3Audio.h"
+#include <vector>
 
 namespace Task1 {
 
@@ -25,7 +28,6 @@ namespace Task1 {
 		Form1(void)
 		{
       
-      InitializeOpenFileDialog();
 			InitializeComponent();
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
@@ -45,7 +47,8 @@ namespace Task1 {
 		}
   private: 
     System::Windows::Forms::Button^  btOpen;
-    System::Windows::Forms::OpenFileDialog^ OpenFileDialog1;
+    std::vector<MP3Audio*> openedAudio;
+  private: System::Windows::Forms::ListBox^  listBox1;
   protected: 
 
 	private:
@@ -62,6 +65,7 @@ namespace Task1 {
 		void InitializeComponent(void)
 		{
       this->btOpen = (gcnew System::Windows::Forms::Button());
+      this->listBox1 = (gcnew System::Windows::Forms::ListBox());
       this->SuspendLayout();
       // 
       // btOpen
@@ -74,11 +78,20 @@ namespace Task1 {
       this->btOpen->UseVisualStyleBackColor = true;
       this->btOpen->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
       // 
+      // listBox1
+      // 
+      this->listBox1->FormattingEnabled = true;
+      this->listBox1->Location = System::Drawing::Point(7, 41);
+      this->listBox1->Name = L"listBox1";
+      this->listBox1->Size = System::Drawing::Size(272, 212);
+      this->listBox1->TabIndex = 1;
+      // 
       // Form1
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
       this->ClientSize = System::Drawing::Size(292, 266);
+      this->Controls->Add(this->listBox1);
       this->Controls->Add(this->btOpen);
       this->Name = L"Form1";
       this->Text = L"MP3 Tagger";
@@ -86,54 +99,34 @@ namespace Task1 {
 
     }
 #pragma endregion
-    void InitializeOpenFileDialog()
-    {
-       this->OpenFileDialog1 = gcnew System::Windows::Forms::OpenFileDialog;
-       
-       // Set the file dialog to filter for mp3 files.
-       this->OpenFileDialog1->Filter = "MP3 Audio (*.MP3)|*.MP3";
-       
-       // Allow the user to select one audio.
-       this->OpenFileDialog1->Multiselect = true;
-       this->OpenFileDialog1->Title = "My MP3 Browser";
-    }
 
 
-    // This method handles the FileOK event.  It opens each file 
-    // selected and loads the audio from a stream into PictureBox1.
-    void OpenFileDialog1_FileOk( Object^ sender,
-       System::ComponentModel::CancelEventArgs^ e )
-    {
-        printf("hallo");
-       this->Activate();
-       array<String^>^ files = OpenFileDialog1->FileNames;
-       
-       // Open each file and display the image in PictureBox1.
-       // Call Application.DoEvents to force a repaint after each
-       // file is read.        
-       for each ( String^ file in files )
-       {
-          System::IO::FileInfo^ fileInfo = gcnew System::IO::FileInfo( file );
-          System::IO::FileStream^ fileStream = fileInfo->OpenRead();
-          //PictureBox1->Image = System::Drawing::Image::FromStream( fileStream );
 
-          MessageBox::Show("btAddItem wurde geklickt!", "Event",  
-             MessageBoxButtons::OK, MessageBoxIcon::Information );
+   System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
+   {
+      // Displays an OpenFileDialog so the user can select a Cursor.
+      OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
+      openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
+      openFileDialog1->Title = "Select a MP3 Audio";
 
-          Application::DoEvents();
-          fileStream->Close();
-          
-          // Call Sleep so the picture is briefly displayed, 
-          //which will create a slide-show effect.
-          System::Threading::Thread::Sleep( 2000 );
-       }
-       //PictureBox1->Image = nullptr;
+      // Show the Dialog.
+      // If the user clicked OK in the dialog and
+      // a .mp3 file was selected, open it.
+      if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+      {
+        //TODO here we could also ask for a directory and get the list of files from directory
 
-    }
+        String^ filename = openFileDialog1->FileName;
+        System::IO::StreamReader^ sr = gcnew System::IO::StreamReader(filename);
+        sr->ReadToEnd();
 
-  private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
-    OpenFileDialog1->ShowDialog();
-  }
+        MP3Audio* mp3audio = MP3Audio::read(filename->ToCharArray());
+
+        MessageBox::Show(filename);
+        sr->Close();
+      }
+   }
+
   };
 }
 
