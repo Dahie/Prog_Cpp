@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include "Utils.h"
 #include "MP3Audio.h"
 #include <vector>
 
@@ -47,7 +48,7 @@ namespace Task1 {
 		}
   private: 
     System::Windows::Forms::Button^  btOpen;
-    std::vector<MP3Audio*> openedAudio;
+    //std::vector<MP3Audio*> openedAudio;
   private: System::Windows::Forms::ListBox^  listBox1;
   protected: 
 
@@ -95,6 +96,7 @@ namespace Task1 {
       this->Controls->Add(this->btOpen);
       this->Name = L"Form1";
       this->Text = L"MP3 Tagger";
+      this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
       this->ResumeLayout(false);
 
     }
@@ -117,16 +119,18 @@ namespace Task1 {
         //TODO here we could also ask for a directory and get the list of files from directory
 
         String^ filename = openFileDialog1->FileName;
-        System::IO::StreamReader^ sr = gcnew System::IO::StreamReader(filename);
-        sr->ReadToEnd();
-
-        MP3Audio* mp3audio = MP3Audio::read(filename->ToCharArray());
+        std::string target = "target"; 
+        MarshalString(filename, target);
+        MP3Audio* mp3audio = MP3Audio::read(target);
+        if(mp3audio == 0) 
+          MessageBox::Show("error");
 
         MessageBox::Show(filename);
-        sr->Close();
       }
    }
 
-  };
+  private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
+           }
+};
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class MP3Audio
 {
 private:
@@ -24,5 +26,5 @@ public:
       genre(pgenre) {};
   ~MP3Audio(void) {};
 
-  static MP3Audio* read(const char* file);
+  static MP3Audio* read(std::string& file);
 };
