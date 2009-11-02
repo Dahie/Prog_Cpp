@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "Form1.h"
-   #include <id3/tag.h>
 
 
 using namespace Task1;
