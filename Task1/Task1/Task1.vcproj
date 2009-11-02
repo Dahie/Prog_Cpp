@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3\include&quot;"
+				AdditionalIncludeDirectories="&quot;D:\studies\Master\Semester3\ProgrammingSS2009\exercises\U1\Projekte\Task1\id3lib\id3lib-3.8.3\include&quot;;&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;ID3LIB_LINKOPTION=1"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -62,7 +62,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="id3lib.lib $(NOINHERIT)"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3binaries\Release&quot;;&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3binaries\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;D:\studies\Master\Semester3\ProgrammingSS2009\exercises\U1\Projekte\Task1\id3lib\id3lib-3.8.3binaries\Debug&quot;;&quot;D:\studies\Master\Semester3\ProgrammingSS2009\exercises\U1\Projekte\Task1\id3lib\id3lib-3.8.3binaries\Release&quot;;&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3binaries\Release&quot;;&quot;C:\Documents and Settings\dahie\My Documents\Visual Studio 2008\Projects\Task1\id3lib\id3lib-3.8.3binaries\Debug&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="2"
