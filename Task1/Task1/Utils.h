@@ -21,6 +21,7 @@ void MarshalString ( String ^ s, wstring& os ) {
    Marshal::FreeHGlobal(IntPtr((void*)chars));
 }
 
+
 //int main() {
 //   string a = "test";
 //   wstring b = L"test2";
