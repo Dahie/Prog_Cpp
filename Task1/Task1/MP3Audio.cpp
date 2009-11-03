@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "MP3Audio.h"
 #include <id3/tag.h>
+#include <id3/misc_support.h>
 #include <iostream>
 #include <sstream>
 
@@ -102,7 +103,23 @@ MP3Audio* MP3Audio::read(std::string& file){
   //comment
   //genre
   const char* pgenre = "";
+
+  const ID3_Tag* ptag = &tag;
+  size_t genreEnum = ID3_GetGenreNum(ptag);
+
+  if(genreEnum <=ID3_NR_OF_V1_GENRES){
+	pgenre = ID3_V1GENRE2DESCRIPTION(genreEnum);
+  }else{
+	//genreNumber is too large
+	  pgenre = "";
+  }
+  
+
+
+
+
   const char* pfilename = "";
+  //only the last end of Filename
   
   //MP3Audio* mp3 =   new MP3Audio(pfilename, ptitle, pinterpret, palbum, pgenre); //temporäres Objekt
  
