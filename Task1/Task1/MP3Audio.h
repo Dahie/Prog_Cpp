@@ -5,19 +5,19 @@
 class MP3Audio
 {
 private:
-  const char* filename;
+	std::string filename;
   std::string title;
-  const char* interpret;
-  const char* album;
-  const char* genre;
+  std::string interpret;
+  std::string album;
+  std::string genre;
 
   
 
 public:
   MP3Audio(const char* pfilename, 
 	  const char* ptitle, 
-    const char* pinterpret, 
-    const char* palbum,
+	  std::string pinterpret, 
+	  std::string palbum,
     const char* pgenre): 
       filename(pfilename), 
       title(ptitle),
@@ -28,6 +28,8 @@ public:
 
   static MP3Audio* read(std::string& file);
   
-  inline std::string getTitle() const { return this->title; }
+  inline const char* getTitle() const { return this->title.c_str(); }
+  inline const char* getAlbum() const { return this->album.c_str(); }
+   inline const char* getArtist() const { return this->interpret.c_str(); }
 
 };
