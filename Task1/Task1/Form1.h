@@ -125,11 +125,13 @@ namespace Task1 {
 		MP3Audio* mp3audio = MP3Audio::read(target);
         if(mp3audio == 0) 
           MessageBox::Show("error");
-		
-		std::string p1 = mp3audio->getTitle();
-		
-		String^ title = gcnew String(p1.c_str());
+				
+		String^ title = gcnew String(mp3audio->getTitle());
 		MessageBox::Show(title);
+		String^ album = gcnew String(mp3audio->getAlbum());
+		MessageBox::Show(album);
+		String^ artist = gcnew String(mp3audio->getArtist());
+		MessageBox::Show(artist);
       }
    }
 
