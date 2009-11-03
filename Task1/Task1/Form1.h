@@ -120,12 +120,16 @@ namespace Task1 {
 
         String^ filename = openFileDialog1->FileName;
         std::string target = "target"; 
-        MarshalString(filename, target);
-        MP3Audio* mp3audio = MP3Audio::read(target);
+       MarshalString(filename, target);
+		
+		MP3Audio* mp3audio = MP3Audio::read(target);
         if(mp3audio == 0) 
           MessageBox::Show("error");
-
-        MessageBox::Show(filename);
+		
+		std::string p1 = mp3audio->getTitle();
+		
+		String^ title = gcnew String(p1.c_str());
+		MessageBox::Show(title);
       }
    }
 

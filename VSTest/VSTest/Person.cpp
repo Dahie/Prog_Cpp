@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Person.h"
 
-CPerson::CPerson(void)
+CPerson::CPerson(void):mAge(0) , mName("")
 {
 }
 
