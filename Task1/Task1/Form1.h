@@ -132,6 +132,8 @@ namespace Task1 {
 		MessageBox::Show(album);
 		String^ artist = gcnew String(mp3audio->getArtist());
 		MessageBox::Show(artist);
+		String^ genre = gcnew String(mp3audio->getGenre());
+		MessageBox::Show(genre);
       }
    }
 

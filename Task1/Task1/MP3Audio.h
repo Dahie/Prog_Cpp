@@ -31,5 +31,6 @@ public:
   inline const char* getTitle() const { return this->title.c_str(); }
   inline const char* getAlbum() const { return this->album.c_str(); }
    inline const char* getArtist() const { return this->interpret.c_str(); }
+   inline const char* getGenre() const { return this->genre.c_str(); }
 
 };
