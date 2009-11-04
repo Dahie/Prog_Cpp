@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace MP3{
+
 class MP3Audio
 {
 private:
@@ -57,3 +59,4 @@ public:
    
 
 };
+}

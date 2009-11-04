@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "Utils.h"
 #include "MP3Audio.h"
-#include <vector>
+#include <list>
 
 namespace Task1 {
 
@@ -13,6 +13,7 @@ namespace Task1 {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace MP3;
 
 	/// <summary>
 	/// Zusammenfassung für Form1
@@ -48,11 +49,8 @@ namespace Task1 {
 		}
   private: 
     System::Windows::Forms::Button^  btOpen;
-    //std::vector<MP3Audio*> openedAudio;
-  private: System::Windows::Forms::ListBox^  listBox1;
-  protected: 
-
-	private:
+	//std::vector<MP3Audio*> openedAudio;
+	System::Windows::Forms::ListBox^  listBox1;
 		/// <summary>
 		/// Erforderliche Designervariable.
 		/// </summary>
@@ -111,21 +109,30 @@ namespace Task1 {
       openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
       openFileDialog1->Title = "Select a MP3 Audio";
 
+	   //Displays an OpenFolderDialog
+	  //FolderBrowserDialog^ openFolder = gcnew FolderBrowserDialog();
+
       // Show the Dialog.
       // If the user clicked OK in the dialog and
       // a .mp3 file was selected, open it.
-      if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-      {
-        //TODO here we could also ask for a directory and get the list of files from directory
+      if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
+        
+		  //TODO here we could also ask for a directory and get the list of files from directory
+		  //if (openFolder->ShowDialog() == System::Windows::Forms::DialogResult::OK){
+		  //openFolder->SelectedPath;
+
 
         String^ filename = openFileDialog1->FileName;
         std::string target = "target"; 
-       MarshalString(filename, target);
+		MarshalString(filename, target);
 		
 		MP3Audio* mp3audio = MP3Audio::read(target);
 
         if(mp3audio == 0) 
           MessageBox::Show("error");
+
+		std::list<MP3Audio*> tracks;
+		tracks.push_back(mp3audio);
 				
 		String^ title = gcnew String(mp3audio->getTitle());
 		MessageBox::Show(title);
