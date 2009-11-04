@@ -2,6 +2,8 @@
 #include "MP3Audio.h"
 #include "ID3Utils.h"
 
+using namespace MP3;
+
 MP3Audio* MP3Audio::read(std::string& file){
 
   // TODO check if file is an mp3

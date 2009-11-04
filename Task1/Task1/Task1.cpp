@@ -6,6 +6,7 @@
 
 using namespace Task1;
 
+
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
 {
@@ -15,5 +16,7 @@ int main(array<System::String ^> ^args)
 
 	// Hauptfenster erstellen und ausführen
 	Application::Run(gcnew Form1());
+	
+
 	return 0;
 }
