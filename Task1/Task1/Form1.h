@@ -123,6 +123,7 @@ namespace Task1 {
        MarshalString(filename, target);
 		
 		MP3Audio* mp3audio = MP3Audio::read(target);
+
         if(mp3audio == 0) 
           MessageBox::Show("error");
 				
@@ -134,6 +135,18 @@ namespace Task1 {
 		MessageBox::Show(artist);
 		String^ genre = gcnew String(mp3audio->getGenre());
 		MessageBox::Show(genre);
+		String^ name = gcnew String(mp3audio->getFileName());
+		MessageBox::Show(name);
+		String^ path = gcnew String(mp3audio->getFilePath());
+		MessageBox::Show(path);
+		String^ year = gcnew String(mp3audio->getYear());
+		MessageBox::Show(year);
+		String^ trackNum = gcnew String(mp3audio->getTrackNum());
+		MessageBox::Show(trackNum);
+		String^ size = gcnew String(mp3audio->getFileSize().ToString());
+		MessageBox::Show(size);
+
+		delete mp3audio;
       }
    }
 
