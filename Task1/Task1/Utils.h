@@ -37,7 +37,6 @@ std::wstring s2ws(const std::string& s)
     return r;
 }
 
-
 //scan for files in an directory
 void scanDir(const std::string& rDirName){
 	HANDLE finfo;
