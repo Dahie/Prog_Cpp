@@ -4,12 +4,12 @@
 
 using namespace MP3;
 
-MP3Audio* MP3Audio::read(std::string& file){
+CMP3Audio* CMP3Audio::read(std::string& file){
 
   // TODO check if file is an mp3
 
   //get a ID3Tag object
-  ID3Utils utils(file);
+  CID3Utils utils(file);
 
   //title - ID3FID_TITLE
   std::string sTitle = "";
@@ -55,6 +55,6 @@ MP3Audio* MP3Audio::read(std::string& file){
 
   
 
-  return new MP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM);
+  return new CMP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM);
 
 }

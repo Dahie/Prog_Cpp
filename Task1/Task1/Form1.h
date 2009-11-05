@@ -79,6 +79,8 @@ namespace Task1 {
 	private: System::Windows::Forms::TextBox^  tbBitrate;
 	private: System::Windows::Forms::Label^  lbBitrate;
 	private: System::Windows::Forms::Label^  lbLBTracks;
+	private: System::Windows::Forms::Button^  btClear;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -117,13 +119,14 @@ namespace Task1 {
 			this->tbBitrate = (gcnew System::Windows::Forms::TextBox());
 			this->lbBitrate = (gcnew System::Windows::Forms::Label());
 			this->lbLBTracks = (gcnew System::Windows::Forms::Label());
+			this->btClear = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// btOpen
 			// 
 			this->btOpen->Location = System::Drawing::Point(7, 5);
 			this->btOpen->Name = L"btOpen";
-			this->btOpen->Size = System::Drawing::Size(130, 29);
+			this->btOpen->Size = System::Drawing::Size(93, 29);
 			this->btOpen->TabIndex = 0;
 			this->btOpen->Text = L"Open Audio";
 			this->btOpen->UseVisualStyleBackColor = true;
@@ -135,7 +138,7 @@ namespace Task1 {
 			this->lbTracks->Location = System::Drawing::Point(7, 56);
 			this->lbTracks->Name = L"lbTracks";
 			this->lbTracks->Size = System::Drawing::Size(373, 199);
-			this->lbTracks->TabIndex = 1;
+			this->lbTracks->TabIndex = 24;
 			this->lbTracks->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::selectTrack_Click);
 			// 
 			// tbTitle
@@ -340,11 +343,22 @@ namespace Task1 {
 			this->lbLBTracks->Text = L"Tracks";
 			this->lbLBTracks->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
+			// btClear
+			// 
+			this->btClear->Location = System::Drawing::Point(277, 5);
+			this->btClear->Name = L"btClear";
+			this->btClear->Size = System::Drawing::Size(103, 29);
+			this->btClear->TabIndex = 1;
+			this->btClear->Text = L"ClearList";
+			this->btClear->UseVisualStyleBackColor = true;
+			this->btClear->Click += gcnew System::EventHandler(this, &Form1::btClear_Click);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(622, 471);
+			this->Controls->Add(this->btClear);
 			this->Controls->Add(this->lbLBTracks);
 			this->Controls->Add(this->lbBitrate);
 			this->Controls->Add(this->tbBitrate);
@@ -398,10 +412,7 @@ namespace Task1 {
 		  //if (openFolder->ShowDialog() == System::Windows::Forms::DialogResult::OK){
 		  //openFolder->SelectedPath;
 		
-		//clear all lists and GUI fields
-		this->tracks->clearTracks();
-		this->lbTracks->Items->Clear();
-		this->clearMP3Infos();
+		
 		
 
 		///////////////////////////////////////////////////////
@@ -410,16 +421,24 @@ namespace Task1 {
 		std::string target = "target"; 
 		MarshalString(filename, target);
 		
-		MP3Audio* mp3audio = MP3Audio::read(target);
+		CMP3Audio* mp3audio = CMP3Audio::read(target);
 
         if(mp3audio == 0) 
           MessageBox::Show("error");
+		
+		if(!this->tracks->isInCollection(mp3audio)){
 
-		this->tracks->addTrack(mp3audio);
+			this->tracks->addTrack(mp3audio);
+			String^ name = gcnew String(mp3audio->getFileName());
+			lbTracks->Items->Add(name);
+			lbTracks->SelectedIndex = (lbTracks->Items->Count-1);
 
-		String^ name = gcnew String(mp3audio->getFileName());
-		lbTracks->Items->Add(name);
-		lbTracks->SelectedIndex = 0;
+		}else{
+
+			MessageBox::Show("mp3-File already exists");
+		}
+
+		
 
 		//delete mp3audio; //only if MP3Audio objects are store in tracks 
       }
@@ -460,8 +479,8 @@ private: System::Void showMP3Infos(const std::string& filename) {
 			//TODO
 			this->tbBitrate->Text = "";
 			
-			String^ path = gcnew String(this->tracks->getTrack(filename)->getFilePath());
-			MessageBox::Show("Path: " + path);
+			/*String^ path = gcnew String(this->tracks->getTrack(filename)->getFilePath());
+			MessageBox::Show("Path: " + path);*/
 				
 		}
 
@@ -479,6 +498,15 @@ private: System::Void showMP3Infos(const std::string& filename) {
 		this->tbBitrate->Text = "";
 		  
 		  }
+private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		//clear all lists and GUI fields
+		this->tracks->clearTracks();
+		this->lbTracks->Items->Clear();
+		this->clearMP3Infos();
+
+
+		 }
 };
 }
 
