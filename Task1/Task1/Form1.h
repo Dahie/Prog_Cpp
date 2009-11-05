@@ -424,8 +424,8 @@ namespace Task1 {
 		
 		CMP3Audio* mp3audio = CMP3Audio::read(target);
 
-        if(mp3audio == 0) 
-          MessageBox::Show("error");
+        if(!mp3audio) 
+			MessageBox::Show("error: no memory access...");
 		
 		if(!this->tracks->isInCollection(mp3audio)){
 
