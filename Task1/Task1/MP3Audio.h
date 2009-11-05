@@ -17,6 +17,8 @@ private:
 	double fileSize;
 	std::string trackNum;
 	std::string filepath;
+	std::string comment;
+	std::string bpm;
 	
 
   
@@ -31,7 +33,9 @@ public:
 	const char* pGenre,
 	double dFileSize,
 	std::string sTrackNum,
-	const char* pFilename): 
+	const char* pFilename,
+	std::string sComment,
+	std::string sBPM): 
       filepath(pFilePath), 
       title(sTitle),
       interpret(sInterpret), 
@@ -40,7 +44,9 @@ public:
       genre(pGenre) ,
 	  fileSize(dFileSize),
 	  trackNum(sTrackNum),
-	  filename(pFilename){};
+	  filename(pFilename),
+	  comment(sComment),
+	  bpm(sBPM){};
   ~MP3Audio(void) {};
 
   static MP3Audio* read(std::string& file);
@@ -54,6 +60,8 @@ public:
   inline double getFileSize() const { return this->fileSize; }
   inline const char* getTrackNum() const { return this->trackNum.c_str(); }
   inline const char* getFilePath() const { return this->filepath.c_str(); }
+  inline const char* getComment() const { return this->comment.c_str(); }
+  inline const char* getBPM() const { return this->bpm.c_str(); }
    
  
    

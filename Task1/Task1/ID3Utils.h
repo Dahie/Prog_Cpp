@@ -26,9 +26,8 @@ public:
 	static const char* getFileName( const char* pszFileName );
 	//int getBitrate(void) const;
 	double getFileSize(void) const;
-
-	//void getComment(std::string& sValue) const;
-	//void getBPM(std::string& sValue) const;
+	void getComment(std::string& sValue) const;
+	void getBPM(std::string& sValue) const;
 	bool hasV1Tag(void) const;
 	bool hasV2Tag(void) const;
 

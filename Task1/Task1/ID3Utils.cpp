@@ -96,6 +96,14 @@ void ID3Utils::getTrackNumber(std::string& sVal ) const {
 	getFrameText( ID3FID_TRACKNUM, sVal );
 }
 
+void ID3Utils::getComment(std::string& sVal ) const {
+	getFrameText( ID3FID_COMMENT, sVal );
+}
+
+void ID3Utils::getBPM(std::string& sVal ) const {
+	getFrameText( ID3FID_BPM, sVal );
+}
+
 void ID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) const{
 
 	const_cast<ID3Utils*>(this)->readTag();

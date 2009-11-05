@@ -9,7 +9,7 @@ CPerson::~CPerson(void)
 {
 }
 
-CPerson::CPerson( const char* pName, int pAge) {
+CPerson::CPerson( const char* pName, int mAge) {
   mName = pName;
   mAge = mAge;
 }
