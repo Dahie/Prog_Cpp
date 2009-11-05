@@ -22,13 +22,13 @@ namespace VSTest {
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
-  private:
+	 private:
     CPerson* pers;
 	public:
 		Form1(void)
 		{
 			InitializeComponent();
-			pers = new CPerson("Peter", 33);
+			pers = new CPerson("Peter", 2);
 		}
 
 	protected:

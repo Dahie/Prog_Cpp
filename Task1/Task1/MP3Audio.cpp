@@ -43,10 +43,18 @@ MP3Audio* MP3Audio::read(std::string& file){
   //filesize in MegaByte
   double dFileSize = utils.getFileSize();
   
-  //Bitrate
   //comment - ID3FID_COMMENT
-  //BPM - ID3FID_BPM
+  std::string sComment = "";
+  utils.getComment(sComment);
 
-  return new MP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename);
+  //BPM - ID3FID_BPM
+  std::string sBPM = "";
+  utils.getBPM(sBPM);
+
+   //Bitrate
+
+  
+
+  return new MP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM);
 
 }

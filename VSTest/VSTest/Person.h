@@ -8,7 +8,7 @@ class CPerson
 public:
   CPerson(void);
   ~CPerson(void);
-  CPerson( const char* pName, int pAge);
+  CPerson( const char* pName, int mAge);
 
   const char* getName() const;
   int getAge() const;

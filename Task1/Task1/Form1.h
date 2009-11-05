@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "Utils.h"
 #include "MP3Audio.h"
+#include "Tracks.h"
 #include <list>
 
 namespace Task1 {
@@ -26,6 +27,10 @@ namespace Task1 {
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
+
+	private:
+		CTracks* tracks;
+
 	public:
 		Form1(void)
 		{
@@ -34,6 +39,7 @@ namespace Task1 {
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
 			//
+			tracks = new CTracks();
 		}
 
 	protected:
@@ -47,14 +53,39 @@ namespace Task1 {
 				delete components;
 			}
 		}
-  private: 
-    System::Windows::Forms::Button^  btOpen;
-	//std::vector<MP3Audio*> openedAudio;
-	System::Windows::Forms::ListBox^  listBox1;
+	private: System::Windows::Forms::Button^  btOpen;
+	private: System::Windows::Forms::ListBox^  lbTracks;
+	private: System::Windows::Forms::TextBox^  tbTitle;
+	private: System::Windows::Forms::Label^  lbTitle;
+	private: System::Windows::Forms::TextBox^  tbAlbum;
+	private: System::Windows::Forms::Label^  lbAlbum;
+	private: System::Windows::Forms::TextBox^  tbArtist;
+	private: System::Windows::Forms::Label^  lbArtist;
+	private: System::Windows::Forms::TextBox^  tbYear;
+	private: System::Windows::Forms::Label^  lbYear;
+	private: System::Windows::Forms::TextBox^  tbTrackNum;
+	private: System::Windows::Forms::Label^  lbTrackNum;
+	private: System::Windows::Forms::TextBox^  tbGenre;
+	private: System::Windows::Forms::Label^  lbGenre;
+
+	private: System::Windows::Forms::Label^  lbSize;
+	private: System::Windows::Forms::TextBox^  tbComment;
+	private: System::Windows::Forms::Label^  lbComment;
+	private: System::Windows::Forms::TextBox^  tbBPM;
+	private: System::Windows::Forms::Label^  lbBPM;
+
+
+	private: System::Windows::Forms::TextBox^  tbSize;
+	private: System::Windows::Forms::TextBox^  tbBitrate;
+	private: System::Windows::Forms::Label^  lbBitrate;
+	private: System::Windows::Forms::Label^  lbLBTracks;
+
+	private: System::ComponentModel::IContainer^  components;
+
 		/// <summary>
 		/// Erforderliche Designervariable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -63,41 +94,287 @@ namespace Task1 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-      this->btOpen = (gcnew System::Windows::Forms::Button());
-      this->listBox1 = (gcnew System::Windows::Forms::ListBox());
-      this->SuspendLayout();
-      // 
-      // btOpen
-      // 
-      this->btOpen->Location = System::Drawing::Point(7, 5);
-      this->btOpen->Name = L"btOpen";
-      this->btOpen->Size = System::Drawing::Size(130, 29);
-      this->btOpen->TabIndex = 0;
-      this->btOpen->Text = L"Open Audio";
-      this->btOpen->UseVisualStyleBackColor = true;
-      this->btOpen->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
-      // 
-      // listBox1
-      // 
-      this->listBox1->FormattingEnabled = true;
-      this->listBox1->Location = System::Drawing::Point(7, 41);
-      this->listBox1->Name = L"listBox1";
-      this->listBox1->Size = System::Drawing::Size(272, 212);
-      this->listBox1->TabIndex = 1;
-      // 
-      // Form1
-      // 
-      this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-      this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-      this->ClientSize = System::Drawing::Size(292, 266);
-      this->Controls->Add(this->listBox1);
-      this->Controls->Add(this->btOpen);
-      this->Name = L"Form1";
-      this->Text = L"MP3 Tagger";
-      this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
-      this->ResumeLayout(false);
+			this->btOpen = (gcnew System::Windows::Forms::Button());
+			this->lbTracks = (gcnew System::Windows::Forms::ListBox());
+			this->tbTitle = (gcnew System::Windows::Forms::TextBox());
+			this->lbTitle = (gcnew System::Windows::Forms::Label());
+			this->tbAlbum = (gcnew System::Windows::Forms::TextBox());
+			this->lbAlbum = (gcnew System::Windows::Forms::Label());
+			this->tbArtist = (gcnew System::Windows::Forms::TextBox());
+			this->lbArtist = (gcnew System::Windows::Forms::Label());
+			this->tbYear = (gcnew System::Windows::Forms::TextBox());
+			this->lbYear = (gcnew System::Windows::Forms::Label());
+			this->tbTrackNum = (gcnew System::Windows::Forms::TextBox());
+			this->lbTrackNum = (gcnew System::Windows::Forms::Label());
+			this->tbGenre = (gcnew System::Windows::Forms::TextBox());
+			this->lbGenre = (gcnew System::Windows::Forms::Label());
+			this->lbSize = (gcnew System::Windows::Forms::Label());
+			this->tbComment = (gcnew System::Windows::Forms::TextBox());
+			this->lbComment = (gcnew System::Windows::Forms::Label());
+			this->tbBPM = (gcnew System::Windows::Forms::TextBox());
+			this->lbBPM = (gcnew System::Windows::Forms::Label());
+			this->tbSize = (gcnew System::Windows::Forms::TextBox());
+			this->tbBitrate = (gcnew System::Windows::Forms::TextBox());
+			this->lbBitrate = (gcnew System::Windows::Forms::Label());
+			this->lbLBTracks = (gcnew System::Windows::Forms::Label());
+			this->SuspendLayout();
+			// 
+			// btOpen
+			// 
+			this->btOpen->Location = System::Drawing::Point(7, 5);
+			this->btOpen->Name = L"btOpen";
+			this->btOpen->Size = System::Drawing::Size(130, 29);
+			this->btOpen->TabIndex = 0;
+			this->btOpen->Text = L"Open Audio";
+			this->btOpen->UseVisualStyleBackColor = true;
+			this->btOpen->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
+			// 
+			// lbTracks
+			// 
+			this->lbTracks->FormattingEnabled = true;
+			this->lbTracks->Location = System::Drawing::Point(7, 56);
+			this->lbTracks->Name = L"lbTracks";
+			this->lbTracks->Size = System::Drawing::Size(373, 199);
+			this->lbTracks->TabIndex = 1;
+			this->lbTracks->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::selectTrack_Click);
+			// 
+			// tbTitle
+			// 
+			this->tbTitle->Location = System::Drawing::Point(86, 264);
+			this->tbTitle->Name = L"tbTitle";
+			this->tbTitle->ReadOnly = true;
+			this->tbTitle->Size = System::Drawing::Size(294, 20);
+			this->tbTitle->TabIndex = 2;
+			this->tbTitle->WordWrap = false;
+			// 
+			// lbTitle
+			// 
+			this->lbTitle->AutoSize = true;
+			this->lbTitle->Location = System::Drawing::Point(12, 267);
+			this->lbTitle->Name = L"lbTitle";
+			this->lbTitle->Size = System::Drawing::Size(27, 13);
+			this->lbTitle->TabIndex = 3;
+			this->lbTitle->Text = L"Title";
+			this->lbTitle->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbAlbum
+			// 
+			this->tbAlbum->Location = System::Drawing::Point(86, 290);
+			this->tbAlbum->Name = L"tbAlbum";
+			this->tbAlbum->ReadOnly = true;
+			this->tbAlbum->Size = System::Drawing::Size(294, 20);
+			this->tbAlbum->TabIndex = 4;
+			this->tbAlbum->WordWrap = false;
+			// 
+			// lbAlbum
+			// 
+			this->lbAlbum->AutoSize = true;
+			this->lbAlbum->Location = System::Drawing::Point(12, 293);
+			this->lbAlbum->Name = L"lbAlbum";
+			this->lbAlbum->Size = System::Drawing::Size(36, 13);
+			this->lbAlbum->TabIndex = 5;
+			this->lbAlbum->Text = L"Album";
+			this->lbAlbum->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbArtist
+			// 
+			this->tbArtist->Location = System::Drawing::Point(86, 316);
+			this->tbArtist->Name = L"tbArtist";
+			this->tbArtist->ReadOnly = true;
+			this->tbArtist->Size = System::Drawing::Size(294, 20);
+			this->tbArtist->TabIndex = 6;
+			this->tbArtist->WordWrap = false;
+			// 
+			// lbArtist
+			// 
+			this->lbArtist->AutoSize = true;
+			this->lbArtist->Location = System::Drawing::Point(12, 319);
+			this->lbArtist->Name = L"lbArtist";
+			this->lbArtist->Size = System::Drawing::Size(46, 13);
+			this->lbArtist->TabIndex = 7;
+			this->lbArtist->Text = L"Interpret";
+			this->lbArtist->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbYear
+			// 
+			this->tbYear->Location = System::Drawing::Point(86, 342);
+			this->tbYear->Name = L"tbYear";
+			this->tbYear->ReadOnly = true;
+			this->tbYear->Size = System::Drawing::Size(51, 20);
+			this->tbYear->TabIndex = 8;
+			this->tbYear->WordWrap = false;
+			// 
+			// lbYear
+			// 
+			this->lbYear->AutoSize = true;
+			this->lbYear->Location = System::Drawing::Point(12, 345);
+			this->lbYear->Name = L"lbYear";
+			this->lbYear->Size = System::Drawing::Size(29, 13);
+			this->lbYear->TabIndex = 9;
+			this->lbYear->Text = L"Year";
+			this->lbYear->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbTrackNum
+			// 
+			this->tbTrackNum->Location = System::Drawing::Point(329, 342);
+			this->tbTrackNum->Name = L"tbTrackNum";
+			this->tbTrackNum->ReadOnly = true;
+			this->tbTrackNum->Size = System::Drawing::Size(51, 20);
+			this->tbTrackNum->TabIndex = 10;
+			this->tbTrackNum->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->tbTrackNum->WordWrap = false;
+			// 
+			// lbTrackNum
+			// 
+			this->lbTrackNum->AutoSize = true;
+			this->lbTrackNum->Location = System::Drawing::Point(274, 345);
+			this->lbTrackNum->Name = L"lbTrackNum";
+			this->lbTrackNum->Size = System::Drawing::Size(49, 13);
+			this->lbTrackNum->TabIndex = 11;
+			this->lbTrackNum->Text = L"TrackNo";
+			this->lbTrackNum->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbGenre
+			// 
+			this->tbGenre->Location = System::Drawing::Point(86, 366);
+			this->tbGenre->Name = L"tbGenre";
+			this->tbGenre->ReadOnly = true;
+			this->tbGenre->Size = System::Drawing::Size(294, 20);
+			this->tbGenre->TabIndex = 12;
+			this->tbGenre->WordWrap = false;
+			// 
+			// lbGenre
+			// 
+			this->lbGenre->AutoSize = true;
+			this->lbGenre->Location = System::Drawing::Point(12, 369);
+			this->lbGenre->Name = L"lbGenre";
+			this->lbGenre->Size = System::Drawing::Size(36, 13);
+			this->lbGenre->TabIndex = 13;
+			this->lbGenre->Text = L"Genre";
+			this->lbGenre->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// lbSize
+			// 
+			this->lbSize->AutoSize = true;
+			this->lbSize->Location = System::Drawing::Point(266, 421);
+			this->lbSize->Name = L"lbSize";
+			this->lbSize->Size = System::Drawing::Size(57, 13);
+			this->lbSize->TabIndex = 15;
+			this->lbSize->Text = L"Size in MB";
+			this->lbSize->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbComment
+			// 
+			this->tbComment->Location = System::Drawing::Point(86, 392);
+			this->tbComment->Name = L"tbComment";
+			this->tbComment->ReadOnly = true;
+			this->tbComment->Size = System::Drawing::Size(294, 20);
+			this->tbComment->TabIndex = 16;
+			this->tbComment->WordWrap = false;
+			// 
+			// lbComment
+			// 
+			this->lbComment->AutoSize = true;
+			this->lbComment->Location = System::Drawing::Point(12, 395);
+			this->lbComment->Name = L"lbComment";
+			this->lbComment->Size = System::Drawing::Size(51, 13);
+			this->lbComment->TabIndex = 17;
+			this->lbComment->Text = L"Comment";
+			this->lbComment->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbBPM
+			// 
+			this->tbBPM->Location = System::Drawing::Point(86, 418);
+			this->tbBPM->Name = L"tbBPM";
+			this->tbBPM->ReadOnly = true;
+			this->tbBPM->Size = System::Drawing::Size(103, 20);
+			this->tbBPM->TabIndex = 18;
+			this->tbBPM->WordWrap = false;
+			// 
+			// lbBPM
+			// 
+			this->lbBPM->AutoSize = true;
+			this->lbBPM->Location = System::Drawing::Point(12, 421);
+			this->lbBPM->Name = L"lbBPM";
+			this->lbBPM->Size = System::Drawing::Size(30, 13);
+			this->lbBPM->TabIndex = 19;
+			this->lbBPM->Text = L"BPM";
+			this->lbBPM->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// tbSize
+			// 
+			this->tbSize->Location = System::Drawing::Point(329, 418);
+			this->tbSize->Name = L"tbSize";
+			this->tbSize->ReadOnly = true;
+			this->tbSize->Size = System::Drawing::Size(51, 20);
+			this->tbSize->TabIndex = 20;
+			this->tbSize->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->tbSize->WordWrap = false;
+			// 
+			// tbBitrate
+			// 
+			this->tbBitrate->Location = System::Drawing::Point(86, 444);
+			this->tbBitrate->Name = L"tbBitrate";
+			this->tbBitrate->ReadOnly = true;
+			this->tbBitrate->Size = System::Drawing::Size(103, 20);
+			this->tbBitrate->TabIndex = 21;
+			this->tbBitrate->WordWrap = false;
+			// 
+			// lbBitrate
+			// 
+			this->lbBitrate->AutoSize = true;
+			this->lbBitrate->Location = System::Drawing::Point(12, 447);
+			this->lbBitrate->Name = L"lbBitrate";
+			this->lbBitrate->Size = System::Drawing::Size(37, 13);
+			this->lbBitrate->TabIndex = 22;
+			this->lbBitrate->Text = L"Bitrate";
+			this->lbBitrate->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// lbLBTracks
+			// 
+			this->lbLBTracks->AutoSize = true;
+			this->lbLBTracks->Location = System::Drawing::Point(12, 40);
+			this->lbLBTracks->Name = L"lbLBTracks";
+			this->lbLBTracks->Size = System::Drawing::Size(40, 13);
+			this->lbLBTracks->TabIndex = 23;
+			this->lbLBTracks->Text = L"Tracks";
+			this->lbLBTracks->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// Form1
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->ClientSize = System::Drawing::Size(622, 471);
+			this->Controls->Add(this->lbLBTracks);
+			this->Controls->Add(this->lbBitrate);
+			this->Controls->Add(this->tbBitrate);
+			this->Controls->Add(this->tbSize);
+			this->Controls->Add(this->lbBPM);
+			this->Controls->Add(this->tbBPM);
+			this->Controls->Add(this->lbComment);
+			this->Controls->Add(this->tbComment);
+			this->Controls->Add(this->lbSize);
+			this->Controls->Add(this->lbGenre);
+			this->Controls->Add(this->tbGenre);
+			this->Controls->Add(this->lbTrackNum);
+			this->Controls->Add(this->tbTrackNum);
+			this->Controls->Add(this->lbYear);
+			this->Controls->Add(this->tbYear);
+			this->Controls->Add(this->lbArtist);
+			this->Controls->Add(this->tbArtist);
+			this->Controls->Add(this->lbAlbum);
+			this->Controls->Add(this->tbAlbum);
+			this->Controls->Add(this->lbTitle);
+			this->Controls->Add(this->tbTitle);
+			this->Controls->Add(this->lbTracks);
+			this->Controls->Add(this->btOpen);
+			this->Name = L"Form1";
+			this->Text = L"MP3 Tagger";
+			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
+			this->ResumeLayout(false);
+			this->PerformLayout();
 
-    }
+		}
 #pragma endregion
 
 
@@ -120,10 +397,17 @@ namespace Task1 {
 		  //TODO here we could also ask for a directory and get the list of files from directory
 		  //if (openFolder->ShowDialog() == System::Windows::Forms::DialogResult::OK){
 		  //openFolder->SelectedPath;
+		
+		//clear all lists and GUI fields
+		this->tracks->clearTracks();
+		this->lbTracks->Items->Clear();
+		this->clearMP3Infos();
+		
 
-
+		///////////////////////////////////////////////////////
         String^ filename = openFileDialog1->FileName;
-        std::string target = "target"; 
+        //convert filename into std::string
+		std::string target = "target"; 
 		MarshalString(filename, target);
 		
 		MP3Audio* mp3audio = MP3Audio::read(target);
@@ -131,34 +415,70 @@ namespace Task1 {
         if(mp3audio == 0) 
           MessageBox::Show("error");
 
-		std::list<MP3Audio*> tracks;
-		tracks.push_back(mp3audio);
-				
-		String^ title = gcnew String(mp3audio->getTitle());
-		MessageBox::Show(title);
-		String^ album = gcnew String(mp3audio->getAlbum());
-		MessageBox::Show(album);
-		String^ artist = gcnew String(mp3audio->getArtist());
-		MessageBox::Show(artist);
-		String^ genre = gcnew String(mp3audio->getGenre());
-		MessageBox::Show(genre);
-		String^ name = gcnew String(mp3audio->getFileName());
-		MessageBox::Show(name);
-		String^ path = gcnew String(mp3audio->getFilePath());
-		MessageBox::Show(path);
-		String^ year = gcnew String(mp3audio->getYear());
-		MessageBox::Show(year);
-		String^ trackNum = gcnew String(mp3audio->getTrackNum());
-		MessageBox::Show(trackNum);
-		String^ size = gcnew String(mp3audio->getFileSize().ToString());
-		MessageBox::Show(size);
+		this->tracks->addTrack(mp3audio);
 
-		delete mp3audio;
+		String^ name = gcnew String(mp3audio->getFileName());
+		lbTracks->Items->Add(name);
+		lbTracks->SelectedIndex = 0;
+
+		//delete mp3audio; //only if MP3Audio objects are store in tracks 
       }
    }
 
   private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
+
+		
+
            }
+
+private: System::Void selectTrack_Click(System::Object^  sender, System::EventArgs^  e) {
+		 
+			 if(lbTracks->SelectedIndex != -1){
+
+			String^ curItem = lbTracks->SelectedItem->ToString();
+
+			std::string filename ="";
+			MarshalString(curItem, filename);
+
+			//show MP3-Information to this track
+			this->showMP3Infos(filename);
+		
+		}
+		 }
+
+private: System::Void showMP3Infos(const std::string& filename) {
+			 
+			this->tbTitle->Text = gcnew String(this->tracks->getTrack(filename)->getTitle());
+			this->tbAlbum->Text = gcnew String(this->tracks->getTrack(filename)->getAlbum());
+			this->tbArtist->Text = gcnew String(this->tracks->getTrack(filename)->getArtist());
+			this->tbYear->Text = gcnew String(this->tracks->getTrack(filename)->getYear());
+			this->tbTrackNum->Text = gcnew String(this->tracks->getTrack(filename)->getTrackNum());
+			this->tbGenre->Text = gcnew String(this->tracks->getTrack(filename)->getGenre());
+			this->tbComment->Text = gcnew String(this->tracks->getTrack(filename)->getComment());
+			this->tbBPM->Text = gcnew String(this->tracks->getTrack(filename)->getBPM());
+			this->tbSize->Text = gcnew String(this->tracks->getTrack(filename)->getFileSize().ToString());
+			//TODO
+			this->tbBitrate->Text = "";
+			
+			String^ path = gcnew String(this->tracks->getTrack(filename)->getFilePath());
+			MessageBox::Show("Path: " + path);
+				
+		}
+
+ private: System::Void clearMP3Infos() {
+
+		this->tbTitle->Text = "";
+		this->tbAlbum->Text = "";
+		this->tbArtist->Text = "";
+		this->tbYear->Text = "";
+		this->tbTrackNum->Text = "";
+		this->tbGenre->Text = "";
+		this->tbComment->Text = "";
+		this->tbBPM->Text = "";
+		this->tbSize->Text = "";
+		this->tbBitrate->Text = "";
+		  
+		  }
 };
 }
 

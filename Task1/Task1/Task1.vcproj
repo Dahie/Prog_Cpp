@@ -234,6 +234,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Tracks.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Utils.cpp"
 				>
 			</File>
@@ -267,6 +271,10 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracks.h"
 				>
 			</File>
 			<File
