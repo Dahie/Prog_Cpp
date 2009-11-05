@@ -26,7 +26,7 @@ public:
 	const char* getGenre(void) const;
 	const char* getFilePathName( void ) const;
 	static const char* getFileName( const char* pszFileName );
-	//int getBitrate(void) const;
+	int getBitrate(void) const;
 	double getFileSize(void) const;
 	void getComment(std::string& sValue) const;
 	void getBPM(std::string& sValue) const;

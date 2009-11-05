@@ -78,6 +78,14 @@ double CID3Utils::getFileSize(void) const{
 
 }
 
+int CID3Utils::getBitrate(void) const{
+
+	const_cast<CID3Utils*>(this)->readTag();
+	const Mp3_Headerinfo* pHeader = my_pTag->GetMp3HeaderInfo();
+
+	return (pHeader != NULL ? pHeader->bitrate : 0)/1000;
+}
+
 void CID3Utils::getTitle( std::string& sVal ) const {
 	getFrameText( ID3FID_TITLE, sVal );
 }

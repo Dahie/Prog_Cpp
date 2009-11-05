@@ -19,6 +19,7 @@ private:
 	std::string filepath;
 	std::string comment;
 	std::string bpm;
+	int bitrate;
 	
 
   
@@ -35,7 +36,8 @@ public:
 	std::string sTrackNum,
 	const char* pFilename,
 	std::string sComment,
-	std::string sBPM): 
+	std::string sBPM,
+	int iBitrate): 
       filepath(pFilePath), 
       title(sTitle),
       interpret(sInterpret), 
@@ -46,7 +48,8 @@ public:
 	  trackNum(sTrackNum),
 	  filename(pFilename),
 	  comment(sComment),
-	  bpm(sBPM){};
+	  bpm(sBPM),
+	  bitrate(iBitrate){};
   ~CMP3Audio(void) {};
 
   static CMP3Audio* read(std::string& file);
@@ -62,6 +65,7 @@ public:
   inline const char* getFilePath() const { return this->filepath.c_str(); }
   inline const char* getComment() const { return this->comment.c_str(); }
   inline const char* getBPM() const { return this->bpm.c_str(); }
+  inline int getBitrate() const { return this->bitrate; }
    
  
    

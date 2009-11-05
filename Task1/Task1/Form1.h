@@ -203,7 +203,7 @@ namespace Task1 {
 			this->tbYear->Location = System::Drawing::Point(86, 342);
 			this->tbYear->Name = L"tbYear";
 			this->tbYear->ReadOnly = true;
-			this->tbYear->Size = System::Drawing::Size(51, 20);
+			this->tbYear->Size = System::Drawing::Size(34, 20);
 			this->tbYear->TabIndex = 8;
 			this->tbYear->WordWrap = false;
 			// 
@@ -290,9 +290,29 @@ namespace Task1 {
 			this->tbBPM->Location = System::Drawing::Point(86, 418);
 			this->tbBPM->Name = L"tbBPM";
 			this->tbBPM->ReadOnly = true;
-			this->tbBPM->Size = System::Drawing::Size(103, 20);
+			this->tbBPM->Size = System::Drawing::Size(34, 20);
 			this->tbBPM->TabIndex = 18;
 			this->tbBPM->WordWrap = false;
+			// 
+			// tbBitrate
+			// 
+			this->tbBitrate->Location = System::Drawing::Point(215, 418);
+			this->tbBitrate->Name = L"tbBitrate";
+			this->tbBitrate->ReadOnly = true;
+			this->tbBitrate->Size = System::Drawing::Size(34, 20);
+			this->tbBitrate->TabIndex = 19;
+			this->tbBitrate->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->tbBitrate->WordWrap = false;
+			// 
+			// lbBitrate
+			// 
+			this->lbBitrate->AutoSize = true;
+			this->lbBitrate->Location = System::Drawing::Point(141, 421);
+			this->lbBitrate->Name = L"lbBitrate";
+			this->lbBitrate->Size = System::Drawing::Size(68, 13);
+			this->lbBitrate->TabIndex = 20;
+			this->lbBitrate->Text = L"Bitrate kBit/s";
+			this->lbBitrate->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// lbBPM
 			// 
@@ -300,7 +320,7 @@ namespace Task1 {
 			this->lbBPM->Location = System::Drawing::Point(12, 421);
 			this->lbBPM->Name = L"lbBPM";
 			this->lbBPM->Size = System::Drawing::Size(30, 13);
-			this->lbBPM->TabIndex = 19;
+			this->lbBPM->TabIndex = 21;
 			this->lbBPM->Text = L"BPM";
 			this->lbBPM->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
@@ -310,28 +330,9 @@ namespace Task1 {
 			this->tbSize->Name = L"tbSize";
 			this->tbSize->ReadOnly = true;
 			this->tbSize->Size = System::Drawing::Size(51, 20);
-			this->tbSize->TabIndex = 20;
+			this->tbSize->TabIndex = 22;
 			this->tbSize->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
 			this->tbSize->WordWrap = false;
-			// 
-			// tbBitrate
-			// 
-			this->tbBitrate->Location = System::Drawing::Point(86, 444);
-			this->tbBitrate->Name = L"tbBitrate";
-			this->tbBitrate->ReadOnly = true;
-			this->tbBitrate->Size = System::Drawing::Size(103, 20);
-			this->tbBitrate->TabIndex = 21;
-			this->tbBitrate->WordWrap = false;
-			// 
-			// lbBitrate
-			// 
-			this->lbBitrate->AutoSize = true;
-			this->lbBitrate->Location = System::Drawing::Point(12, 447);
-			this->lbBitrate->Name = L"lbBitrate";
-			this->lbBitrate->Size = System::Drawing::Size(37, 13);
-			this->lbBitrate->TabIndex = 22;
-			this->lbBitrate->Text = L"Bitrate";
-			this->lbBitrate->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// lbLBTracks
 			// 
@@ -476,8 +477,7 @@ private: System::Void showMP3Infos(const std::string& filename) {
 			this->tbComment->Text = gcnew String(this->tracks->getTrack(filename)->getComment());
 			this->tbBPM->Text = gcnew String(this->tracks->getTrack(filename)->getBPM());
 			this->tbSize->Text = gcnew String(this->tracks->getTrack(filename)->getFileSize().ToString());
-			//TODO
-			this->tbBitrate->Text = "";
+			this->tbBitrate->Text = gcnew String(this->tracks->getTrack(filename)->getBitrate().ToString());
 			
 			/*String^ path = gcnew String(this->tracks->getTrack(filename)->getFilePath());
 			MessageBox::Show("Path: " + path);*/

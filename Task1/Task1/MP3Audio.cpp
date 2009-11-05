@@ -51,10 +51,11 @@ CMP3Audio* CMP3Audio::read(std::string& file){
   std::string sBPM = "";
   utils.getBPM(sBPM);
 
-   //Bitrate
+   //Bitrate in kb/s
+  int iBitrate = utils.getBitrate();
 
   
 
-  return new CMP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM);
+  return new CMP3Audio(pFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM, iBitrate);
 
 }
