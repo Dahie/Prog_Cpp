@@ -2,15 +2,17 @@
 
 #include <id3/tag.h>
 
-class ID3Utils
+namespace MP3{
+
+class CID3Utils
 {
 	ID3_Tag* my_pTag;
 	std::string my_sFileName;
 
 public:
 
-	ID3Utils(const std::string& sFileName);
-	~ID3Utils(void);
+	CID3Utils(const std::string& sFileName);
+	~CID3Utils(void);
 
 	void getFrameText(enum ID3_FrameID eFrameId, std::string& sVal) const;
 	void getFieldText(ID3_Field* pField, std::string& sVal);
@@ -34,4 +36,6 @@ public:
 	//only for test issues
 	void testFrame(ID3_Frame* pFrame, ID3_Field* pField);
 
-};
+};//class CID3Utils
+
+}

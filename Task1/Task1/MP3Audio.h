@@ -4,7 +4,7 @@
 
 namespace MP3{
 
-class MP3Audio
+class CMP3Audio
 {
 private:
 
@@ -24,7 +24,7 @@ private:
   
 
 public:
-  MP3Audio(
+  CMP3Audio(
 	  const char* pFilePath,
 	  std::string sTitle, 
 	  std::string sInterpret, 
@@ -47,9 +47,9 @@ public:
 	  filename(pFilename),
 	  comment(sComment),
 	  bpm(sBPM){};
-  ~MP3Audio(void) {};
+  ~CMP3Audio(void) {};
 
-  static MP3Audio* read(std::string& file);
+  static CMP3Audio* read(std::string& file);
   
   inline const char* getFileName() const { return this->filename.c_str(); }
   inline const char* getTitle() const { return this->title.c_str(); }

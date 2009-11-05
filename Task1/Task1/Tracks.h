@@ -9,7 +9,7 @@ class CTracks
 {
 private:
 	//type-definition for container
-	typedef std::list<MP3::MP3Audio*> mp3_cont;
+	typedef std::list<MP3::CMP3Audio*> mp3_cont;
 
 public:
 	CTracks(void);
@@ -22,13 +22,16 @@ public:
 
 	
 	//add mp3 with an iterator
-	void insertTrack(mp3_it iter, MP3::MP3Audio* track);
+	void insertTrack(mp3_it iter, MP3::CMP3Audio* track);
 
 	//add mp3 at the end of container
-	void addTrack(MP3::MP3Audio* track);
+	void addTrack(MP3::CMP3Audio* track);
 	
 	//get an mp3
-	MP3::MP3Audio* getTrack(const std::string& filename);
+	MP3::CMP3Audio* getTrack(const std::string& filename);
+
+	//is mp3 in container
+	bool isInCollection(MP3::CMP3Audio* track);
 
 	//delete all mp3 in container
 	void clearTracks();

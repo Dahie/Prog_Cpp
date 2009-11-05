@@ -4,36 +4,38 @@
 #include <id3/tag.h>
 #include <id3/misc_support.h>
 
-ID3Utils::ID3Utils(const std::string& sFileName):my_pTag(NULL),
+using namespace MP3;
+
+CID3Utils::CID3Utils(const std::string& sFileName):my_pTag(NULL),
 	my_sFileName(sFileName)
 {
 }
 
-ID3Utils::~ID3Utils(void)
+CID3Utils::~CID3Utils(void)
 {
 }
 
 
-void ID3Utils::readTag( void ){
+void CID3Utils::readTag( void ){
 	
 	if( my_pTag == NULL){
 		my_pTag = new ID3_Tag( my_sFileName.c_str() );
 	}
 }
 
-bool ID3Utils::hasV1Tag(void) const{
-	const_cast<ID3Utils*>(this)->readTag();
+bool CID3Utils::hasV1Tag(void) const{
+	const_cast<CID3Utils*>(this)->readTag();
 	return my_pTag->HasV1Tag();
 }
 
-bool ID3Utils::hasV2Tag(void) const{
-	const_cast<ID3Utils*>(this)->readTag();
+bool CID3Utils::hasV2Tag(void) const{
+	const_cast<CID3Utils*>(this)->readTag();
 	return my_pTag->HasV2Tag();
 }
 
-const char* ID3Utils::getGenre(void) const {
+const char* CID3Utils::getGenre(void) const {
 	
-	const_cast<ID3Utils*>(this)->readTag();
+	const_cast<CID3Utils*>(this)->readTag();
 	size_t genreEnum = ID3_GetGenreNum(my_pTag);
 
 	if(genreEnum <=ID3_NR_OF_V1_GENRES){
@@ -46,14 +48,14 @@ const char* ID3Utils::getGenre(void) const {
 	return "";
 }
 
-const char* ID3Utils::getFilePathName(void) const{
+const char* CID3Utils::getFilePathName(void) const{
 	if(!my_sFileName.empty()){
 		return my_sFileName.c_str();
 	}
 	return "";
 }
 
-const char* ID3Utils::getFileName( const char* pFilePathName )
+const char* CID3Utils::getFileName( const char* pFilePathName )
 {
 	const char* pLastChar = pFilePathName + strlen(pFilePathName);
 
@@ -66,9 +68,9 @@ const char* ID3Utils::getFileName( const char* pFilePathName )
 	return pLastChar;
 }
 
-double ID3Utils::getFileSize(void) const{
+double CID3Utils::getFileSize(void) const{
 
-	const_cast<ID3Utils*>(this)->readTag();
+	const_cast<CID3Utils*>(this)->readTag();
 	size_t psize = my_pTag->GetFileSize();
 	int size = static_cast<unsigned int>(psize);
 	double dsize = System::Convert::ToDouble(size)/1024/1024;
@@ -76,37 +78,37 @@ double ID3Utils::getFileSize(void) const{
 
 }
 
-void ID3Utils::getTitle( std::string& sVal ) const {
+void CID3Utils::getTitle( std::string& sVal ) const {
 	getFrameText( ID3FID_TITLE, sVal );
 }
 
-void ID3Utils::getInterpret( std::string& sVal ) const {
+void CID3Utils::getInterpret( std::string& sVal ) const {
 	getFrameText( ID3FID_LEADARTIST, sVal );
 }
 
-void ID3Utils::getAlbum(std::string& sVal ) const {
+void CID3Utils::getAlbum(std::string& sVal ) const {
 	getFrameText( ID3FID_ALBUM, sVal );
 }
 
-void ID3Utils::getYear(std::string& sVal ) const {
+void CID3Utils::getYear(std::string& sVal ) const {
 	getFrameText( ID3FID_YEAR, sVal );
 }
 
-void ID3Utils::getTrackNumber(std::string& sVal ) const {
+void CID3Utils::getTrackNumber(std::string& sVal ) const {
 	getFrameText( ID3FID_TRACKNUM, sVal );
 }
 
-void ID3Utils::getComment(std::string& sVal ) const {
+void CID3Utils::getComment(std::string& sVal ) const {
 	getFrameText( ID3FID_COMMENT, sVal );
 }
 
-void ID3Utils::getBPM(std::string& sVal ) const {
+void CID3Utils::getBPM(std::string& sVal ) const {
 	getFrameText( ID3FID_BPM, sVal );
 }
 
-void ID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) const{
+void CID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) const{
 
-	const_cast<ID3Utils*>(this)->readTag();
+	const_cast<CID3Utils*>(this)->readTag();
 	ID3_Frame* pframe = my_pTag->Find(eFrameId);
 
 	if(NULL != pframe){
@@ -114,13 +116,13 @@ void ID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) cons
 		ID3_Field* pField = pframe->GetField(ID3FN_TEXT);
 		
 		if(NULL != pField){
-			const_cast<ID3Utils*>(this)->getFieldText(pField, sVal);
+			const_cast<CID3Utils*>(this)->getFieldText(pField, sVal);
 		}
 	}
 }
 
 
-void ID3Utils::getFieldText(ID3_Field *pField, std::string &sVal){
+void CID3Utils::getFieldText(ID3_Field *pField, std::string &sVal){
 
 		enum ID3_FieldType eType = pField->GetType();
 
