@@ -18,7 +18,7 @@ CTracks::~CTracks(void)
 	typedef mp3_cont::const_iterator mp3_const_it;
 
 	////add mp3 with an iterator
-	//void CTracks::insertTrack(mp3_it iter, MP3::CMP3Audio* track) {
+	//void CTracks::insertTrack(mp3_it iter,MP3::CMP3Audio* track) {
 	//	tracks.insert(iter, track);
 	//}
 
