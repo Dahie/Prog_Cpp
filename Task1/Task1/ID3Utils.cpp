@@ -6,57 +6,48 @@
 
 using namespace MP3;
 
-CID3Utils::CID3Utils(const std::string& sFileName):my_pTag(NULL),
-	my_sFileName(sFileName)
+CID3Utils::CID3Utils(const std::string& sFileName):my_sFileName(sFileName),
+myTag(sFileName.c_str())	
 {
 }
 
 CID3Utils::~CID3Utils(void)
-{
+{	
 }
 
-
-void CID3Utils::readTag( void ){
-	
-	if( my_pTag == NULL){
-		my_pTag = new ID3_Tag( my_sFileName.c_str() );
-	}
-}
 
 bool CID3Utils::hasV1Tag(void) const{
-	const_cast<CID3Utils*>(this)->readTag();
-	return my_pTag->HasV1Tag();
+	return myTag.HasV1Tag();
 }
 
 bool CID3Utils::hasV2Tag(void) const{
-	const_cast<CID3Utils*>(this)->readTag();
-	return my_pTag->HasV2Tag();
+	return myTag.HasV2Tag();
 }
 
 const char* CID3Utils::getGenre(void) const {
 	
-	const_cast<CID3Utils*>(this)->readTag();
-	size_t genreEnum = ID3_GetGenreNum(my_pTag);
+	ID3_Tag* pTag = new ID3_Tag(this->my_sFileName.c_str());
+	if(!pTag){ 
+		System::Windows::Forms::MessageBox::Show("ERROR: no memory access... ID3Tag \"<genre>\" was not read... MP3 Info corrupted");
+		return "ERROR: ID3Tag \"<genre>\" not available";
+	}
 
+	size_t genreEnum = ID3_GetGenreNum(pTag);
 	if(genreEnum <=ID3_NR_OF_V1_GENRES){
 		return ID3_V1GENRE2DESCRIPTION(genreEnum);
 	}else{
 		//genreNumber is too large
-		//return "";
+		return "<no genre>";
 	}
-
-	return "";
+	delete pTag;
 }
 
 const char* CID3Utils::getFilePathName(void) const{
-	if(!my_sFileName.empty()){
-		return my_sFileName.c_str();
-	}
-	return "";
+	return my_sFileName.c_str();
 }
 
-const char* CID3Utils::getFileName( const char* pFilePathName )
-{
+const char* CID3Utils::getFileName( const char* pFilePathName ){
+
 	const char* pLastChar = pFilePathName + strlen(pFilePathName);
 
 	while ( --pLastChar > pFilePathName ) {
@@ -70,18 +61,16 @@ const char* CID3Utils::getFileName( const char* pFilePathName )
 
 double CID3Utils::getFileSize(void) const{
 
-	const_cast<CID3Utils*>(this)->readTag();
-	size_t psize = my_pTag->GetFileSize();
+	size_t psize = myTag.GetFileSize();
 	int size = static_cast<unsigned int>(psize);
 	double dsize = System::Convert::ToDouble(size)/1024/1024;
-	return dsize = ((int)(dsize*100+0.5))/100.0;
 
+	return dsize = ((int)(dsize*100+0.5))/100.0;
 }
 
 int CID3Utils::getBitrate(void) const{
 
-	const_cast<CID3Utils*>(this)->readTag();
-	const Mp3_Headerinfo* pHeader = my_pTag->GetMp3HeaderInfo();
+	const Mp3_Headerinfo* pHeader = myTag.GetMp3HeaderInfo();
 
 	return (pHeader != NULL ? pHeader->bitrate : 0)/1000;
 }
@@ -116,8 +105,7 @@ void CID3Utils::getBPM(std::string& sVal ) const {
 
 void CID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) const{
 
-	const_cast<CID3Utils*>(this)->readTag();
-	ID3_Frame* pframe = my_pTag->Find(eFrameId);
+	ID3_Frame* pframe = myTag.Find(eFrameId);
 
 	if(NULL != pframe){
 
@@ -125,6 +113,7 @@ void CID3Utils::getFrameText( enum ID3_FrameID eFrameId, std::string& sVal ) con
 		
 		if(NULL != pField){
 			const_cast<CID3Utils*>(this)->getFieldText(pField, sVal);
+			//testFrame(pframe, pField);
 		}
 	}
 }
@@ -144,17 +133,14 @@ void CID3Utils::getFieldText(ID3_Field *pField, std::string &sVal){
 				
 				char copiedText[1024];
 				size_t lenCopiedText = pField->Get(copiedText, lenTextSize+1);
+				
 				if(lenTextSize == lenCopiedText){
 					//convert char[] into std::string
 					std::stringstream s;
 					s << copiedText;
 					sVal = s.str();
-				
-				}else{
-
-					sVal.erase();
-					
-				}
+	
+				}else{ sVal.erase(); }
 			}
 
 			pField->SetEncoding(ePreviousEncoding);
@@ -168,15 +154,13 @@ void CID3Utils::getFieldText(ID3_Field *pField, std::string &sVal){
 			ss << intVal;
 			ss >> sVal;
 
-		}else{
-
-			//open to do
-		}
+		}else{ /*TODO if other FIELDTYPES are needed*/ }
 }
 
-void testFrame(ID3_Frame* pFrame, ID3_Field* pField){
+//test-method for a frame, how many fields, which FieldId and which FieldType
+//Condition pFrame and pField are not NULL
+void CID3Utils::testFrame(ID3_Frame* pFrame, ID3_Field* pField) const {
 
-	//test-method for a frame, how many fields, which FieldId and which FieldType
 	int fieldCount = pFrame->NumFields();
 	uint32 content = 10;
 	std::string pFieldType = "";
@@ -193,8 +177,11 @@ void testFrame(ID3_Frame* pFrame, ID3_Field* pField){
 		}else if (eType == ID3FTY_INTEGER){
 			pFieldType = "isn int";
 			content = pField->Get();
-		}else{pFieldType = "wat anders";}
-	}
+		}else{ pFieldType = "wat anders"; }
 
-	//delete iter;
+		ID3_TextEnc ePreviousEncoding = pField->GetEncoding();
+	}
+	delete iter;
 }
+
+

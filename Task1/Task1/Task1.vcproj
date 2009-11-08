@@ -210,6 +210,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SortedTracks.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -267,6 +271,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SortedTracks.h"
 				>
 			</File>
 			<File

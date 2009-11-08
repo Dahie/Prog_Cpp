@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <map>
 #include "MP3Audio.h"
 
 namespace MP3{
@@ -9,7 +9,8 @@ class CTracks
 {
 private:
 	//type-definition for container
-	typedef std::list<MP3::CMP3Audio*> mp3_cont;
+	typedef std::map<std::string, MP3::CMP3Audio*> mp3_cont;
+	int iTitleCount;
 
 public:
 	CTracks(void);
@@ -20,18 +21,26 @@ public:
 	typedef mp3_cont::iterator mp3_it;
 	typedef mp3_cont::const_iterator mp3_const_it;
 
+	//get number of equal titles
+	int getTitleCount();
 	
-	//add mp3 with an iterator
-	void insertTrack(mp3_it iter, MP3::CMP3Audio* track);
+	////add mp3 with an iterator
+	//void insertTrack(mp3_it iter, MP3::CMP3Audio* track);
 
 	//add mp3 at the end of container
-	void addTrack(MP3::CMP3Audio* track);
+	void addTrack(MP3::CMP3Audio* track, const std::string& name);
 	
-	//get an mp3
-	MP3::CMP3Audio* getTrack(const std::string& filename);
+	//get a mp3
+	MP3::CMP3Audio* getTrack(const std::string& name);
+
+	//delete a mp3
+	void removeTrack(const std::string& name);
 
 	//is mp3 in container
 	bool isInCollection(MP3::CMP3Audio* track);
+
+	//is mp3 with this title in container, counts how many times
+	bool isTitleInCollection(MP3::CMP3Audio* track);
 
 	//delete all mp3 in container
 	void clearTracks();
