@@ -6,8 +6,9 @@ namespace MP3{
 
 class CID3Utils
 {
-	ID3_Tag* my_pTag;
+private:
 	std::string my_sFileName;
+	ID3_Tag myTag;
 
 public:
 
@@ -16,7 +17,6 @@ public:
 
 	void getFrameText(enum ID3_FrameID eFrameId, std::string& sVal) const;
 	void getFieldText(ID3_Field* pField, std::string& sVal);
-	void readTag( void );
 
 	void getTitle(std::string& sValue) const;
 	void getInterpret(std::string& sValue) const;
@@ -25,7 +25,7 @@ public:
 	void getTrackNumber(std::string& sValue) const;
 	const char* getGenre(void) const;
 	const char* getFilePathName( void ) const;
-	static const char* getFileName( const char* pszFileName );
+	static const char* getFileName( const char* pFilePathName );
 	int getBitrate(void) const;
 	double getFileSize(void) const;
 	void getComment(std::string& sValue) const;
@@ -34,7 +34,7 @@ public:
 	bool hasV2Tag(void) const;
 
 	//only for test issues
-	void testFrame(ID3_Frame* pFrame, ID3_Field* pField);
+	void testFrame(ID3_Frame* pFrame, ID3_Field* pField)const;
 
 };//class CID3Utils
 

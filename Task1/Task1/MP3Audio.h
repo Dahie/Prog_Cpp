@@ -21,39 +21,39 @@ private:
 	std::string bpm;
 	int bitrate;
 	
-
-  
-
 public:
   CMP3Audio(
-	  const char* pFilePath,
+	  std::string sFilePath,
 	  std::string sTitle, 
 	  std::string sInterpret, 
 	  std::string sAlbum,
 	  std::string sYear,
-	const char* pGenre,
-	double dFileSize,
-	std::string sTrackNum,
-	const char* pFilename,
-	std::string sComment,
-	std::string sBPM,
-	int iBitrate): 
-      filepath(pFilePath), 
-      title(sTitle),
-      interpret(sInterpret), 
-      album(sAlbum),
-	  year(sYear),
-      genre(pGenre) ,
-	  fileSize(dFileSize),
-	  trackNum(sTrackNum),
-	  filename(pFilename),
-	  comment(sComment),
-	  bpm(sBPM),
-	  bitrate(iBitrate){};
-  ~CMP3Audio(void) {};
+	  const char* pGenre,
+	  double dFileSize,
+	  std::string sTrackNum,
+	  const char* pFilename,
+	  std::string sComment,
+	  std::string sBPM,
+	  int iBitrate):
+		  filepath(sFilePath),
+		  title(sTitle),
+		  interpret(sInterpret), 
+		  album(sAlbum),
+		  year(sYear),
+		  genre(pGenre) ,
+		  fileSize(dFileSize),
+		  trackNum(sTrackNum),
+		  filename(pFilename),
+		  comment(sComment),
+		  bpm(sBPM),
+		  bitrate(iBitrate){};
+
+  ~CMP3Audio(void){};
 
   static CMP3Audio* read(std::string& file);
+  static bool isMP3File(const char* pFilePathName);
   
+  //getter
   inline const char* getFileName() const { return this->filename.c_str(); }
   inline const char* getTitle() const { return this->title.c_str(); }
   inline const char* getArtist() const { return this->interpret.c_str(); }
@@ -67,8 +67,5 @@ public:
   inline const char* getBPM() const { return this->bpm.c_str(); }
   inline int getBitrate() const { return this->bitrate; }
    
- 
-   
-
-};
+};//class CMP3Audio
 }
