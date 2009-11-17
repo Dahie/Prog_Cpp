@@ -538,16 +538,16 @@ System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
 		
 		System::Array^ filenames =  openFileDialog1->FileNames;
 		
-		if(!(this->openAllFiles(filenames))) return;
+		this->openAllFiles(filenames);
 
 		//set right buttons enabled and disable Open Audio button
-		this->setButtonsEnabled(true);
+		this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
       }
 }
 
 private: System::Boolean^ openAllFiles(System::Array^ filenames){
 		
-		System::Boolean^ flag;
+		System::Boolean^ flag = true;
 		String^ title;
 		std::string name;
 
@@ -556,16 +556,25 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 			//convert String^ filename into std::string
 			std::string target = "target"; 
 			MarshalString(filenames->GetValue(i)->ToString(), target);
-		
+
+			//check if file is a mp3
+			if(!CMP3Audio::isMP3File(target.c_str())){
+				System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
+				  +filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
+				  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+				continue;
+			}
+
 			//read ID3 tags and create mp3 object
 			CMP3Audio* mp3audio = CMP3Audio::read(target);
 			if(!mp3audio){
 				MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
-				return flag=false;
+				flag=false;
+				continue;
 			}
 
-			if(!this->tracks->isInCollection(mp3audio)){
+			if(!this->tracks->isInCollection(mp3audio)) { //check if mp3 with this filename exists
 
 				//clear listBox Items and MP3 Info
 				lbTracks->Items->Clear();
@@ -575,7 +584,7 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 				if(this->tracks->isTitleInCollection(mp3audio)){
 
 					name = mp3audio->getTitle();
-					
+						
 					//create new name for title list with current counter at the end
 					String^ iNumOfTitle = " (" + this->tracks->getTitleCount().ToString()+ ")";
 					std::string num ="";
@@ -600,7 +609,7 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 				//fill listBox with names from sorted title list
 				CSortedTracks::mp3_it iter = this->sortedTracks->getBeginIterator();
 				for (iter = this->sortedTracks->getBeginIterator(); iter != this->sortedTracks->getEndIterator(); ++iter ) {
-				
+					
 					title = gcnew String((*iter).c_str());
 					lbTracks->Items->Add(title);
 					lbTracks->SelectedIndex = 0;
@@ -609,11 +618,13 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 
 				//output number of read tracks in status strip
 				this->toolStripStatLb->Text = this->sortedTracks->getSizeOfSortedTracks().ToString()+ " tracks";
-			
+				
 			}else{ MessageBox::Show("mp3-File \""+gcnew String(mp3audio->getFileName()) +"\" already exists"); }
-		}
-		//delete mp3audio; //only if MP3Audio objects are stored in tracks 
-		return flag = true;
+
+			
+		}//end of for loop
+
+		return flag;
 }
 
 
@@ -734,10 +745,10 @@ System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::Forms::Dr
 
 		 System::Array^ filenames = safe_cast<System::Array^>(file);
 		 
-		 if(!(this->openAllFiles(filenames))) return;	
+		 this->openAllFiles(filenames);
 
 		 //set right buttons enabled and disable Open Audio button
-		 this->setButtonsEnabled(true);
+		 this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
 }
 
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {}
