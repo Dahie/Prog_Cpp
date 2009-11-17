@@ -29,13 +29,6 @@ bool CMP3Audio::isMP3File(const char* pFilePathName) {
 
 CMP3Audio* CMP3Audio::read(std::string& sFilePath){
 
-  //check if file is a mp3
-  if(!isMP3File(sFilePath.c_str())){
-	  System::Windows::Forms::MessageBox::Show("Selected file is not a mp3 file ( *.MP3 | *.mp3 ) !\n","MP3 Tagger",
-		  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
-	  return NULL;
-  }
-
   //create a ID3Tag object
   CID3Utils* utils = new CID3Utils(sFilePath);
   if(!utils){
