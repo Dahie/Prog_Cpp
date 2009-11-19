@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include "Utils.h"
 #include "MP3Audio.h"
-#include "Tracks.h"
-#include "SortedTracks.h"
-#include "ID3Reader.h"
 #include <list>
 
 namespace Task1 {
@@ -31,8 +28,7 @@ namespace Task1 {
 	{
 
 	private:
-		CTracks* tracks;
-		CSortedTracks* sortedTracks;
+		CTracksController* tracksController;
 	
 	public:
 		Form1(void)
@@ -42,8 +38,7 @@ namespace Task1 {
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
 			//
-			tracks = new CTracks();
-			sortedTracks = new CSortedTracks();
+			tracksController = new CTracksController();
 		}
 
 	protected:
@@ -552,78 +547,87 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 		String^ title;
 		std::string name;
 
-		IMP3Reader* mp3Reader = new CID3Reader();
-
 		for(int i=0; i<filenames->Length; ++i){
 
 			//convert String^ filename into std::string
 			std::string target = "target"; 
 			MarshalString(filenames->GetValue(i)->ToString(), target);
 
-			//check if file is a mp3
-			if(!mp3Reader->isMP3File(target.c_str())){
-				System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
-				  +filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
-				  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
-				continue;
-			}
+			Response response = this->tracksController->addFile(target);
 
-			//read ID3 tags and create mp3 object
-			CMP3Audio* mp3audio = mp3Reader->read(target);
-			if(!mp3audio){
-				MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
-					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
-				flag=false;
-				continue;
-			}
+			//switch(response){
 
-			if(!this->tracks->isInCollection(mp3audio)) { //check if mp3 with this filename exists
+			//	case OK: 
+			//			//jdkfdjfk
+			//			break;
+			//
+			//}
 
-				//clear listBox Items and MP3 Info
-				lbTracks->Items->Clear();
-				clearMP3Infos();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////check if file is a mp3
+			//if(!mp3Reader->isMP3File(target.c_str())){
+			//	System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
+			//	  +filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
+			//	  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+			//	continue;
+			//}
 
-				//if mp3 with same title exists
-				if(this->tracks->isTitleInCollection(mp3audio)){
+			////read ID3 tags and create mp3 object
+			//CMP3Audio* mp3audio = mp3Reader->read(target);
+			//if(!mp3audio){
+			//	MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
+			//		System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+			//	flag=false;
+			//	continue;
+			//}
 
-					name = mp3audio->getTitle();
-						
-					//create new name for title list with current counter at the end
-					String^ iNumOfTitle = " (" + this->tracks->getTitleCount().ToString()+ ")";
-					std::string num ="";
-					MarshalString(iNumOfTitle, num);
-					name += num;
+			//if(!this->tracks->isInCollection(mp3audio)) { //check if mp3 with this filename exists
 
-					//add mp3 in tracks collection and the title in sorted titlelist
-					this->tracks->addTrack(mp3audio, name);
-					this->sortedTracks->addTrack(name);
+			//	//clear listBox Items and MP3 Info
+			//	lbTracks->Items->Clear();
+			//	clearMP3Infos();
 
-				}else{
-					//create name for title list
-					name = mp3audio->getTitle();
-					//add mp3 in tracks collection and the title in sorted titlelist
-					this->tracks->addTrack(mp3audio, name);
-					this->sortedTracks->addTrack(name);
-				}
+			//	//if mp3 with same title exists
+			//	if(this->tracks->isTitleInCollection(mp3audio)){
 
-				//sort title list
-				this->sortedTracks->sortTracks();
+			//		name = mp3audio->getTitle();
+			//			
+			//		//create new name for title list with current counter at the end
+			//		String^ iNumOfTitle = " (" + this->tracks->getTitleCount().ToString()+ ")";
+			//		std::string num ="";
+			//		MarshalString(iNumOfTitle, num);
+			//		name += num;
 
-				//fill listBox with names from sorted title list
-				CSortedTracks::mp3_it iter = this->sortedTracks->getBeginIterator();
-				for (iter = this->sortedTracks->getBeginIterator(); iter != this->sortedTracks->getEndIterator(); ++iter ) {
-					
-					title = gcnew String((*iter).c_str());
-					lbTracks->Items->Add(title);
-					lbTracks->SelectedIndex = 0;
-					lbTracks->Select();
-				}
+			//		//add mp3 in tracks collection and the title in sorted titlelist
+			//		this->tracks->addTrack(mp3audio, name);
+			//		this->sortedTracks->addTrack(name);
 
-				//output number of read tracks in status strip
-				this->toolStripStatLb->Text = this->sortedTracks->getSizeOfSortedTracks().ToString()+ " tracks";
-				
-			}else{ MessageBox::Show("mp3-File \""+gcnew String(mp3audio->getFileName()) +"\" already exists"); }
+			//	}else{
+			//		//create name for title list
+			//		name = mp3audio->getTitle();
+			//		//add mp3 in tracks collection and the title in sorted titlelist
+			//		this->tracks->addTrack(mp3audio, name);
+			//		this->sortedTracks->addTrack(name);
+			//	}
 
+			//	//sort title list
+			//	this->sortedTracks->sortTracks();
+
+			//	//fill listBox with names from sorted title list
+			//	CSortedTracks::mp3_it iter = this->sortedTracks->getBeginIterator();
+			//	for (iter = this->sortedTracks->getBeginIterator(); iter != this->sortedTracks->getEndIterator(); ++iter ) {
+			//		
+			//		title = gcnew String((*iter).c_str());
+			//		lbTracks->Items->Add(title);
+			//		lbTracks->SelectedIndex = 0;
+			//		lbTracks->Select();
+			//	}
+
+			//	//output number of read tracks in status strip
+			//	this->toolStripStatLb->Text = this->sortedTracks->getSizeOfSortedTracks().ToString()+ " tracks";
+			//	
+			//}else{ MessageBox::Show("mp3-File \""+gcnew String(mp3audio->getFileName()) +"\" already exists"); }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 		}//end of for loop
 

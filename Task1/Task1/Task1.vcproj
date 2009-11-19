@@ -250,6 +250,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TracksController.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Utils.cpp"
 				>
 			</File>
@@ -299,6 +303,10 @@
 			</File>
 			<File
 				RelativePath=".\Tracks.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TracksController.h"
 				>
 			</File>
 			<File
