@@ -1,4 +1,7 @@
 #pragma once
+#if !defined(MP3AUDIO_H)
+
+#define MP3AUDIO_H
 
 #include <string>
 
@@ -50,8 +53,8 @@ public:
 
   ~CMP3Audio(void){};
 
-  static CMP3Audio* read(std::string& file);
-  static bool isMP3File(const char* pFilePathName);
+  //static CMP3Audio* read(std::string& file);
+  //static bool isMP3File(const char* pFilePathName);
   
   //getter
   inline const char* getFileName() const { return this->filename.c_str(); }
@@ -69,3 +72,4 @@ public:
    
 };//class CMP3Audio
 }
+#endif //MP3AUDIO_H

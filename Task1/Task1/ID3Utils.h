@@ -1,4 +1,7 @@
 #pragma once
+#if !defined(ID3UTILS_H)
+
+#define ID3UTILS_H
 
 #include <id3/tag.h>
 
@@ -39,3 +42,4 @@ public:
 };//class CID3Utils
 
 }
+#endif //ID3UTILS_H

@@ -1,4 +1,7 @@
 #pragma once
+#if !defined(TRACKS_H)
+
+#define TRACKS_H
 
 #include <map>
 #include "MP3Audio.h"
@@ -69,3 +72,4 @@ private:
 };//class CTracks
 
 }
+#endif //TRACKS_H

@@ -1,4 +1,8 @@
 #pragma once
+#if !defined(SORTEDTRACKS_H)
+
+#define SORTEDTRACKS_H
+
 #include <list>
 #include "MP3Audio.h"
 
@@ -60,3 +64,4 @@ private:
 	mp3_list list;
 };//class CSortedTracks
 }
+#endif //SORTEDTRACKS_H
