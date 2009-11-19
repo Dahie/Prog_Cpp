@@ -516,7 +516,7 @@ namespace Task1 {
 		}
 #pragma endregion
 
-System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
       
 	  // Displays an OpenFileDialog so the user can select mp3 Files
       OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
@@ -711,7 +711,7 @@ private: System::Void showMP3Infos(const std::string& name) {
 				
 }
 
- private: System::Void clearMP3Infos() {
+private: System::Void clearMP3Infos( void ) {
 
 		this->tbTitle->Text = "";
 		this->tbAlbum->Text = "";
@@ -738,7 +738,7 @@ private: System::Void dragFileEnter(System::Object^  /*sender*/, System::Windows
 }
 
 //called when object was dropped in specific area
-System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::Forms::DragEventArgs^  e) {
+private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::Forms::DragEventArgs^  e) {
 		
 		 //System::Windows::Forms::IDataObject^ data = e->Data;
 		 Object^ file = e->Data->GetData("FileNameW");
