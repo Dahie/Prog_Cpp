@@ -1,3 +1,7 @@
+#if !defined(UTILS_H)
+
+#define UTILS_H
+
 #include <string>
 #include <iostream>
 #include <windows.h>
@@ -53,3 +57,4 @@ void scanDir(const std::string& rDirName){
 	std::wstring sKey = s2ws(rDirName + "\\*.*");
 	finfo = FindFirstFile(sKey.c_str(), &data);
 }
+#endif //UTILS_H

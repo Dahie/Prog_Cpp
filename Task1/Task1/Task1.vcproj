@@ -202,11 +202,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ID3Reader.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ID3Utils.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\MP3Audio.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MP3Reader.cpp"
 				>
 			</File>
 			<File
@@ -262,11 +270,19 @@
 				</File>
 			</File>
 			<File
+				RelativePath=".\ID3Reader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ID3Utils.h"
 				>
 			</File>
 			<File
 				RelativePath=".\MP3Audio.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MP3Reader.h"
 				>
 			</File>
 			<File

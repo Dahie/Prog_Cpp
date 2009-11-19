@@ -5,6 +5,7 @@
 #include "MP3Audio.h"
 #include "Tracks.h"
 #include "SortedTracks.h"
+#include "ID3Reader.h"
 #include <list>
 
 namespace Task1 {
@@ -551,6 +552,8 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 		String^ title;
 		std::string name;
 
+		IMP3Reader* mp3Reader = new CID3Reader();
+
 		for(int i=0; i<filenames->Length; ++i){
 
 			//convert String^ filename into std::string
@@ -558,7 +561,7 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 			MarshalString(filenames->GetValue(i)->ToString(), target);
 
 			//check if file is a mp3
-			if(!CMP3Audio::isMP3File(target.c_str())){
+			if(!mp3Reader->isMP3File(target.c_str())){
 				System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
 				  +filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 				  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
@@ -566,7 +569,7 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 			}
 
 			//read ID3 tags and create mp3 object
-			CMP3Audio* mp3audio = CMP3Audio::read(target);
+			CMP3Audio* mp3audio = mp3Reader->read(target);
 			if(!mp3audio){
 				MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
