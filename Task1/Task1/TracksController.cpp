@@ -45,7 +45,6 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 			std::stringstream ss;
 			ss << " (" << this->tracks->getTitleCount() << ") ";
 			name += ss.str();
-
 		}
 
 		//add mp3 in tracks collection and the title in sorted titlelist
@@ -57,28 +56,24 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 
 	}else{ return ALREADY_OPENED; }
 
-    return OK;
+  return OK;
 }
 
 MP3::CMP3Audio* CTracksController::getFile( const std::string& name ){
-
 	return this->tracks->getTrack(name);
 }
 
 MP3::CSortedTracks* CTracksController::getAllTitles( void ){
-
 	return this->sortedTracks;
 }
 
 void CTracksController::removeFile( const std::string& name ){
-	
 	//remove track in both collections
 	this->sortedTracks->removeTrack(name);
 	this->tracks->removeTrack(name);
 }
 
 void CTracksController::removeAllFiles( void ){
-
 	//remove all tracks in both collections
 	this->tracks->clearTracks();
 	this->sortedTracks->clearTracks();
