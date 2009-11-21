@@ -202,11 +202,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ID3Reader.cpp"
+				RelativePath=".\ID3LibWrapper.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ID3Utils.cpp"
+				RelativePath=".\ID3Reader.cpp"
 				>
 			</File>
 			<File
@@ -215,6 +215,10 @@
 			</File>
 			<File
 				RelativePath=".\MP3Reader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MP3ReaderFactory.cpp"
 				>
 			</File>
 			<File
@@ -274,11 +278,11 @@
 				</File>
 			</File>
 			<File
-				RelativePath=".\ID3Reader.h"
+				RelativePath=".\ID3LibWrapper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ID3Utils.h"
+				RelativePath=".\ID3Reader.h"
 				>
 			</File>
 			<File
@@ -287,6 +291,10 @@
 			</File>
 			<File
 				RelativePath=".\MP3Reader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MP3ReaderFactory.h"
 				>
 			</File>
 			<File

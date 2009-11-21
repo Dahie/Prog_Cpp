@@ -1,6 +1,5 @@
 #pragma once
 #if !defined(MP3AUDIO_H)
-
 #define MP3AUDIO_H
 
 #include <string>
@@ -38,23 +37,20 @@ public:
 	  std::string sComment,
 	  std::string sBPM,
 	  int iBitrate):
-		  filepath(sFilePath),
-		  title(sTitle),
-		  interpret(sInterpret), 
-		  album(sAlbum),
-		  year(sYear),
-		  genre(pGenre) ,
-		  fileSize(dFileSize),
-		  trackNum(sTrackNum),
-		  filename(pFilename),
-		  comment(sComment),
-		  bpm(sBPM),
-		  bitrate(iBitrate){};
+		  filepath( sFilePath ),
+		  title( sTitle ),
+		  interpret( sInterpret ), 
+		  album( sAlbum ),
+		  year( sYear ),
+		  genre( pGenre ) ,
+		  fileSize( dFileSize ),
+		  trackNum( sTrackNum ),
+		  filename( pFilename ),
+		  comment( sComment ),
+		  bpm( sBPM ),
+		  bitrate( iBitrate ){};
 
   ~CMP3Audio(void){};
-
-  //static CMP3Audio* read(std::string& file);
-  //static bool isMP3File(const char* pFilePathName);
   
   //getter
   inline const char* getFileName() const { return this->filename.c_str(); }
