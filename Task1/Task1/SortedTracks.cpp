@@ -3,11 +3,11 @@
 
 using namespace MP3;
 
-CSortedTracks::CSortedTracks(void)
+CSortedTracks::CSortedTracks( void )
 {
 }
 
-CSortedTracks::~CSortedTracks(void)
+CSortedTracks::~CSortedTracks( void )
 {
 }
 
@@ -17,17 +17,17 @@ CSortedTracks::~CSortedTracks(void)
 	typedef mp3_list::const_iterator mp3_const_it;
 
 	//add title with an iterator
-	void CSortedTracks::insertTrack(mp3_it iter, const std::string& name) {
+	void CSortedTracks::insertTrack( mp3_it iter, const std::string& name ) {
 		list.insert(iter, name);
 	}
 
 	//add title at the end of container
-	void CSortedTracks::addTrack(const std::string& name) {
+	void CSortedTracks::addTrack( const std::string& name ) {
 		list.push_back(name);
 	}
 
 	//get a title
-	std::string CSortedTracks::getTrack(const std::string& name) {
+	std::string CSortedTracks::getTrack( const std::string& name ) {
 		
 		if(!list.empty()){
 			mp3_it iter;
@@ -41,7 +41,7 @@ CSortedTracks::~CSortedTracks(void)
 	}
 
 	//remove a title
-	void CSortedTracks::removeTrack(const std::string& name){
+	void CSortedTracks::removeTrack( const std::string& name ){
 		list.remove(name);
 	}
 
@@ -51,37 +51,37 @@ CSortedTracks::~CSortedTracks(void)
 	}
 
 	//delete all titles in container
-	void CSortedTracks::clearTracks(){
+	void CSortedTracks::clearTracks( void ){
 		list.clear();
 	}
 
 	//is container empty
-	bool CSortedTracks::isEmpty(void) const{
+	bool CSortedTracks::isEmpty( void ) const{
 		return list.empty();
 	}
 
 	//size of title collection
-	const sz_type CSortedTracks::getSizeOfSortedTracks() const {
+	const sz_type CSortedTracks::getSizeOfSortedTracks( void ) const {
 		return list.size();
 	}
 
 	//begin-iterator
-	mp3_it CSortedTracks::getBeginIterator() {
+	mp3_it CSortedTracks::getBeginIterator( void ) {
 		return list.begin();
 	}
 
 	//end-iterator
-	mp3_it CSortedTracks::getEndIterator() {
+	mp3_it CSortedTracks::getEndIterator( void ) {
 		return list.end();
 	}
 
 	//const_begin-iterator
-	mp3_const_it CSortedTracks::getBeginIterator() const {
+	mp3_const_it CSortedTracks::getBeginIterator( void ) const {
 		return list.begin();
 	}
 
 	//const_end-iterator
-	mp3_const_it CSortedTracks::getEndIterator() const {
+	mp3_const_it CSortedTracks::getEndIterator( void ) const {
 		return list.end();
 	}
 

@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "ID3Reader.h"
-#include "ID3Utils.h"
+#include "ID3LibWrapper.h"
+
+using namespace MP3;
 
 CID3Reader::CID3Reader(void)
 {
@@ -10,11 +12,10 @@ CID3Reader::~CID3Reader(void)
 {
 }
 
-using namespace MP3;
-
-bool CID3Reader::isMP3File(const char* pFilePathName) const {
+bool CID3Reader::isMP3File( const std::string& sFilePathName ) const {
 	
 	bool flag = false;
+	const char* pFilePathName = sFilePathName.c_str();
 	const char* fileEnd;
 	std::string comp = "MP3", comp1 = "mp3";
 	//get pointer on last character of filepath
@@ -33,11 +34,11 @@ bool CID3Reader::isMP3File(const char* pFilePathName) const {
 	return flag;
 }
 
-CMP3Audio* CID3Reader::read(std::string& sFilePath){
+CMP3Audio* CID3Reader::readMP3Data( const std::string& sFilePath ){
 
   //create a ID3Tag object
-  CID3Utils* utils = new CID3Utils(sFilePath);
-  if(!utils){
+  CID3LibWrapper* id3Lib = new CID3LibWrapper(sFilePath);
+  if(!id3Lib){
 	  System::Windows::Forms::MessageBox::Show("\nERROR: No memory access...\n\n\nID3Tag object was NOT created!\n\n","MP3 Tagger",
 		  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
 	  return NULL;
@@ -45,43 +46,43 @@ CMP3Audio* CID3Reader::read(std::string& sFilePath){
 
   //title - ID3FID_TITLE
   std::string sTitle = "<no title>";
-  utils->getTitle(sTitle);
+  id3Lib->getTitle(sTitle);
   
   //interpret - ID3FID_LEADARTIST
   std::string sInterpret = "<no artist>";
-  utils->getInterpret(sInterpret);
+  id3Lib->getInterpret(sInterpret);
  
   //albumtitle - ID3FID_ALBUM
   std::string sAlbum = "<no album>";
-  utils->getAlbum(sAlbum);
+  id3Lib->getAlbum(sAlbum);
 
   //year - ID3FID_YEAR
   std::string sYear = "";
-  utils->getYear(sYear);
+  id3Lib->getYear(sYear);
 
   //tracknumber - ID3FID_TRACKNUM
   std::string sTrackNum = "";
-  utils->getTrackNumber(sTrackNum);
+  id3Lib->getTrackNumber(sTrackNum);
   
   //genre
-  const char* pGenre = utils->getGenre();
+  const char* pGenre = id3Lib->getGenre();
 
   //filename
-  const char* pFilename = utils->getFileName(sFilePath.c_str());
+  const char* pFilename = id3Lib->getFileName(sFilePath.c_str());
   
   //filesize in MegaByte
-  double dFileSize = utils->getFileSize();
+  double dFileSize = id3Lib->getFileSize();
   
   //comment - ID3FID_COMMENT
   std::string sComment = "<no comment>";
-  utils->getComment(sComment);
+  id3Lib->getComment(sComment);
 
   //BPM - ID3FID_BPM
   std::string sBPM = "";
-  utils->getBPM(sBPM);
+  id3Lib->getBPM(sBPM);
 
    //Bitrate in kb/s
-  int iBitrate = utils->getBitrate();
+  int iBitrate = id3Lib->getBitrate();
 
   //if size of File is NULL no tag was read in ID3Utils.cpp
   if(!dFileSize){
@@ -91,7 +92,7 @@ CMP3Audio* CID3Reader::read(std::string& sFilePath){
   }
 
   //delete ID3Utils pointer and object
-  delete utils;
+  delete id3Lib;
 
   return new CMP3Audio(sFilePath, sTitle, sInterpret, sAlbum, sYear, pGenre, dFileSize, sTrackNum, pFilename, sComment, sBPM, iBitrate);
 }
