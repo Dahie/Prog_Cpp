@@ -167,8 +167,8 @@ namespace Task1 {
 			this->lbTracks->Size = System::Drawing::Size(365, 199);
 			this->lbTracks->TabIndex = 3;
 			this->lbTracks->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::selectTrack_Click);
-			this->lbTracks->DragEnter += gcnew System::Windows::Forms::DragEventHandler(this, &Form1::dragFileEnter);
 			this->lbTracks->DragDrop += gcnew System::Windows::Forms::DragEventHandler(this, &Form1::dragFileDrop);
+			this->lbTracks->DragEnter += gcnew System::Windows::Forms::DragEventHandler(this, &Form1::dragFileEnter);
 			// 
 			// tbTitle
 			// 
@@ -466,6 +466,7 @@ namespace Task1 {
 			this->tbSearch->Size = System::Drawing::Size(200, 22);
 			this->tbSearch->TabIndex = 25;
 			this->tbSearch->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->tbSearch->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Form1::searchField_Input);
 			// 
 			// btRemove
 			// 
@@ -516,6 +517,12 @@ namespace Task1 {
 
 		}
 #pragma endregion
+
+private: System::Void searchField_Input(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
+	
+	//System::Windows::Forms::MessageBox::Show(e->KeyChar.ToString());
+
+}
 
 private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
       
