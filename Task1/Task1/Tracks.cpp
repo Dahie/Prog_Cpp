@@ -10,6 +10,7 @@ CTracks::CTracks(void): iTitleCount(0)
 
 CTracks::~CTracks(void)
 {
+	this->clearTracks();
 }
 
 	typedef std::map<std::string, MP3::CMP3Audio*> mp3_cont;		
@@ -57,11 +58,13 @@ CTracks::~CTracks(void)
 	//delete all mp3 in container
 	void CTracks::clearTracks( void ){
 
-		mp3_it	iter;
-		for ( iter = tracks.begin(); iter != tracks.end(); ++iter ){
-			delete iter->second;
+		if(!tracks.empty()){
+			mp3_it	iter;
+			for ( iter = tracks.begin(); iter != tracks.end(); ++iter ){
+				delete iter->second;
+			}
+			tracks.clear();
 		}
-		tracks.clear();
 	}
 
 	//get number of mp3Tracks with same title information
