@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Indexer.h"
+#include "SortedTracks.h";
 
 using namespace Search;
 
@@ -16,7 +17,7 @@ Indexer::~Indexer(void)
   delete list;
 }
 
-void Indexer::add(std:string& word, MP3:MP3Audio* mp3audio) 
+void Indexer::add(std::string& word, MP3::CMP3Audio* mp3audio) 
 {
   // find if the word already exists
   KeyPair* keypair = find(key);
@@ -28,7 +29,7 @@ void Indexer::add(std:string& word, MP3:MP3Audio* mp3audio)
 
     // create keypair
     KeyPair* keypair;
-    keypair->word = word;
+    keypair->key = word;
 // TODOkeypair->list
     keypair->addAudio(mp3audio);
 
@@ -66,24 +67,57 @@ void Indexer::add(std:string& word, MP3:MP3Audio* mp3audio)
 
 }
 
-KeyPair* Indexer::find(std:string& key) const
+KeyPair* Indexer::find(std::string& key) const
 {
-  KeyPair* keypair
+  KeyPair* keypair = list;
 
   // logarithmix search
   int i = (int)num_words*0.5;
+  keypair +=i;
+  int upper_limit = 0;
+  int lower_limit = num_words;
+  int strcmp;
+
   while(current_keypair->key != key) 
   {
     
     current_keypair = list[i];
-    
+    strcmp = strmcmp(current_keypair->word, key );
+
+
+
+    if( strcmp == 0) {
+      // strings equal
+      return pointer;
+    else if ( strcmp > 0){
+      // key after current index
+      lower_limit = i;
+      i 
+      pointer += 
+    else if ( strcmp < 0){
+      // key before current index
+      upper_limit = i;
+    }
+
+
+
+    if( strcmp == 0) {
+      // strings equal
+      return keypair;
+    else if ( strcmp > 0){
+      // key after current index
+      lower_limit = i;
+      i = upper_limit / lower_limit;
+    else if ( strcmp < 0){
+      // key before current index
+      upper_limit = i;
+    }  
   }
 
-  // return the found keypair
-  return keypair*
+  return -1;
 }
 
-MP3:MP3Audio* Indexer::findFirst(std:string& key) const
+    MP3::CMP3Audio* Indexer::findFirst(std::string& key) const
 {
  
 
@@ -91,14 +125,14 @@ MP3:MP3Audio* Indexer::findFirst(std:string& key) const
 
 }
 
-CSortedTracks* Indexer::findAll(std:string& key) const
+    CSortedTracks* Indexer::findAll(std::string& key) const
 {
    // find word
   KeyPair* keypair = find(key);
   if(keypair != 0) {
   
     // return the first element in the associated list
-    keypair->set->first
+    return keypair->list;
 
   } else 
     return 0;
