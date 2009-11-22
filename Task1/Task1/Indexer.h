@@ -6,14 +6,15 @@
 
 namespace Search {
 
-struct KeyPair
+class KeyPair
 {
+public:
   // key
-  std:string& key;
+  std::string& key;
   // associated list of elements
   // TODO
-  list
-}
+  MP3::CSortedTracks* list;
+};
 
 class Indexer
 {
@@ -23,17 +24,17 @@ protected:
   int growth = 256;
   
   // array holding the keypairs
-  KeyPair*[] list;
+  KeyPair* list;
 
 
 public:
   Indexer(void);
   ~Indexer(void);
 
-  void add(std:string& word, MP3:MP3Audio* mp3audio);
-  KeyPair* find(std:string& key) const;
-  MP3:MP3Audio* findFirst(std:string& key) const;
-  CSortedTracks* findAll(std:string& key) const;
+  void add(std::string& word, MP3::CMP3Audio* mp3audio);
+  KeyPair* find(std::string& key) const;
+  MP3::CMP3Audio* findFirst(std::string& key) const;
+  MP3::CSortedTracks* findAll(std::string& key) const;
 
 };
 }
