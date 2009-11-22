@@ -4,28 +4,26 @@
 #include "MP3Audio.h"
 #include "SortedTracks.h"
 
+namespace Search {
 
-class KeyPair
+struct KeyPair
 {
-private:
   // key
   std:string& key;
   // associated list of elements
   // TODO
-public:
-  KeyPair(void);
-  KeyPair(std:string& pkey): _key(pkey);
-  ~KeyPair(void);
-
+  list
 }
 
 class Indexer
 {
 protected:
-  int num_words;
+  int num_words; // current length of keypair array
+  int capacity; // max length of keypair array
+  int growth = 256;
   
-  
-  KeyPair[] list;
+  // array holding the keypairs
+  KeyPair*[] list;
 
 
 public:
@@ -38,3 +36,4 @@ public:
   CSortedTracks* findAll(std:string& key) const;
 
 };
+}
