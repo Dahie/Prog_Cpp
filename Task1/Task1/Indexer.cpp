@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "Indexer.h"
-#include "SortedTracks.h";
+#include "SortedTracks.h"
+#include <stdio.h>
+#include <string.h>
 
 using namespace Search;
 
@@ -17,21 +19,17 @@ Indexer::~Indexer(void)
   delete list;
 }
 
-void Indexer::add(std::string& word, MP3::CMP3Audio* mp3audio) 
+void Indexer::add(const std::string& word, const std::string& title) 
 {
   // find if the word already exists
-  KeyPair* keypair = find(key);
-  if(keypair != 0) {
-    // word already exists
-    // add mp3audio to the words' associated list
-  } else {
+  KeyPair* keypair = find(word);
+  if(keypair == 0) {
     // word not yet indexed
 
     // create keypair
     KeyPair* keypair;
     keypair->key = word;
-// TODOkeypair->list
-    keypair->addAudio(mp3audio);
+    keypair->list->addTrack(title);
 
     // find insert index one behind the la
     int insert_index = num_words++;
@@ -67,40 +65,38 @@ void Indexer::add(std::string& word, MP3::CMP3Audio* mp3audio)
 
 }
 
-KeyPair* Indexer::find(std::string& key) const
+KeyPair* Indexer::find(const std::string& key) const
 {
   KeyPair* keypair = list;
 
   // logarithmix search
-  int i = (int)num_words*0.5;
-  keypair +=i;
-  int upper_limit = 0;
-  int lower_limit = num_words;
-  int strcmp;
+  int delta = (int)num_words*0.5;
+  keypair +=delta;
+  //int upper_limit = 0;
+  //int lower_limit = num_words;
+  int strcmp = strncmp(keypair->key, key );
 
-  while(current_keypair->key != key) 
+  while( 
+    strcmp != 0) // FIXME breaks when no element found 
   {
-    
-    current_keypair = list[i];
-    strcmp = strmcmp(current_keypair->word, key );
-
+    strcmp = strncmp(keypair->key, key );
 
 
     if( strcmp == 0) {
       // strings equal
-      return pointer;
+      return keypair;
     else if ( strcmp > 0){
       // key after current index
-      lower_limit = i;
+      //lower_limit = i;
       i 
-      pointer += 
+      pointer += delta;
     else if ( strcmp < 0){
       // key before current index
-      upper_limit = i;
+      //upper_limit = delta;
     }
 
 
-
+/*
     if( strcmp == 0) {
       // strings equal
       return keypair;
@@ -111,21 +107,14 @@ KeyPair* Indexer::find(std::string& key) const
     else if ( strcmp < 0){
       // key before current index
       upper_limit = i;
-    }  
+    }*/  
   }
 
   return -1;
 }
 
-    MP3::CMP3Audio* Indexer::findFirst(std::string& key) const
-{
- 
 
-  
-
-}
-
-    CSortedTracks* Indexer::findAll(std::string& key) const
+CSortedTracks* Indexer::findAll(const std::string& key) const
 {
    // find word
   KeyPair* keypair = find(key);
