@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Tracks.h"
-#include <list>
 
 using namespace MP3;
 
@@ -10,7 +9,6 @@ CTracks::CTracks(void): iTitleCount(0)
 
 CTracks::~CTracks(void)
 {
-	this->clearTracks();
 }
 
 	typedef std::map<std::string, MP3::CMP3Audio*> mp3_cont;		
@@ -27,7 +25,6 @@ CTracks::~CTracks(void)
 	MP3::CMP3Audio* CTracks::getTrack( const std::string& name ) {
 		
 		if(!tracks.empty()){
-
 			mp3_it iter = tracks.find(name);
 			if(iter != tracks.end()){
 				return iter->second;
@@ -45,6 +42,18 @@ CTracks::~CTracks(void)
 			mp3_it iter = tracks.find(name);
 			if(iter != tracks.end()){
 				delete iter->second;
+				tracks.erase(name);
+			}
+		}
+	}
+
+	//remove item in container but save oject
+	void CTracks::eraseTrack( const std::string& name ){
+		
+		if(!tracks.empty()){
+
+			mp3_it iter = tracks.find(name);
+			if(iter != tracks.end()){
 				tracks.erase(name);
 			}
 		}

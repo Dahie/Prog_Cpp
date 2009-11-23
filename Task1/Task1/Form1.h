@@ -529,7 +529,7 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
 	  // Displays an OpenFileDialog so the user can select mp3 Files
       OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
 	  openFileDialog1->Multiselect = true;
-      //openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
+      openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
       openFileDialog1->Title = "Select a MP3 Audio";
 
 	  //Displays an OpenFolderDialog
@@ -553,8 +553,6 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
 }
 
 private: System::Void openAllFiles(System::Array^ filenames){
-		
-		String^ title;
 
 		for(int i=0; i<filenames->Length; ++i){
 
@@ -584,26 +582,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 				}
 				case OK:{
 					
-					//clear listBox Items and MP3 Info
-					lbTracks->Items->Clear();
-					clearMP3Infos();
-
-					//fill listBox with names from sorted title list
-					const MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
-
-					MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
-					for (iter; iter != titles->getEndIterator(); ++iter ) {
-						
-						title = gcnew String((iter->sTitleName).c_str());
-						//title = gcnew String((*iter).c_str());
-						lbTracks->Items->Add(title);
-						lbTracks->SelectedIndex = 0;
-						lbTracks->Select();
-					}
-
-					//output number of read tracks in status strip
-					this->toolStripStatLb->Text = titles->getSizeOfSortedTitles().ToString()+ " tracks";
-
+					this->updateTitleListOutput();
 					break;
 				}
 				case ALREADY_OPENED:{
@@ -615,10 +594,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 				}
 			}//end of switch			
 		}//end of for loop
-
-}//method openAllFiles
-
-
+}
 
 private: System::Void selectTrack_Click(System::Object^  sender, System::EventArgs^  e) {
 		 
@@ -655,16 +631,41 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 
 			//remove track
 			this->tracksController->removeFile(name);
-			
-			//remove track from listbox
-			lbTracks->Items->RemoveAt(lbTracks->SelectedIndex);
+
+			this->updateTitleListOutput();
+
 			if(lbTracks->Items->Count>=1){
-				lbTracks->SelectedIndex = 0;
+				//lbTracks->SelectedIndex = 0;
 			}else{
 				this->clearMP3Infos();
 				this->setButtonsEnabled(false);
 			}
 		}
+}
+
+private: System::Void updateTitleListOutput( void ){
+
+		String^ title;
+
+		//clear listBox Items and MP3 Info
+		lbTracks->Items->Clear();
+		clearMP3Infos();
+
+		//fill listBox with names from sorted title list
+		const MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
+
+		MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
+		for (iter; iter != titles->getEndIterator(); ++iter ) {
+			
+			title = gcnew String((iter->sTitleName).c_str());
+			//title = gcnew String((*iter).c_str());
+			lbTracks->Items->Add(title);
+			lbTracks->SelectedIndex = 0;
+			lbTracks->Select();
+		}
+
+		//output number of read tracks in status strip
+		this->toolStripStatLb->Text = titles->getSizeOfSortedTitles().ToString()+ " tracks";
 }
 
 private: System::Void setButtonsEnabled(bool flag) {

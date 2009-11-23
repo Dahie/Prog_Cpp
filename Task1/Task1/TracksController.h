@@ -5,6 +5,7 @@
 #include "MP3ReaderFactory.h"
 #include "Tracks.h"
 #include "SortedTitles.h"
+#include "Utils.h"
 
 enum Response{
 	NO_MP3_FILE, NOT_READ, OK, ALREADY_OPENED
@@ -26,7 +27,8 @@ class CTracksController
 		MP3::CSortedTitles* getAllTitles( void );
 		void removeFile( const std::string& name );
 		void removeAllFiles( void );
-	
-};
+		void renameUniqueTitles( const std::string& name, const std::string& title );	
+
+}; //class CTracksController
 
 #endif //TRACKSCONTROLLER_H
