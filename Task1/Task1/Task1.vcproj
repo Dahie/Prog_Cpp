@@ -210,10 +210,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Indexer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\MP3Audio.cpp"
 				>
 			</File>
@@ -287,10 +283,6 @@
 			</File>
 			<File
 				RelativePath=".\ID3Reader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Indexer.h"
 				>
 			</File>
 			<File
