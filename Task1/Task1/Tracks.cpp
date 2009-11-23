@@ -31,13 +31,8 @@ CTracks::~CTracks(void)
 			mp3_it iter = tracks.find(name);
 			if(iter != tracks.end()){
 				return iter->second;
-			}
-			/*mp3_it iter;
-			for ( iter = tracks.begin(); iter != tracks.end(); ++iter ) {
-				if((iter->first) == name){
-					return iter->second;
-				}
-			}*/
+			} 
+			return NULL;
 		}
 		return NULL;
 	}

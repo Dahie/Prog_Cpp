@@ -222,6 +222,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SortedTitles.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SortedTracks.cpp"
 				>
 			</File>
@@ -299,6 +303,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SortedTitles.h"
 				>
 			</File>
 			<File
