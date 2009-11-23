@@ -552,9 +552,8 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
       }
 }
 
-private: System::Boolean^ openAllFiles(System::Array^ filenames){
+private: System::Void openAllFiles(System::Array^ filenames){
 		
-		System::Boolean^ flag = true;
 		String^ title;
 
 		for(int i=0; i<filenames->Length; ++i){
@@ -573,12 +572,14 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 					System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
 					+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+					lbTracks->Select();
 					break;
 				}
 				case NOT_READ:{ 
 
 					MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+					lbTracks->Select();
 					break;
 				}
 				case OK:{
@@ -588,34 +589,34 @@ private: System::Boolean^ openAllFiles(System::Array^ filenames){
 					clearMP3Infos();
 
 					//fill listBox with names from sorted title list
-					MP3::CSortedTracks* sortedTitles = this->tracksController->getAllTitles();
+					const MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
 
-					MP3::CSortedTracks::mp3_it iter = sortedTitles->getBeginIterator();
-					for (iter = sortedTitles->getBeginIterator(); iter != sortedTitles->getEndIterator(); ++iter ) {
+					MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
+					for (iter; iter != titles->getEndIterator(); ++iter ) {
 						
-						title = gcnew String((*iter).c_str());
+						title = gcnew String((iter->sTitleName).c_str());
+						//title = gcnew String((*iter).c_str());
 						lbTracks->Items->Add(title);
 						lbTracks->SelectedIndex = 0;
 						lbTracks->Select();
 					}
 
 					//output number of read tracks in status strip
-					this->toolStripStatLb->Text = sortedTitles->getSizeOfSortedTracks().ToString()+ " tracks";
-					
+					this->toolStripStatLb->Text = titles->getSizeOfSortedTitles().ToString()+ " tracks";
+
 					break;
 				}
 				case ALREADY_OPENED:{
 
 					//TODO just the filename!!!!!!!!!!
 					MessageBox::Show("mp3-File \""+filenames->GetValue(i)->ToString()+"\" already exists");
-					
+					lbTracks->Select();
 					break;
 				}
 			}//end of switch			
 		}//end of for loop
 
-		return flag;
-}
+}//method openAllFiles
 
 
 
