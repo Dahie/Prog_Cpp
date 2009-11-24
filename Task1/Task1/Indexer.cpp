@@ -55,19 +55,19 @@ void Indexer::insert(const std::string& word, const std::string& title)
 }
 
 KeyPair* Indexer::expand() {
- // create new longer list
-      KeyPair* new_list = new KeyPair[capacity+growth];
+  // create new longer list
+  KeyPair* new_list = new KeyPair[capacity+growth];
 
-      // copy all elements
-      for (signed int i = 0; i < num_words; ++i) {
-        new_list[i] = list[i];
-      }
+  // copy all elements
+  for (unsigned int i = 0; i < num_words; ++i) {
+    new_list[i] = list[i];
+  }
 
-      // delete old list
-      delete[] list;
+  // delete old list
+  delete[] list;
 
-      // replace list
-      return new_list;
+  // replace list
+  return new_list;
 }
 
 KeyPair* Indexer::createKeyPair(const std::string& word, const std::string& title)
@@ -76,9 +76,18 @@ KeyPair* Indexer::createKeyPair(const std::string& word, const std::string& titl
   return keypair;
 }
 
+bool Indexer::is_empty() const
+{
+  return (num_words > 0) ? false : true;
+}
+
 KeyPair* Indexer::find(const std::string& key) const
 {
   KeyPair* keypair = list; // get first list pointer
+
+  // has index values?
+  if(num_words == 0)
+    return 0;
 
   // logarithmix search
   unsigned int delta = (unsigned int)num_words*0.5;
