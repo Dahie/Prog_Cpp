@@ -28,11 +28,15 @@ public:
     this->list = new MP3::CSortedTracks();
     this->list->addTrack(title);
    };
-  KeyPair(KeyPair*);
+  // no deep copy
+  KeyPair(KeyPair* copy): key(copy->key), list(copy->list) {
+   };
   ~KeyPair(void){ };
 
 
-KeyPair& operator= ( const KeyPair& rhs );
+  KeyPair& operator= ( const KeyPair& rhs ) {
+    return *this;
+  };
 };
 
 class Indexer
