@@ -94,6 +94,7 @@ namespace Task1 {
 
 	private: System::Windows::Forms::StatusStrip^  statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatLb;
+  private: System::Windows::Forms::Button^  btn_indexinfo;
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -141,6 +142,7 @@ namespace Task1 {
       this->tbSearch = (gcnew System::Windows::Forms::TextBox());
       this->btRemove = (gcnew System::Windows::Forms::Button());
       this->btAdd = (gcnew System::Windows::Forms::Button());
+      this->btn_indexinfo = (gcnew System::Windows::Forms::Button());
       this->statusStrip1->SuspendLayout();
       this->gbMP3Infos->SuspendLayout();
       this->gbTracks->SuspendLayout();
@@ -491,11 +493,22 @@ namespace Task1 {
       this->btAdd->UseVisualStyleBackColor = true;
       this->btAdd->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
       // 
+      // btn_indexinfo
+      // 
+      this->btn_indexinfo->Location = System::Drawing::Point(404, 175);
+      this->btn_indexinfo->Name = L"btn_indexinfo";
+      this->btn_indexinfo->Size = System::Drawing::Size(90, 29);
+      this->btn_indexinfo->TabIndex = 31;
+      this->btn_indexinfo->Text = L"Index Info";
+      this->btn_indexinfo->UseVisualStyleBackColor = true;
+      this->btn_indexinfo->Click += gcnew System::EventHandler(this, &Form1::btn_indexinfo_Click);
+      // 
       // Form1
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
       this->ClientSize = System::Drawing::Size(622, 531);
+      this->Controls->Add(this->btn_indexinfo);
       this->Controls->Add(this->btAdd);
       this->Controls->Add(this->btRemove);
       this->Controls->Add(this->btClear);
@@ -755,6 +768,11 @@ private: System::Void tbSearch_TextChanged(System::Object^  sender, System::Even
            const MP3::CSortedTitles* found_titles = this->tracksController->find("Title");
            if(found_titles != 0) 
              this->updateTitleListOutput(found_titles);
+         }
+private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
+          unsigned int length = this->tracksController->getIndexLength();
+          unsigned int capacity = this->tracksController->getIndexCapacity();
+          MessageBox::Show("Length: " + length + "\n" + "Capacity: " + capacity);
          }
 };//class Form1
 

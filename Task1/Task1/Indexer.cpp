@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <string.h>
+
 #include "StdAfx.h"
 #include "Indexer.h"
 #include "SortedTitles.h"
@@ -81,6 +80,16 @@ bool Indexer::is_empty() const
   return (num_words > 0) ? false : true;
 }
 
+unsigned int Indexer::get_length() const
+{
+  return this->num_words;
+}
+
+unsigned int Indexer::get_capacity() const
+{
+  return this->capacity;
+}
+
 KeyPair* Indexer::find(const std::string& key) const
 {
   KeyPair* keypair = list; // get first list pointer
@@ -90,7 +99,7 @@ KeyPair* Indexer::find(const std::string& key) const
     return 0;
 
   // logarithmix search
-  unsigned int delta = (unsigned int)num_words*0.5;
+  signed int delta = (signed int)num_words*0.5;
   keypair +=delta;
   //int upper_limit = 0;
   //int lower_limit = num_words;
