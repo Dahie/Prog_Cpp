@@ -1,8 +1,9 @@
+#include <stdio.h>
+#include <string.h>
 #include "StdAfx.h"
 #include "Indexer.h"
 #include "SortedTracks.h"
-#include <stdio.h>
-#include <string.h>
+
 
 using namespace Search;
 
@@ -19,7 +20,7 @@ Indexer::~Indexer(void)
   delete list;
 }
 
-void Indexer::add(const std::string& word, const std::string& title) 
+void Indexer::insert(const std::string& word, const std::string& title) 
 {
   size_t word_length = strlen(word.c_str());
 
@@ -79,19 +80,19 @@ KeyPair* Indexer::createKeyPair(const std::string& word, const std::string& titl
 
 KeyPair* Indexer::find(const std::string& key) const
 {
-  KeyPair* keypair = list;
+  KeyPair* keypair = list; // get first list pointer
 
   // logarithmix search
-  int delta = (int)num_words*0.5;
+  unsigned int delta = (unsigned int)num_words*0.5;
   keypair +=delta;
   //int upper_limit = 0;
   //int lower_limit = num_words;
-  int strcmp = strncmp(keypair->key.c_str(), key.c_str() );
+  int stringcomp = strcmp( (keypair->key).c_str(), key.c_str() );
 
   while( 
-    strcmp != 0) // FIXME breaks when no element found 
+    stringcomp != 0) // FIXME breaks when no element found 
   {
-    strcmp = strncmp(keypair->key, key );
+    stringcomp = strcmp( (keypair->key).c_str(), key.c_str() );
 
 
     if( strcmp == 0) {
