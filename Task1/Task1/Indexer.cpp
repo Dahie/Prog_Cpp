@@ -72,9 +72,7 @@ KeyPair* Indexer::expand() {
 
 KeyPair* Indexer::createKeyPair(const std::string& word, const std::string& title)
 {
-  KeyPair* keypair = new KeyPair();
-  keypair->key = word;
-  keypair->list->addTrack(title);
+  KeyPair* keypair = new KeyPair(word, title);
   return keypair;
 }
 

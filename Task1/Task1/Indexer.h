@@ -11,14 +11,25 @@ class KeyPair
 {
 public:
   // key
-  std::string& key;
+  const std::string& key;
   // associated list of elements
   // TODO
   MP3::CSortedTracks* list;
 
-  KeyPair(void);
+  KeyPair(): key("dummy"){
+    this->list = new MP3::CSortedTracks();
+   };
+
+  KeyPair(const std::string& word): key(word) {
+    this->list = new MP3::CSortedTracks();
+   };
+
+  KeyPair(const std::string& word, const std::string& title): key(word) {
+    this->list = new MP3::CSortedTracks();
+    this->list->addTrack(title);
+   };
   KeyPair(KeyPair*);
-  ~KeyPair(void);
+  ~KeyPair(void){ };
 
 
 KeyPair& operator= ( const KeyPair& rhs );
