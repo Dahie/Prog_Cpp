@@ -753,7 +753,8 @@ private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e)
 
 private: System::Void tbSearch_TextChanged(System::Object^  sender, System::EventArgs^  e) {
            const MP3::CSortedTitles* found_titles = this->tracksController->find("Title");
-           this->updateTitleListOutput(found_titles);
+           if(found_titles != 0) 
+             this->updateTitleListOutput(found_titles);
          }
 };//class Form1
 
