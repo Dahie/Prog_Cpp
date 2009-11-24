@@ -68,7 +68,13 @@ public:
   KeyPair* find(const std::string& key) const;
 
   // is index empty, nothing indexed yet
-  bool Indexer::is_empty() const;
+  bool is_empty() const;
+
+  // number of indexed words
+  unsigned int get_length() const;
+
+  // capacity of the index
+  unsigned int get_capacity() const;
 
   // returns a sorted list of all titles associated with this searchterm
   MP3::CSortedTitles* findAll(const std::string& key) const;

@@ -31,6 +31,8 @@ class CTracksController
 		void removeFile( const std::string& name );
 		void removeAllFiles( void );
 		void renameUniqueTitles( const std::string& name, const std::string& title );	
+    unsigned int getIndexLength() const;
+    unsigned int getIndexCapacity() const;
 
 }; //class CTracksController
 

@@ -65,8 +65,18 @@ MP3::CSortedTitles* CTracksController::getAllTitles( void ){
 	return this->sortedTitles;
 }
 
-MP3::CSortedTitles* CTracksController::find( const std::string& searchword ) const{
+MP3::CSortedTitles* CTracksController::find( const std::string& searchword ) const
+{
 	return this->indexer->findAll(searchword);
+}
+
+unsigned int CTracksController::getIndexLength() const
+{
+	return this->indexer->get_length();
+}
+unsigned int CTracksController::getIndexCapacity() const
+    {
+	return this->indexer->get_capacity();
 }
 
 void CTracksController::removeFile( const std::string& name ){
