@@ -3,7 +3,7 @@
 #define SORTEDTRACKS_H
 
 #include <list>
-#include "MP3Audio.h"
+#include <string>
 
 namespace MP3{
 

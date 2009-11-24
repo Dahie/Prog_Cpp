@@ -35,6 +35,9 @@ public:
 	//delete a mp3
 	void removeTrack( const std::string& name );
 
+	//remove item in container but save oject
+	void eraseTrack( const std::string& name );
+
 	//is mp3 in container
 	bool isInCollection( MP3::CMP3Audio* track );
 
