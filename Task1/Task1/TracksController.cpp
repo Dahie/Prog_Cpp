@@ -3,9 +3,11 @@
 
 
 CTracksController::CTracksController( void ):tracks( new MP3::CTracks() ), 
-sortedTitles( new MP3::CSortedTitles() ), mp3Reader( MP3::CMP3ReaderFactory::createInstance() )
+  sortedTitles( new MP3::CSortedTitles() ), 
+  mp3Reader( MP3::CMP3ReaderFactory::createInstance() ),
+  indexer ( new Search::Indexer() )
 {
-	if( (!tracks) || (!sortedTitles) || (!mp3Reader) ){ 
+	if( (!tracks) || (!sortedTitles) || (!mp3Reader) || (!indexer)  ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 			"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
@@ -17,6 +19,7 @@ CTracksController::~CTracksController( void )
 {
 	delete this->mp3Reader;
 	delete this->sortedTitles;
+  delete this->indexer;
 	this->tracks->clearTracks();
 	delete this->tracks;
 }
@@ -60,6 +63,10 @@ MP3::CMP3Audio* CTracksController::getFile( const std::string& name ){
 
 MP3::CSortedTitles* CTracksController::getAllTitles( void ){
 	return this->sortedTitles;
+}
+
+MP3::CSortedTitles* CTracksController::find( const std::string& searchword ) const{
+	return this->indexer->findAll(searchword);
 }
 
 void CTracksController::removeFile( const std::string& name ){

@@ -6,6 +6,7 @@
 #include "Tracks.h"
 #include "SortedTitles.h"
 #include "Utils.h"
+#include "Indexer.h"
 
 enum Response{
 	NO_MP3_FILE, NOT_READ, OK, ALREADY_OPENED
@@ -17,6 +18,7 @@ class CTracksController
 		MP3::CTracks* tracks;
 		MP3::CSortedTitles* sortedTitles;
 		MP3::IMP3Reader* mp3Reader;
+    Search::Indexer* indexer;
 
 	public:
 		CTracksController( void );
@@ -25,6 +27,7 @@ class CTracksController
 		Response addFile( const std::string& filePath );
 		MP3::CMP3Audio* getFile( const std::string& name );
 		MP3::CSortedTitles* getAllTitles( void );
+    MP3::CSortedTitles* find( const std::string& searchword ) const;
 		void removeFile( const std::string& name );
 		void removeAllFiles( void );
 		void renameUniqueTitles( const std::string& name, const std::string& title );	
