@@ -21,29 +21,44 @@ Indexer::~Indexer(void)
 
 void Indexer::add(const std::string& word, const std::string& title) 
 {
+  size_t word_length = strlen(word.c_str());
+
   // find if the word already exists
   KeyPair* keypair = find(word);
   if(keypair == 0) {
     // word not yet indexed
 
-    // create keypair
-    KeyPair* keypair;
-    keypair->key = word;
-    keypair->list->addTrack(title);
+    // create keypair for word
+    KeyPair* keypair = createKeyPair(word, title);
+    // create keypair for each subvariant of word
 
     // find insert index one behind the la
-    int insert_index = num_words++;
+    unsigned int insert_index = num_words++;
 
     // determine if the capacity of the current list is exceeded
     if(insert_index++ > capacity) {
       // number of elements exceeded capacity
-      // expand list
+      // expand list and replace old list
+      list = expand();
+    }
 
-      // create new longer list
+
+    // add keypairs to list
+    list[insert_index] = keypair;
+
+    // resort list to alphabetical ASC
+    // TODO later
+
+  }
+
+}
+
+KeyPair* Indexer::expand() {
+ // create new longer list
       KeyPair* new_list = new KeyPair[capacity+growth];
 
       // copy all elements
-      for (int i = 0; i < num_words; ++i) {
+      for (signed int i = 0; i < num_words; ++i) {
         new_list[i] = list[i];
       }
 
@@ -51,18 +66,15 @@ void Indexer::add(const std::string& word, const std::string& title)
       delete[] list;
 
       // replace list
-      list = new_list;
-    }
+      return new_list;
+}
 
-
-    // add keypair to list
-      list[insert_index] = keypair;
-
-    // resort list to alphabetical ASC
-    // TODO later
-
-  }
-
+KeyPair* Indexer::createKeyPair(const std::string& word, const std::string& title)
+{
+  KeyPair* keypair = new KeyPair();
+  keypair->key = word;
+  keypair->list->addTrack(title);
+  return keypair;
 }
 
 KeyPair* Indexer::find(const std::string& key) const
@@ -74,7 +86,7 @@ KeyPair* Indexer::find(const std::string& key) const
   keypair +=delta;
   //int upper_limit = 0;
   //int lower_limit = num_words;
-  int strcmp = strncmp(keypair->key, key );
+  int strcmp = strncmp(keypair->key.c_str(), key.c_str() );
 
   while( 
     strcmp != 0) // FIXME breaks when no element found 
@@ -85,12 +97,11 @@ KeyPair* Indexer::find(const std::string& key) const
     if( strcmp == 0) {
       // strings equal
       return keypair;
-    else if ( strcmp > 0){
+    }else if ( strcmp > 0){
       // key after current index
       //lower_limit = i;
-      i 
-      pointer += delta;
-    else if ( strcmp < 0){
+      keypair += delta;
+    }else if ( strcmp < 0){
       // key before current index
       //upper_limit = delta;
     }
@@ -110,11 +121,11 @@ KeyPair* Indexer::find(const std::string& key) const
     }*/  
   }
 
-  return -1;
+  return 0;
 }
 
 
-CSortedTracks* Indexer::findAll(const std::string& key) const
+MP3::CSortedTracks* Indexer::findAll(const std::string& key) const
 {
    // find word
   KeyPair* keypair = find(key);
