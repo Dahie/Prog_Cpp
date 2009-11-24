@@ -752,7 +752,7 @@ private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {}
 
 private: System::Void tbSearch_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-           const MP3::CSortedTitles* found_titles = this->tracksController->indexer.findAll("Title");
+           const MP3::CSortedTitles* found_titles = this->tracksController->find("Title");
            this->updateTitleListOutput(found_titles);
          }
 };//class Form1

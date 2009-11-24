@@ -2,7 +2,7 @@
 #include <string.h>
 #include "StdAfx.h"
 #include "Indexer.h"
-#include "SortedTracks.h"
+#include "SortedTitles.h"
 
 
 using namespace Search;
@@ -124,7 +124,7 @@ KeyPair* Indexer::find(const std::string& key) const
 }
 
 
-MP3::CSortedTracks* Indexer::findAll(const std::string& key) const
+MP3::CSortedTitles* Indexer::findAll(const std::string& key) const
 {
    // find word
   KeyPair* keypair = find(key);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "SortedTracks.h"
+#include "SortedTitles.h"
 
 namespace Search {
 
@@ -14,19 +14,19 @@ public:
   const std::string& key;
   // associated list of elements
   // TODO
-  MP3::CSortedTracks* list;
+  MP3::CSortedTitles* list;
 
   KeyPair(): key("dummy"){
-    this->list = new MP3::CSortedTracks();
+    this->list = new MP3::CSortedTitles();
    };
 
   KeyPair(const std::string& word): key(word) {
-    this->list = new MP3::CSortedTracks();
+    this->list = new MP3::CSortedTitles();
    };
 
   KeyPair(const std::string& word, const std::string& title): key(word) {
-    this->list = new MP3::CSortedTracks();
-    this->list->addTrack(title);
+    this->list = new MP3::CSortedTitles();
+    this->list->addTitle(title);
    };
   // no deep copy
   KeyPair(KeyPair* copy): key(copy->key), list(copy->list) {
@@ -68,7 +68,7 @@ public:
   KeyPair* find(const std::string& key) const;
 
   // returns a sorted list of all titles associated with this searchterm
-  MP3::CSortedTracks* findAll(const std::string& key) const;
+  MP3::CSortedTitles* findAll(const std::string& key) const;
 
 };
 }
