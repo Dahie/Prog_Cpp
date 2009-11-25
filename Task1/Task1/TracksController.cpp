@@ -57,6 +57,8 @@ enum Response CTracksController::addFile( const std::string& filePath ){
     // add to indexer
     this->indexer->insert(name, name);
 
+		createSubstrings(name);
+
 	}else{ return ALREADY_OPENED; }
 
   return OK;
