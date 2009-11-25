@@ -469,7 +469,7 @@ namespace Task1 {
 			this->tbSearch->Size = System::Drawing::Size(200, 22);
 			this->tbSearch->TabIndex = 25;
 			this->tbSearch->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
-			this->tbSearch->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Form1::searchField_Input);
+			this->tbSearch->TextChanged += gcnew System::EventHandler(this, &Form1::searchField_textChanged);
 			// 
 			// btRemove
 			// 
@@ -533,15 +533,16 @@ namespace Task1 {
 		}
 #pragma endregion
 
-private: System::Void searchField_Input(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-	
-	//System::Windows::Forms::MessageBox::Show(e->KeyChar.ToString());
+private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
+	MessageBox::Show(this->tbSearch->Text + " length of text: " + this->tbSearch->TextLength);
+			 //this->tbSearch->ResetText(); //delete content of textbox
+	this->tbSearch->CharacterCasing = System::Windows::Forms::CharacterCasing::Upper;
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles("Title");
 	if( found_titles ){ 
 		this->updateTitleListOutput(found_titles);
 	}
-
+		 
 }
 
 private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -599,7 +600,9 @@ private: System::Void openAllFiles(System::Array^ filenames){
 				}
 				case OK:{
 					
-					this->updateTitleListOutput(this->tracksController->getAllTitles());
+					MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
+					titles->sortTitles();
+					this->updateTitleListOutput(titles);
 					break;
 				}
 				case ALREADY_OPENED:{
