@@ -13,7 +13,7 @@ class KeyPair
 {
 public:
   // key
-  const std::string key;
+  std::string key;
   // associated list of elements
   MP3::CSortedTitles* list;
 
@@ -39,6 +39,8 @@ public:
 
 
   KeyPair& operator= ( const KeyPair& rhs ) {
+    this->key = rhs.key;
+    this->list = rhs.list;
     return *this;
   };
 };
