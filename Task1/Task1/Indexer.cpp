@@ -34,7 +34,7 @@ void Indexer::insert(const std::string* words, const unsigned int num, const std
       // TODO create keypair for each subvariant of word
 
       // find insert index one behind the la
-      unsigned int insert_index = num_words++;
+      unsigned int insert_index = num_words;
 
       // determine if the capacity of the current list is exceeded
       if(insert_index >= capacity) {
@@ -46,7 +46,7 @@ void Indexer::insert(const std::string* words, const unsigned int num, const std
 
       // add keypairs to list
       list[insert_index] = keypair;
-
+      this->num_words++;
       words++;
     }
     // resort list to alphabetical ASC
@@ -71,7 +71,7 @@ void Indexer::insert(const std::string& word, const std::string& title)
     // TODO create keypair for each subvariant of word
 
     // find insert index one behind the la
-    unsigned int insert_index = num_words++;
+    unsigned int insert_index = num_words;
 
     // determine if the capacity of the current list is exceeded
     if(insert_index >= capacity) {
@@ -83,6 +83,7 @@ void Indexer::insert(const std::string& word, const std::string& title)
 
     // add keypairs to list
     list[insert_index] = keypair;
+    this->num_words++;
 
     // resort list to alphabetical ASC
     // TODO later
@@ -144,13 +145,17 @@ KeyPair* Indexer::find(const std::string& searchterm) const
   if(num_words == 0)
     return 0;
 
+  
+
   // logarithmic search
   signed int delta = (signed int)num_words*0.5;
-  printf("%s",delta);
+  
+  //printf("%s",delta);
   //keypair +=delta;
+  return keypair;
   //int upper_limit = 0;
   //int lower_limit = num_words;
-  int stringcomp = searchterm.compare(keypair->key);
+  //int stringcomp = searchterm.compare(keypair->key);
 
   /*while( 
     (stringcomp != 0) // FIXME breaks when no element found 
@@ -181,6 +186,8 @@ MP3::CSortedTitles* Indexer::findAll(const std::string& key) const
 {
    // find word
   KeyPair* keypair = find(key);
+  keypair->list;
+  keypair->key;
   if(keypair != 0) {
   
     // return the first element in the associated list

@@ -533,11 +533,20 @@ namespace Task1 {
 
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
-	MessageBox::Show(this->tbSearch->Text + " length of text: " + this->tbSearch->TextLength);
+	//MessageBox::Show(this->tbSearch->Text + " length of text: " + this->tbSearch->TextLength);
 			 //this->tbSearch->ResetText(); //delete content of textbox
-	this->tbSearch->CharacterCasing = System::Windows::Forms::CharacterCasing::Upper;
-	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles("Title");
-	if( found_titles ){ 
+	//this->tbSearch->CharacterCasing = System::Windows::Forms::CharacterCasing::Upper;
+
+  std::string searchterm ="";
+	MarshalString(this->tbSearch->Text, searchterm);
+
+  if(searchterm.empty()){ 
+		this->updateTitleListOutput(this->tracksController->getAllTitles());
+	}
+
+	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
+	if( found_titles != 0 ){ 
+    MessageBox::Show("found somethin");
 		this->updateTitleListOutput(found_titles);
 	}
 		 

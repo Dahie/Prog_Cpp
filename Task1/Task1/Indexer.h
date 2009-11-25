@@ -13,9 +13,8 @@ class KeyPair
 {
 public:
   // key
-  const std::string& key;
+  const std::string key;
   // associated list of elements
-  // TODO
   MP3::CSortedTitles* list;
 
   KeyPair(): key("dummy"){
@@ -28,12 +27,15 @@ public:
 
   KeyPair(const std::string& word, const std::string& title): key(word) {
     this->list = new MP3::CSortedTitles();
-    this->list->addTitle(title); //addTitle is unsorted Adding- for sorted use insertTitle
+    this->list->insertTitle(title); //addTitle is unsorted Adding- for sorted use insertTitle
    };
   // no deep copy
   KeyPair(KeyPair* copy): key(copy->key), list(copy->list) {
    };
-  ~KeyPair(void){ };
+  ~KeyPair(void){ 
+    //delete this->list;
+    //delete this->key;
+  };
 
 
   KeyPair& operator= ( const KeyPair& rhs ) {
