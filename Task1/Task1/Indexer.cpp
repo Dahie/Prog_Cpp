@@ -134,12 +134,12 @@ KeyPair* Indexer::find(const std::string& searchterm) const
   
   //printf("%s",delta);
   keypair +=delta;
-  return keypair;
+  //return keypair;
   //int upper_limit = 0;
   //int lower_limit = num_words;
   int stringcomp = searchterm.compare(keypair->key);
 
-  /*while( 
+  while( 
     (stringcomp != 0) // FIXME breaks when no element found 
     && (delta > 0) 
     )
@@ -158,7 +158,7 @@ KeyPair* Indexer::find(const std::string& searchterm) const
       //upper_limit = delta;
       keypair -= delta;
     }
-  }*/
+  }
 
   return 0;
 }
