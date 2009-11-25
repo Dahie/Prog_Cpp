@@ -544,6 +544,7 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
   if(searchterm.empty()){ 
 		this->updateTitleListOutput(this->tracksController->getAllTitles());
+    return;
 	}
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
