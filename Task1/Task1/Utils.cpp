@@ -47,8 +47,36 @@ std::string ws2s(const std::wstring& s){
 //create std::string with an ending converted from int
 void createStdString( std::string& name, const int count ){
 		std::stringstream ss;
-		ss << " (" << count << ") ";
+		ss << " (" << count << ")";
 		name += ss.str();
+}
+
+//split string into different substrings
+void createSubstrings(const std::string& sText){
+
+	//sWordContainer
+
+	const char* pText = sText.c_str();
+	std::string pWord;
+	std::string result;
+
+	////get pointer on last character of text
+	const char* pLastChar = pText + strlen(pText);
+
+	while( pText <= pLastChar ){
+
+		pWord += (*pText);
+		
+		if( *pText == ' ' || pText == pLastChar ){
+			result = pWord;
+			System::Windows::Forms::MessageBox::Show(gcnew String(result.c_str()));
+			pWord = "";
+		}
+	
+		++pText;
+	}
+
+	//return sWordContainer;
 }
 
 //scan for files in an directory - NOT COMPLETED - TODO
