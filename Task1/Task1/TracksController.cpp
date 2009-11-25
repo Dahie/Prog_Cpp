@@ -48,8 +48,8 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 
 		//add mp3 in tracks collection and the title in sorted titlelist
 		this->tracks->addTrack(name, mp3audio);
-		this->sortedTitles->insertTitle(name);
-		//this->sortedTitles->addTitle(name);
+		//this->sortedTitles->insertTitle(name);
+		this->sortedTitles->addTitle(name);
 
 	}else{ return ALREADY_OPENED; }
 
@@ -61,7 +61,6 @@ MP3::CMP3Audio* CTracksController::getFile( const std::string& name ){
 }
 
 MP3::CSortedTitles* CTracksController::getAllTitles( void ){
-	//this->sortedTitles->sortTitles();
 	return this->sortedTitles;
 }
 
