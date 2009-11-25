@@ -21,13 +21,15 @@ void Indexer::insert(const std::string& word, const std::string& title)
   size_t word_length = strlen(word.c_str());
 
   // find if the word already exists
-  KeyPair* keypair = find(word);
+  KeyPair* keypair = 0;
+  //KeyPair* keypair = find(word);
   if(keypair == 0) {
     // word not yet indexed
 
     // create keypair for word
-    KeyPair* keypair = createKeyPair(word, title);
-    // create keypair for each subvariant of word
+    KeyPair* keypair = new KeyPair(word, title);
+
+    // TODO create keypair for each subvariant of word
 
     // find insert index one behind the la
     unsigned int insert_index = num_words++;
@@ -47,7 +49,15 @@ void Indexer::insert(const std::string& word, const std::string& title)
     // TODO later
 
   }
+}
 
+void Indexer::remove(const std::string& title) 
+{
+  KeyPair* keypair = 0;
+  for(unsigned int i = 0; i < num_words; ++i){
+    this->list[i].list->removeTitle(title);
+  }
+  // TODO remove unused index word
 }
 
 KeyPair* Indexer::expand() {
