@@ -1,4 +1,6 @@
 #pragma once
+#if !defined(INDEXER_H)
+#define INDEXER_H
 
 #include <string>
 #include "SortedTitles.h"
@@ -26,7 +28,7 @@ public:
 
   KeyPair(const std::string& word, const std::string& title): key(word) {
     this->list = new MP3::CSortedTitles();
-    this->list->addTitle(title);
+    this->list->addTitle(title); //addTitle is unsorted Adding- for sorted use insertTitle
    };
   // no deep copy
   KeyPair(KeyPair* copy): key(copy->key), list(copy->list) {
@@ -82,3 +84,4 @@ public:
 };
 }
 
+#endif //INDEXER_H

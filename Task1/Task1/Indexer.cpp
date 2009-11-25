@@ -1,11 +1,8 @@
 
 #include "StdAfx.h"
 #include "Indexer.h"
-#include "SortedTitles.h"
-
 
 using namespace Search;
-
 
 Indexer::Indexer(void)
 {
@@ -16,7 +13,7 @@ Indexer::Indexer(void)
 
 Indexer::~Indexer(void)
 {
-  delete list;
+  delete[] list;
 }
 
 void Indexer::insert(const std::string& word, const std::string& title) 

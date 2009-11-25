@@ -2,11 +2,9 @@
 #include "TracksController.h"
 
 
-CTracksController::CTracksController( void ):tracks( new MP3::CTracks() ), 
-  sortedTitles( new MP3::CSortedTitles() ), 
-  mp3Reader( MP3::CMP3ReaderFactory::createInstance() ),
-  indexer ( new Search::Indexer() )
-{
+CTracksController::CTracksController( void ):tracks( new MP3::CTracks() ), sortedTitles( new MP3::CSortedTitles() ), 
+  mp3Reader( MP3::CMP3ReaderFactory::createInstance() ), indexer ( new Search::Indexer() ){
+
 	if( (!tracks) || (!sortedTitles) || (!mp3Reader) || (!indexer)  ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 			"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
@@ -18,8 +16,8 @@ CTracksController::CTracksController( void ):tracks( new MP3::CTracks() ),
 CTracksController::~CTracksController( void )
 {
 	delete this->mp3Reader;
+	delete this->indexer;
 	delete this->sortedTitles;
-  delete this->indexer;
 	this->tracks->clearTracks();
 	delete this->tracks;
 }
@@ -50,7 +48,8 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 
 		//add mp3 in tracks collection and the title in sorted titlelist
 		this->tracks->addTrack(name, mp3audio);
-		this->sortedTitles->insertTitle(name);	
+		this->sortedTitles->insertTitle(name);
+		//this->sortedTitles->addTitle(name);
 
 	}else{ return ALREADY_OPENED; }
 
@@ -62,20 +61,19 @@ MP3::CMP3Audio* CTracksController::getFile( const std::string& name ){
 }
 
 MP3::CSortedTitles* CTracksController::getAllTitles( void ){
+	//this->sortedTitles->sortTitles();
 	return this->sortedTitles;
 }
 
-MP3::CSortedTitles* CTracksController::find( const std::string& searchword ) const
-{
+MP3::CSortedTitles* CTracksController::findTitles( const std::string& searchword ) const {
 	return this->indexer->findAll(searchword);
 }
 
-unsigned int CTracksController::getIndexLength() const
-{
+unsigned int CTracksController::getIndexLength() const {
 	return this->indexer->get_length();
 }
-unsigned int CTracksController::getIndexCapacity() const
-    {
+
+unsigned int CTracksController::getIndexCapacity() const {
 	return this->indexer->get_capacity();
 }
 
