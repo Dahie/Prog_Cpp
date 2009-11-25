@@ -51,6 +51,8 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 		//this->sortedTitles->insertTitle(name);
 		this->sortedTitles->addTitle(name);
 
+		createSubstrings(name);
+
 	}else{ return ALREADY_OPENED; }
 
   return OK;
