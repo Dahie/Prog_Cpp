@@ -16,24 +16,64 @@ Indexer::~Indexer(void)
   delete[] list;
 }
 
+void Indexer::insert(const std::string* words, const unsigned int num, const std::string& title) 
+{
+  
+  for(unsigned int i=0;i<num;++i) {
+  
+    // find if the word already exists
+    KeyPair* keypair = 0;
+    //KeyPair* keypair = find(word);
+    if(keypair == 0) {
+      // word not yet indexed
+
+      // create keypair for word
+      KeyPair* keypair = new KeyPair(*words, title);
+
+      // TODO create keypair for each subvariant of word
+
+      // find insert index one behind the la
+      unsigned int insert_index = num_words++;
+
+      // determine if the capacity of the current list is exceeded
+      if(insert_index >= capacity) {
+        // number of elements exceeded capacity
+        // expand list and replace old list
+        list = expand();
+      }
+
+
+      // add keypairs to list
+      list[insert_index] = keypair;
+
+      words++;
+    }
+    // resort list to alphabetical ASC
+    // TODO later
+  }
+}
+
+
 void Indexer::insert(const std::string& word, const std::string& title) 
 {
-  size_t word_length = strlen(word.c_str());
+  size_t word_length = word.length();
 
   // find if the word already exists
-  KeyPair* keypair = find(word);
+  KeyPair* keypair = 0;
+  //KeyPair* keypair = find(word);
   if(keypair == 0) {
     // word not yet indexed
 
     // create keypair for word
-    KeyPair* keypair = createKeyPair(word, title);
-    // create keypair for each subvariant of word
+    KeyPair* keypair = new KeyPair(word, title);
+
+    // TODO create keypair for each subvariant of word
 
     // find insert index one behind the la
     unsigned int insert_index = num_words++;
 
     // determine if the capacity of the current list is exceeded
-    if(insert_index++ > capacity) {
+    if(insert_index >= capacity) {
       // number of elements exceeded capacity
       // expand list and replace old list
       list = expand();
@@ -47,7 +87,15 @@ void Indexer::insert(const std::string& word, const std::string& title)
     // TODO later
 
   }
+}
 
+void Indexer::remove(const std::string& title) 
+{
+  KeyPair* keypair = 0;
+  for(unsigned int i = 0; i < num_words; ++i){
+    this->list[i].list->removeTitle(title);
+  }
+  // TODO remove unused index word
 }
 
 KeyPair* Indexer::expand() {
