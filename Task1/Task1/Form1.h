@@ -461,7 +461,7 @@ namespace Task1 {
 			// 
 			this->tbSearch->BackColor = System::Drawing::SystemColors::Window;
 			this->tbSearch->Cursor = System::Windows::Forms::Cursors::IBeam;
-			this->tbSearch->Enabled = true;
+			this->tbSearch->Enabled = false;
 			this->tbSearch->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
 			this->tbSearch->Location = System::Drawing::Point(397, 14);
@@ -495,7 +495,7 @@ namespace Task1 {
 			// 
 			// btn_indexinfo
 			// 
-			this->btn_indexinfo->Enabled = false;
+			this->btn_indexinfo->Enabled = true;
 			this->btn_indexinfo->Location = System::Drawing::Point(404, 175);
 			this->btn_indexinfo->Name = L"btn_indexinfo";
 			this->btn_indexinfo->Size = System::Drawing::Size(90, 29);
