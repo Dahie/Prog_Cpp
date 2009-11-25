@@ -71,18 +71,19 @@ void Indexer::insert(const std::string& word, const std::string& title)
     // TODO create keypair for each subvariant of word
 
     // find insert index one behind the la
-    unsigned int insert_index = num_words;
+    unsigned int insert_index = this->num_words;
 
     // determine if the capacity of the current list is exceeded
-    if(insert_index >= capacity) {
+    if(insert_index >= this->capacity) {
       // number of elements exceeded capacity
       // expand list and replace old list
-      list = expand();
+      this->list = expand();
     }
 
 
     // add keypairs to list
-    list[insert_index] = keypair;
+    this->list[insert_index] = keypair;
+    this->list;
     this->num_words++;
 
     // resort list to alphabetical ASC
@@ -106,11 +107,11 @@ KeyPair* Indexer::expand() {
 
   // copy all elements
   for (unsigned int i = 0; i < num_words; ++i) {
-    new_list[i] = list[i];
+    new_list[i] = this->list[i];
   }
 
   // delete old list
-  delete[] list;
+  delete[] this->list;
 
   // replace list
   return new_list;
@@ -139,10 +140,10 @@ unsigned int Indexer::get_capacity() const
 
 KeyPair* Indexer::find(const std::string& searchterm) const
 {
-  KeyPair* keypair = list; // get first list pointer
+  KeyPair* keypair = this->list; // get first list pointer
 
   // has index values?
-  if(num_words == 0)
+  if(this->num_words == 0)
     return 0;
 
   
@@ -151,11 +152,11 @@ KeyPair* Indexer::find(const std::string& searchterm) const
   signed int delta = (signed int)num_words*0.5;
   
   //printf("%s",delta);
-  //keypair +=delta;
+  keypair +=delta;
   return keypair;
   //int upper_limit = 0;
   //int lower_limit = num_words;
-  //int stringcomp = searchterm.compare(keypair->key);
+  int stringcomp = searchterm.compare(keypair->key);
 
   /*while( 
     (stringcomp != 0) // FIXME breaks when no element found 
@@ -188,6 +189,7 @@ MP3::CSortedTitles* Indexer::findAll(const std::string& key) const
   KeyPair* keypair = find(key);
   keypair->list;
   keypair->key;
+  this->list;
   if(keypair != 0) {
   
     // return the first element in the associated list
