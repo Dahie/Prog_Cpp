@@ -11,135 +11,124 @@ CTracks::~CTracks(void)
 {
 }
 
-	typedef std::map<std::string, MP3::CMP3Audio*> mp3_cont;		
-	typedef mp3_cont::size_type sz_type;
-	typedef mp3_cont::iterator mp3_it;
-	typedef mp3_cont::const_iterator mp3_const_it;
+//add mp3 at the end of container
+void CTracks::addTrack( const std::string& name, MP3::CMP3Audio* track ) {
+		tracks[name]=track;
+}
 
-	//add mp3 at the end of container
-	void CTracks::addTrack( const std::string& name, MP3::CMP3Audio* track ) {
-			tracks[name]=track;
+//get a mp3
+MP3::CMP3Audio* CTracks::getTrack( const std::string& name ) {
+	
+	if(!tracks.empty()){
+		mp3_it iter = tracks.find(name);
+		return (iter != tracks.end() ? iter->second : NULL);
 	}
+	return NULL;
+}
 
-	//get a mp3
-	MP3::CMP3Audio* CTracks::getTrack( const std::string& name ) {
-		
-		if(!tracks.empty()){
-			mp3_it iter = tracks.find(name);
-			if(iter != tracks.end()){
-				return iter->second;
-			} 
-			return NULL;
+//remove a mp3 in container
+void CTracks::removeTrack( const std::string& name ){
+	
+	if(!tracks.empty()){
+		mp3_it iter = tracks.find(name);
+		if(iter != tracks.end()){
+			delete iter->second;
+			tracks.erase(name);
 		}
-		return NULL;
 	}
+}
 
-	//remove a mp3 in container
-	void CTracks::removeTrack( const std::string& name ){
-		
-		if(!tracks.empty()){
+//remove item in container but save oject
+void CTracks::eraseTrack( const std::string& name ){
+	
+	if(!tracks.empty()){
+		mp3_it iter = tracks.find(name);
+		if(iter != tracks.end()){
+			tracks.erase(name);
+		}
+	}
+}
 
-			mp3_it iter = tracks.find(name);
-			if(iter != tracks.end()){
-				delete iter->second;
-				tracks.erase(name);
+//delete all mp3 in container
+void CTracks::clearTracks( void ){
+
+	if(!tracks.empty()){
+		mp3_it	iter;
+		for ( iter = tracks.begin(); iter != tracks.end(); ++iter ){
+			delete iter->second;
+		}
+		tracks.clear();
+	}
+}
+
+//is mp3 in container
+bool CTracks::isInCollection( MP3::CMP3Audio* track ){
+	
+	bool flag = false;
+
+	if(!tracks.empty()){
+		mp3_it iter;
+		for ( iter = tracks.begin(); iter != tracks.end(); ++iter ) {
+			std::string trackName((*(iter->second)).getFileName());
+			if(trackName == track->getFileName()){
+				flag = true;
 			}
 		}
 	}
+	return flag;
+}
 
-	//remove item in container but save oject
-	void CTracks::eraseTrack( const std::string& name ){
+//get number of mp3Tracks with same title information
+const MP3::CTracks::sz_type CTracks::getTitleCount( void ){
+	return this->iTitleCount;
+}
+
+//is mp3 with this title in container, counts how many times
+bool CTracks::isTitleInCollection( MP3::CMP3Audio* track ){
+	
+	bool flag = false;
+	this->iTitleCount = 1;
+	
+	if(!tracks.empty()){
 		
-		if(!tracks.empty()){
-
-			mp3_it iter = tracks.find(name);
-			if(iter != tracks.end()){
-				tracks.erase(name);
+		mp3_it iter;
+		for ( iter = tracks.begin(); iter != tracks.end(); ++iter ) {
+			std::string trackTitle((*(iter->second)).getTitle());
+			if(trackTitle == track->getTitle()){
+				++this->iTitleCount;
+				flag = true;
 			}
 		}
 	}
+	return flag;
+}
 
-	//delete all mp3 in container
-	void CTracks::clearTracks( void ){
+//is container empty
+bool CTracks::isEmpty( void ) const{
+	return tracks.empty();
+}
 
-		if(!tracks.empty()){
-			mp3_it	iter;
-			for ( iter = tracks.begin(); iter != tracks.end(); ++iter ){
-				delete iter->second;
-			}
-			tracks.clear();
-		}
-	}
+//size of mp3 collection
+const MP3::CTracks::sz_type CTracks::getSizeOfTracks( void ) const {
+	return tracks.size();
+}
 
-	//get number of mp3Tracks with same title information
-	int CTracks::getTitleCount( void ){
-		return this->iTitleCount;
-	}
+//begin-iterator
+MP3::CTracks::mp3_it CTracks::getBeginIterator( void ) {
+	return tracks.begin();
+}
 
-	//is mp3 in container
-	bool CTracks::isInCollection( MP3::CMP3Audio* track ){
-		
-		bool flag = false;
+//end-iterator
+MP3::CTracks::mp3_it CTracks::getEndIterator( void ) {
+	return tracks.end();
+}
 
-		if(!tracks.empty()){
-			
-			mp3_it iter;
-			for ( iter = tracks.begin(); iter != tracks.end(); ++iter ) {
-				std::string trackName((*(iter->second)).getFileName());
-				if(trackName == track->getFileName()){
-					flag = true;
-				}
-			}
-		}
-		return flag;
-	}
+//const_begin-iterator
+MP3::CTracks::mp3_const_it CTracks::getBeginIterator( void ) const {
+	return tracks.begin();
+}
 
-	//is mp3 with this title in container, counts how many times
-	bool CTracks::isTitleInCollection( MP3::CMP3Audio* track ){
-		
-		bool flag = false;
-		this->iTitleCount = 1;
-
-		if(!tracks.empty()){
-			
-			mp3_it iter;
-			for ( iter = tracks.begin(); iter != tracks.end(); ++iter ) {
-				std::string trackName((*(iter->second)).getTitle());
-				if(trackName == track->getTitle()){
-					++this->iTitleCount;
-					flag = true;
-				}
-			}
-		}
-		return flag;
-	}
-
-	//is container empty
-	bool CTracks::isEmpty( void ) const{
-		return tracks.empty();
-	}
-
-	//size of mp3 collection
-	const sz_type CTracks::getSizeOfTracks( void ) const {
-		return tracks.size();
-	}
-
-	//begin-iterator
-	mp3_it CTracks::getBeginIterator( void ) {
-		return tracks.begin();
-	}
-
-	//end-iterator
-	mp3_it CTracks::getEndIterator( void ) {
-		return tracks.end();
-	}
-
-	//const_begin-iterator
-	mp3_const_it CTracks::getBeginIterator( void ) const {
-		return tracks.begin();
-	}
-
-	//const_end-iterator
-	mp3_const_it CTracks::getEndIterator( void ) const {
-		return tracks.end();
-	}
+//const_end-iterator
+MP3::CTracks::mp3_const_it CTracks::getEndIterator( void ) const {
+	return tracks.end();
+}

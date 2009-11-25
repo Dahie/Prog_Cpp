@@ -12,7 +12,6 @@ class CTracks
 private:
 	//type-definition for container
 	typedef std::map<std::string, MP3::CMP3Audio*> mp3_cont;
-	int iTitleCount;
 
 public:
 	CTracks(void);
@@ -22,9 +21,6 @@ public:
 	typedef mp3_cont::size_type sz_type;
 	typedef mp3_cont::iterator mp3_it;
 	typedef mp3_cont::const_iterator mp3_const_it;
-
-	//get number of equal titles
-	int getTitleCount( void );
 
 	//add mp3 at the end of container
 	void addTrack( const std::string& name, MP3::CMP3Audio* track );
@@ -50,6 +46,9 @@ public:
 	//is container empty
 	bool isEmpty( void ) const;
 
+	//get number of equal titles
+	const sz_type getTitleCount( void );
+
 	//size of mp3 collection
 	const sz_type getSizeOfTracks( void ) const ;
 
@@ -63,10 +62,11 @@ public:
 	mp3_const_it getBeginIterator( void) const ;
 
 	//const_end-iterator
-	mp3_const_it getEndIterator( void ) const;
+	mp3_const_it getEndIterator( void ) const;	
 
 private:
 	mp3_cont tracks;
+	sz_type iTitleCount;
 
 };//class CTracks
 
