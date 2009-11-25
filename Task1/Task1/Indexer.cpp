@@ -1,4 +1,3 @@
-
 #include "StdAfx.h"
 #include "Indexer.h"
 #include <stdio.h>
@@ -17,41 +16,23 @@ Indexer::~Indexer(void)
   delete[] list;
 }
 
-void Indexer::insert(const std::string* words, const unsigned int num, const std::string& title) 
-{
+void Indexer::insert( const std::string& title ){
   
-  for(unsigned int i=0;i<num;++i) {
-  
-    // find if the word already exists
-    KeyPair* keypair = 0;
-    //KeyPair* keypair = find(word);
-    if(keypair == 0) {
-      // word not yet indexed
+	const char* pText = title.c_str();
+	std::string sWord;
 
-      // create keypair for word
-      KeyPair* keypair = new KeyPair(*words, title);
+	////get pointer on last character of title
+	const char* pLastChar = pText + strlen(pText);
 
-      // TODO create keypair for each subvariant of word
-
-      // find insert index one behind the la
-      unsigned int insert_index = num_words;
-
-      // determine if the capacity of the current list is exceeded
-      if(insert_index >= capacity) {
-        // number of elements exceeded capacity
-        // expand list and replace old list
-        list = expand();
-      }
-
-
-      // add keypairs to list
-      list[insert_index] = keypair;
-      this->num_words++;
-      words++;
-    }
-    // resort list to alphabetical ASC
-    // TODO later
-  }
+	while( pText <= pLastChar ){
+		sWord += (*pText);
+		if( *pText == ' ' || pText == pLastChar ){
+			this->insert(sWord, title);
+			System::Windows::Forms::MessageBox::Show(gcnew System::String(sWord.c_str()));
+			sWord = "";
+		}
+		++pText;
+	}
 }
 
 

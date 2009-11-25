@@ -24,9 +24,6 @@ std::string ws2s(const std::wstring& s);
 //create std::string with an ending converted from int
 void createStdString(std::string& name, const int count);
 
-//split string into different substrings
-void createSubstrings(const std::string& sText);
-
 //scan for files in an directory - NOT COMPLETED - TODO
 void scanDir(const std::string& rDirName);
 

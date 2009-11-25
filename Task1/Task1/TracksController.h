@@ -30,7 +30,7 @@ class CTracksController
 		MP3::CSortedTitles* findTitles( const std::string& searchword ) const;
 		void removeFile( const std::string& name );
 		void removeAllFiles( void );
-		void renameUniqueTitles( const std::string& name, const std::string& title );	
+		void renameUniqueTitles( const std::string& name, const std::string& title );
 		unsigned int getIndexLength() const;
 		unsigned int getIndexCapacity() const;
 
