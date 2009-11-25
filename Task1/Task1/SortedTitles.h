@@ -32,7 +32,7 @@ public:
 	typedef Const_Iter const_iterator;
 
 	//sort titles in list
-	//void sortTitles( void );
+	void sortTitles( void );
 	
 	//add title at correct position in sorted container
 	void insertTitle( const std::string& name );
@@ -51,6 +51,7 @@ public:
 
 	//is container empty
 	bool isEmpty( void ) const;
+
 	//size of title collection
 	const sz_type getSizeOfSortedTitles( void ) const ;
 
@@ -72,6 +73,9 @@ private:
 	CElement* pNode;		//working pointer
 	sz_type mCounter;		//number of elements in list
 
+	//mergeSort
+	CElement* mergeSort( CElement* pList, int stepSize = 1 );
+
 	//Iterator classes
 	class Iter {
 		CElement* position;
@@ -88,8 +92,6 @@ private:
 			bool Iter::operator== ( const Iter& it ) const { return position == it.position; }
 			bool Iter::operator!= ( const Iter& it ) const { return position != it.position; }
 	};//class Iter
-
-	
 
 	class Const_Iter {
 		CElement* position;

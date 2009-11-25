@@ -27,12 +27,12 @@ class CTracksController
 		Response addFile( const std::string& filePath );
 		MP3::CMP3Audio* getFile( const std::string& name );
 		MP3::CSortedTitles* getAllTitles( void );
-    MP3::CSortedTitles* find( const std::string& searchword ) const;
+		MP3::CSortedTitles* findTitles( const std::string& searchword ) const;
 		void removeFile( const std::string& name );
 		void removeAllFiles( void );
 		void renameUniqueTitles( const std::string& name, const std::string& title );	
-    unsigned int getIndexLength() const;
-    unsigned int getIndexCapacity() const;
+		unsigned int getIndexLength() const;
+		unsigned int getIndexCapacity() const;
 
 }; //class CTracksController
 

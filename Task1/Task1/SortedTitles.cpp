@@ -12,7 +12,7 @@ CSortedTitles::CSortedTitles ( void ): pAnchor(new CElement()), pNode(NULL), mCo
 		exit(0); 
 	}
 	
-	//dummy element
+	//head element
 	pAnchor->next = pAnchor;
 	pAnchor->prev = pAnchor;
 	pAnchor->sTitleName = "";
@@ -56,10 +56,10 @@ void CSortedTitles::addTitle (const std::string& name ){
 
 	pNew->sTitleName = name;
 	pNew->prev = pAnchor->prev;		//prev element is old last element
-	pNew->next = pAnchor;			//last element's next is dummy element
+	pNew->next = pAnchor;			//last element's next is head
 
 	if(this->isEmpty()){			
-		pAnchor->next = pNew;		//dummy element's next is new last element
+		pAnchor->next = pNew;		//head's next is new last element
 	}else{
 		pAnchor->prev->next = pNew; //old last element's next is new last element
 	}
@@ -156,4 +156,112 @@ MP3::CSortedTitles::const_iterator CSortedTitles::getBeginIterator( void ) const
 //const_end-iterator
 MP3::CSortedTitles::const_iterator CSortedTitles::getEndIterator( void ) const {
 	return const_iterator(pAnchor);
+}
+
+void MP3::CSortedTitles::sortTitles( void ){
+	this->mergeSort( this->pAnchor );
+}
+
+//returns new head of the list
+MP3::CElement* MP3::CSortedTitles::mergeSort( MP3::CElement* pList, int stepSize ){
+
+	MP3::CElement* pLeftList,* pRightList,* pOldHead,* pBuffer;
+	int iLeftListSize, iRightListSize, numberOfMerges;
+
+	if(!pList){ return NULL; }
+
+	pLeftList = pList;	//pointer to head of double linked list which is circular linked
+	pOldHead = pList;	//save pointer to old head
+	pList = NULL;
+	pBuffer = NULL;
+
+	numberOfMerges = 0;
+
+	while( NULL != pLeftList ){
+	
+		++numberOfMerges; //increment number of merges
+
+		//iterate to element which is "stepSize" next from pLeftList 
+		pRightList = pLeftList;
+		iLeftListSize = 0;
+
+		for( int i = 0; i < stepSize; ++i ){
+			
+			++iLeftListSize;
+			//check if next is the end of original list if not it is first of right list
+			pRightList = (pRightList->next == pOldHead ? NULL : pRightList->next);	
+			if ( !pRightList ){ break; } //end of list
+		}
+
+		iRightListSize = stepSize;	//set size of right list
+
+		//merge  lists
+		while( (iLeftListSize > 0) || ( (iRightListSize > 0) && (NULL != pRightList) )){
+
+			MP3::CElement* resultElement;
+
+			//next element for merge list comes from left or right list
+			if( iLeftListSize == 0 ){
+				
+				//left list is empty, element comes from right list
+				resultElement = pRightList;
+				pRightList = pRightList->next;
+				--iRightListSize;
+				
+				if( pRightList == pOldHead ){ pRightList = NULL; } //end of list
+
+			}else if( iRightListSize == 0 || !pRightList ){
+				
+				//right list is empty, element comes from left list
+				resultElement = pLeftList;
+				pLeftList = pLeftList->next;
+				--iLeftListSize;
+				if( pLeftList == pOldHead ){ pLeftList = NULL; } //end of list
+				
+
+			}else if( (pLeftList->sTitleName) <= (pRightList->sTitleName) ){
+				
+				/* First element of left list is smaller or same, element comes from left list. */
+				resultElement = pLeftList;
+				pLeftList = pLeftList->next;
+				--iLeftListSize;
+
+				if( pLeftList == pOldHead ){ pLeftList = NULL; } //end of list
+
+			}else{
+
+				/* First element of right list is smaller, element comes from right list. */
+				resultElement = pRightList;
+				pRightList = pRightList->next;
+				--iRightListSize;
+
+				if( pRightList == pOldHead ){ pRightList = NULL; } //end of list
+			}
+
+            //add the result element to the merged list
+			if( NULL != pBuffer ){
+				pBuffer->next = resultElement;
+			}else{
+				pList = resultElement;	//pList points to first resultElement
+			}
+			resultElement->prev = pBuffer;
+			pBuffer = resultElement;
+
+		}//end of while resultElement
+
+		//pointer of left list points now on end of right list - both interated over "stepSize" elements
+        pLeftList = pRightList;
+	
+	}//end of while( NULL != pLeftList )
+
+	pBuffer->next = pList;		//set next-pointer of last element to head
+	pList->prev = pBuffer;		//set prev-pointer of head to last element
+	
+	if( numberOfMerges <= 1 ){	//terminat if only 1 merge was done or list is empty
+        return pList;
+	}else{						//repeat with double merging list size
+		stepSize *= 2;
+		this->mergeSort(pList,stepSize);
+	}
+	return NULL;
 }
