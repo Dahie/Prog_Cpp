@@ -2,11 +2,8 @@
 #include "TracksController.h"
 
 
-CTracksController::CTracksController( void ):
-  tracks( new MP3::CTracks() ), 
-  sortedTitles( new MP3::CSortedTitles() ), 
-  mp3Reader( MP3::CMP3ReaderFactory::createInstance() ), 
-  indexer ( new Search::Indexer() )
+CTracksController::CTracksController( void ): tracks( new MP3::CTracks() ), sortedTitles( new MP3::CSortedTitles() ), 
+  mp3Reader( MP3::CMP3ReaderFactory::createInstance() ), indexer ( new Search::Indexer() )
 {
 
 	if( (!tracks) || (!sortedTitles) || (!mp3Reader) || (!indexer)  ){ 
@@ -54,10 +51,10 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 		this->tracks->addTrack(name, mp3audio);
 		//this->sortedTitles->insertTitle(name);
 		this->sortedTitles->addTitle(name);
-    // add to indexer
-    this->indexer->insert(name, name);
 
-		createSubstrings(name);
+		//add title and words of title into indexer
+		this->indexer->insert(name);
+		//this->indexer->insert(name, name);
 
 	}else{ return ALREADY_OPENED; }
 
@@ -94,12 +91,15 @@ void CTracksController::removeFile( const std::string& name ){
 	//remove track in both collections
 	this->tracks->removeTrack(name);
 	this->sortedTitles->removeTitle(name);
-  this->indexer->remove(name);
 
-	//if tracks with same title rename them if necessary
+	//remove title and all entries to words from indexer
+	this->indexer->remove(name);
+
+	//if tracks with same title rename them if necessary TODO: update indexer
 	if(flag){	
 		this->renameUniqueTitles( name, title );
-	}		
+	}
+
 }
 
 void CTracksController::removeAllFiles( void ){
@@ -146,4 +146,3 @@ void CTracksController::renameUniqueTitles( const std::string& name, const std::
 		delete helpTitles;
 		delete help;
 }
-

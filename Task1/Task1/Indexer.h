@@ -68,10 +68,10 @@ public:
 
   // inserts the word and all possible combinations into the indexer
   // if the word already exists, the title is added to its list
-  void insert(const std::string& word, const std::string& title);
+  void insert( const std::string& word, const std::string& title );
 
   // insert of several words for one title
-  void insert(const std::string* words, const unsigned int num, const std::string& title);
+  void insert( const std::string& title );
 
   // remove this title from all indexes
   void remove(const std::string& title);
