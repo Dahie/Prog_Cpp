@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "Indexer.h"
+#include <stdio.h>
 
 using namespace Search;
 
@@ -135,7 +136,7 @@ unsigned int Indexer::get_capacity() const
   return this->capacity;
 }
 
-KeyPair* Indexer::find(const std::string& key) const
+KeyPair* Indexer::find(const std::string& searchterm) const
 {
   KeyPair* keypair = list; // get first list pointer
 
@@ -143,20 +144,22 @@ KeyPair* Indexer::find(const std::string& key) const
   if(num_words == 0)
     return 0;
 
-  // logarithmix search
+  // logarithmic search
   signed int delta = (signed int)num_words*0.5;
-  keypair +=delta;
+  printf("%s",delta);
+  //keypair +=delta;
   //int upper_limit = 0;
   //int lower_limit = num_words;
-  int stringcomp = strcmp( (keypair->key).c_str(), key.c_str() );
+  int stringcomp = searchterm.compare(keypair->key);
 
-  while( 
-    stringcomp != 0) // FIXME breaks when no element found 
+  /*while( 
+    (stringcomp != 0) // FIXME breaks when no element found 
+    && (delta > 0) 
+    )
   {
-    stringcomp = strcmp( (keypair->key).c_str(), key.c_str() );
+    stringcomp = searchterm.compare(keypair->key);
 
-
-    if( strcmp == 0) {
+    if( stringcomp == 0) {
       // strings equal
       return keypair;
     }else if ( strcmp > 0){
@@ -166,22 +169,9 @@ KeyPair* Indexer::find(const std::string& key) const
     }else if ( strcmp < 0){
       // key before current index
       //upper_limit = delta;
+      keypair -= delta;
     }
-
-
-/*
-    if( strcmp == 0) {
-      // strings equal
-      return keypair;
-    else if ( strcmp > 0){
-      // key after current index
-      lower_limit = i;
-      i = upper_limit / lower_limit;
-    else if ( strcmp < 0){
-      // key before current index
-      upper_limit = i;
-    }*/  
-  }
+  }*/
 
   return 0;
 }
