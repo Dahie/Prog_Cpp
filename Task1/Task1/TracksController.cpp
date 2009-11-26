@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "TracksController.h"
+#include <algorithm>
 
 
 CTracksController::CTracksController( void ): tracks( new MP3::CTracks() ), sortedTitles( new MP3::CSortedTitles() ), 
@@ -68,7 +69,9 @@ MP3::CSortedTitles* CTracksController::getAllTitles( void ){
 }
 
 MP3::CSortedTitles* CTracksController::findTitles( const std::string& searchword ) const {
-	return this->indexer->findAll(searchword);
+  std::string word_lowercase = searchword;
+  std::transform(word_lowercase.begin(), word_lowercase.end(), word_lowercase.begin(), tolower);
+	return this->indexer->findAll(word_lowercase);
 }
 
 unsigned int CTracksController::getIndexLength() const {
