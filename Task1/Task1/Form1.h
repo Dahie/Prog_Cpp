@@ -543,15 +543,17 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
   MarshalString(this->tbSearch->Text, searchterm);
 
   if(searchterm.empty()){ 
-		this->updateTitleListOutput(this->tracksController->getAllTitles());
+		this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
 		this->tbSearch->Select();
 		return;
   }
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){ 
-		this->updateTitleListOutput(found_titles);
+		this->updateTitleListOutput(found_titles, false);
 		this->tbSearch->Select();
+	}else{
+		this->lbTracks->Items->Clear();
 	}
 		 
 }
@@ -614,7 +616,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 					
 					MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
 					titles->sortTitles();
-					this->updateTitleListOutput(titles);
+					this->updateTitleListOutput(titles, true);
 					break;
 				}
 				case ALREADY_OPENED:{
@@ -648,6 +650,7 @@ private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^ 
 		this->tracksController->removeAllFiles();
 		this->lbTracks->Items->Clear();
 		this->clearMP3Infos();
+		this->tbSearch->Text = "";
 
 		this->setButtonsEnabled(false);
 }
@@ -664,7 +667,7 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 			//remove track
 			this->tracksController->removeFile(name);
 
-			this->updateTitleListOutput(this->tracksController->getAllTitles());
+			this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
 
 			if(lbTracks->Items->Count>=1){
 				//lbTracks->SelectedIndex = 0;
@@ -676,13 +679,14 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 }
 
 //fill listBox with names from sorted title list
-private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles ){
+private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles, bool clearSearchField ){
 
 		String^ title;
 
 		//clear listBox Items and MP3 Info
 		lbTracks->Items->Clear();
 		clearMP3Infos();
+		if(clearSearchField) tbSearch->Text = "";
 
 		MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
 		for (iter; iter != titles->getEndIterator(); ++iter ) {
