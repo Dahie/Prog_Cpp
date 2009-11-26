@@ -31,6 +31,8 @@ void Indexer::insert( const std::string& title ){
 				sWord += (*pText);
 			}
 			this->insert(sWord.c_str(), title);
+			// resort list to alphabetical ASC
+			this->sort();
 			sWord = "";
 		}else{
 			sWord += (*pText);
@@ -38,8 +40,6 @@ void Indexer::insert( const std::string& title ){
 		++pText;
 
 	}
-	// resort list to alphabetical ASC
-	this->sort();
 }
 
 void Indexer::insert( const std::string& word, const std::string& title )
