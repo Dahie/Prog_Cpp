@@ -552,8 +552,6 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 	if( found_titles != 0 ){ 
 		this->updateTitleListOutput(found_titles);
 		this->tbSearch->Select();
-	} else {
-		
 	}
 		 
 }
