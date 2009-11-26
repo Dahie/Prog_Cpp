@@ -1,2 +1,6 @@
 Debug/
 Task1/Debug/
+Task1/Release/
+*.ncb
+*.suo
+*.vcproj.*
