@@ -126,11 +126,12 @@ void CSortedTitles::clearTitles( void ){
 //is container empty
 bool CSortedTitles::isEmpty( void ) const{
 
-	bool flag = false;
-	if((pAnchor->next) == pAnchor){
-		flag = true;
-	}
-	return flag;
+	//bool flag = false;
+	//if((pAnchor->next) == pAnchor){
+	//	flag = true;
+	//}
+	//return flag;
+	return (this->mCounter > 0 ? false : true);
 }
 
 //size of title collection

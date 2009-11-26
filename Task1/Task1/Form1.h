@@ -540,12 +540,12 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 	//this->tbSearch->CharacterCasing = System::Windows::Forms::CharacterCasing::Upper;
 
   std::string searchterm ="";
-	MarshalString(this->tbSearch->Text, searchterm);
+  MarshalString(this->tbSearch->Text, searchterm);
 
   if(searchterm.empty()){ 
 		this->updateTitleListOutput(this->tracksController->getAllTitles());
     return;
-	}
+  }
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){ 
@@ -559,6 +559,7 @@ private: System::Void btn_indexinfo_Click(System::Object^  sender, System::Event
       unsigned int length = this->tracksController->getIndexLength();
       unsigned int capacity = this->tracksController->getIndexCapacity();
       MessageBox::Show("Length: " + length + "\n" + "Capacity: " + capacity);
+	  this->tracksController->outputListElements();
 }
 
 private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {

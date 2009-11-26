@@ -18,7 +18,7 @@ class CTracksController
 		MP3::CTracks* tracks;
 		MP3::CSortedTitles* sortedTitles;
 		MP3::IMP3Reader* mp3Reader;
-    Search::Indexer* indexer;
+		Search::Indexer* indexer;
 
 	public:
 		CTracksController( void );
@@ -33,6 +33,7 @@ class CTracksController
 		void renameUniqueTitles( const std::string& name, const std::string& title );
 		unsigned int getIndexLength() const;
 		unsigned int getIndexCapacity() const;
+		void outputListElements( void );
 
 }; //class CTracksController
 
