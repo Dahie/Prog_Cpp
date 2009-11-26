@@ -495,13 +495,13 @@ namespace Task1 {
 			// 
 			// btn_indexinfo
 			// 
-			this->btn_indexinfo->Enabled = true;
 			this->btn_indexinfo->Location = System::Drawing::Point(404, 175);
 			this->btn_indexinfo->Name = L"btn_indexinfo";
 			this->btn_indexinfo->Size = System::Drawing::Size(90, 29);
 			this->btn_indexinfo->TabIndex = 31;
 			this->btn_indexinfo->Text = L"Index Info";
 			this->btn_indexinfo->UseVisualStyleBackColor = true;
+			this->btn_indexinfo->Visible = false;
 			this->btn_indexinfo->Click += gcnew System::EventHandler(this, &Form1::btn_indexinfo_Click);
 			// 
 			// Form1
