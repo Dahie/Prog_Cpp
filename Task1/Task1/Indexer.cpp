@@ -21,7 +21,7 @@ void Indexer::insert( const std::string& title ){
 	const char* pText = title.c_str();
 	std::string sWord="";
 
-	////get pointer on last character of title
+	//get pointer on last character of title
 	const char* pLastChar = pText + strlen(pText);
 
 	while( pText <= pLastChar ){
@@ -31,7 +31,6 @@ void Indexer::insert( const std::string& title ){
 				sWord += (*pText);
 			}
 			this->insert(sWord.c_str(), title);
-			//System::Windows::Forms::MessageBox::Show(gcnew System::String(strlen(sWord.c_str()).ToString()));
 			sWord = "";
 		}else{
 			sWord += (*pText);
@@ -43,10 +42,17 @@ void Indexer::insert( const std::string& title ){
 	this->sort();
 }
 
-void Indexer::insert( const std::string& word, const std::string& title ){
-  
-	size_t word_length = word.length();
-	
+void Indexer::insert( const std::string& word, const std::string& title )
+{
+  // split each word into substring
+  for(size_t l = 1; l < word.length()+1; ++l) {
+    std::string subword = word.substr(0, l);
+    this->insertSingleWord(subword, title);
+  }
+}
+
+void Indexer::insertSingleWord( const std::string& word, const std::string& title )
+{
 	// find if the word already exists	
 	KeyPair* keypair = findWord(word);
 
@@ -60,8 +66,8 @@ void Indexer::insert( const std::string& word, const std::string& title ){
 		unsigned int insert_index = this->num_words;
 		// determine if the capacity of the current list is exceeded
 		if( insert_index >= this->capacity ){
-		// number of elements exceeded capacity
-		// expand list and replace old list
+		  // number of elements exceeded capacity
+		  // expand list and replace old list
 		  this->list = expand();
 		}
 		  
@@ -235,39 +241,6 @@ Search::KeyPair* Indexer::find(const std::string& searchterm) const {
 		}
 	}
 	
-	//KeyPair* keypair = this->list; // get first list pointer
-
-	//// logarithmic search
-	//signed int delta = (signed int)num_words/2; //warning deleted
-
-	////printf("%s",delta);
-	//keypair +=delta;
-	////return keypair;
-	////int upper_limit = 0;
-	////int lower_limit = num_words;
-	//int stringcomp = searchterm.compare(keypair->key);
-
-	//while( 
-	//(stringcomp != 0) // FIXME breaks when no element found 
-	//&& (delta > 0) 
-	//)
-	//{
-	//stringcomp = searchterm.compare(keypair->key);
-
-	//if( stringcomp == 0) {
-	//  // strings equal
-	//  return keypair;
-	//}else if ( strcmp > 0){
-	//  // key after current index
-	//  //lower_limit = i;
-	//  keypair += delta;
-	//}else if ( strcmp < 0){
-	//  // key before current index
-	//  //upper_limit = delta;
-	//  keypair -= delta;
-	//}
-	//}
-
 	return 0;
 }
 
@@ -278,11 +251,6 @@ MP3::CSortedTitles* Indexer::findAll( const std::string& key ) const {
 	
 	// find word, get keypair
 	KeyPair* keypair = this->findWord(key);
-	// find all words with this key TODO
-	//this->list;
-	//this->findWord(key); //returns a list with CSortedTitles
-	
-	
 
 	if(keypair != 0) {
 
