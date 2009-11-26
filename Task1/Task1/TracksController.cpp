@@ -128,7 +128,7 @@ void CTracksController::renameUniqueTitles( const std::string& name, const std::
 				
 					help->addTrack(compName, iter->second);
 					compName = iter->first;
-					helpTitles->addTitle(compName);	
+					helpTitles->addTitle(compName);
 				}
 			}
 		}
@@ -138,6 +138,7 @@ void CTracksController::renameUniqueTitles( const std::string& name, const std::
 		for(it; it != helpTitles->getEndIterator(); ++it){
 			this->tracks->eraseTrack(it->sTitleName);
 			this->sortedTitles->removeTitle(it->sTitleName);
+			this->indexer->remove(it->sTitleName);
 		}
 
 		//add tracks from help in both collection
@@ -145,6 +146,7 @@ void CTracksController::renameUniqueTitles( const std::string& name, const std::
 		for(iter; iter != help->getEndIterator(); ++iter){
 			this->tracks->addTrack(iter->first, iter->second);
 			this->sortedTitles->insertTitle(iter->first);
+			this->indexer->insert(iter->first);
 		}
 
 		delete helpTitles;
