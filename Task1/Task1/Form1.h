@@ -544,6 +544,7 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
   if(searchterm.empty()){ 
 		this->updateTitleListOutput(this->tracksController->getAllTitles());
+    this->tbSearch->Focus();
     return;
   }
 
@@ -552,6 +553,7 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 		this->updateTitleListOutput(found_titles);
 	} else { 
     this->lbTracks->Items->Clear();
+    this->tbSearch->Focus();
     return;
   }
 		 
