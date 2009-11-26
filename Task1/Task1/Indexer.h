@@ -60,21 +60,20 @@ public:
 	//sort list
 	void sort( void );
 
-
-
 	// remove this title from all indexes
 	void remove( const std::string& title );
 
 	// remove all words and titles
 	void clearIndices( void );
 
-
+	// return the KeyPair of the word with the search term
+	KeyPair* findWord( const std::string& key ) const;
 
 	// return the KeyPair with the search term
 	KeyPair* find( const std::string& key ) const;
 
-	// return the KeyPair / index of the KeyPair with the search term
-	KeyPair* findWord( const std::string& key ) const;
+	// returns a sorted list of all titles associated with this searchterm
+	MP3::CSortedTitles* findRest( const std::string& searchterm, int mid );
 
 	// returns a sorted list of all titles associated with this searchterm
 	MP3::CSortedTitles* findAll( const std::string& key ) const;

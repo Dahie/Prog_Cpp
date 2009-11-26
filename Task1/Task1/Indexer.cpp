@@ -197,7 +197,7 @@ Search::KeyPair* Indexer::findWord( const std::string& searchterm ) const {
 		if( begin > size ) return (0); // element not found
 		int mid = (begin + size) / 2;
 
-		int comp = this->list[mid].key.compare(searchterm);
+		int comp = this->list[mid].key.compare(searchterm.c_str());
 
 		if( comp == 0) {
 			return &this->list[mid];
@@ -229,10 +229,11 @@ Search::KeyPair* Indexer::find( const std::string& searchterm ) const {
 		if( begin > size ) return (0); // element not found
 		int mid = (begin + size) / 2;
 
-		int comp = this->list[mid].key.compare(0, searchtermLength, searchterm);
+		int comp = this->list[mid].key.compare(0, searchtermLength, searchterm.c_str());
 
 		if( comp == 0) {
-			return &this->list[mid];
+			//this->findRest(searchterm, mid);
+			return &this->list[mid];		
 		}else{
 			if( comp < 0 ){
 				begin = mid + 1 ;	//element is in upper area
@@ -277,6 +278,28 @@ Search::KeyPair* Indexer::find( const std::string& searchterm ) const {
 	//}
 
 	return 0;
+}
+
+MP3::CSortedTitles* Indexer::findRest( const std::string& searchterm, int mid ){
+
+	MP3::CSortedTitles* resList = new MP3::CSortedTitles();
+	//find element which doesnt return searchterm
+	//outer limits
+	int comp = 0;
+	size_t searchtermLength = strlen(searchterm.c_str());
+
+
+	while( comp == 0){
+		int comp = this->list[++mid].key.compare(0, searchtermLength, searchterm.c_str());
+		//TODO:add titles to result list //check if title is already in that list
+		//resList->insertTitle();
+	}
+	while( comp == 0){
+		int comp = this->list[--mid].key.compare(0, searchtermLength, searchterm.c_str());
+		//TODO:add titles to result list
+	}
+
+	return resList;
 }
 
 

@@ -544,13 +544,15 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
   if(searchterm.empty()){ 
 		this->updateTitleListOutput(this->tracksController->getAllTitles());
-    return;
+		this->tbSearch->Select();
+		return;
   }
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){ 
-    MessageBox::Show("found somethin");
+		MessageBox::Show("found somethin");
 		this->updateTitleListOutput(found_titles);
+		this->tbSearch->Select();
 	}
 		 
 }
@@ -687,7 +689,6 @@ private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles ){
 		for (iter; iter != titles->getEndIterator(); ++iter ) {
 			
 			title = gcnew String((iter->sTitleName).c_str());
-			//title = gcnew String((*iter).c_str());
 			lbTracks->Items->Add(title);
 			lbTracks->SelectedIndex = 0;
 			lbTracks->Select();
