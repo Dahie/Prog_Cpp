@@ -197,13 +197,15 @@ Search::KeyPair* Indexer::findWord( const std::string& searchterm ) const {
 		if( begin > size ) return (0); // element not found
 		int mid = (begin + size) / 2;
 
-		if( this->list[mid].key == searchterm ){
+		int comp = this->list[mid].key.compare(searchterm);
+
+		if( comp == 0) {
 			return &this->list[mid];
 		}else{
-			if( this->list[mid].key < searchterm ){
+			if( comp < 0 ){
 				begin = mid + 1 ;	//element is in upper area
 			}
-			if( this->list[mid].key > searchterm ){
+			if( comp > 0 ){
 				size = mid - 1;		//element is in bottom area
 			}
 		}
@@ -223,13 +225,15 @@ Search::KeyPair* Indexer::find(const std::string& searchterm) const {
 		if( begin > size ) return (0); // element not found
 		int mid = (begin + size) / 2;
 
-		if( this->list[mid].key == searchterm ){
+		int comp = this->list[mid].key.compare(searchterm);
+
+		if( comp == 0) {
 			return &this->list[mid];
 		}else{
-			if( this->list[mid].key < searchterm ){
+			if( comp < 0 ){
 				begin = mid + 1 ;	//element is in upper area
 			}
-			if( this->list[mid].key > searchterm ){
+			if( comp > 0 ){
 				size = mid - 1;		//element is in bottom area
 			}
 		}
