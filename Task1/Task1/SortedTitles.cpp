@@ -96,7 +96,6 @@ void CSortedTitles::removeTitle( const std::string& name ){
 	pNode->prev->next = pNode->next;
 	pNode->next->prev = pNode->prev;
 
-	//delete pNode->sTitleName; //TODO: if it is a pointer
 	delete pNode;
 	--(this->mCounter);
 }
@@ -129,12 +128,6 @@ void MP3::CSortedTitles::clearTitles( void ){
 
 //is container empty
 bool MP3::CSortedTitles::isEmpty( void ) const{
-
-	//bool flag = false;
-	//if((pAnchor->next) == pAnchor){
-	//	flag = true;
-	//}
-	//return flag;
 	return (this->mCounter > 0 ? false : true);
 }
 
