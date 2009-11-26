@@ -69,7 +69,7 @@ void CSortedTitles::addTitle (const std::string& name ){
 }
 
 //find a title, if not found return value is NULL
-std::string* CSortedTitles::findTitle( const std::string& name ){
+std::string* CSortedTitles::findTitle( const std::string& name ) {
 
 	if(!isEmpty()){
 		pNode = pAnchor->next;
@@ -101,8 +101,12 @@ void CSortedTitles::removeTitle( const std::string& name ){
 	--(this->mCounter);
 }
 
+bool MP3::CSortedTitles::contains(const std::string& title) {
+  return ( this->findTitle(title) != 0 );
+}
+
 //delete all titles in container
-void CSortedTitles::clearTitles( void ){
+void MP3::CSortedTitles::clearTitles( void ){
 
 	if(!isEmpty()){
 
@@ -124,7 +128,7 @@ void CSortedTitles::clearTitles( void ){
 }
 
 //is container empty
-bool CSortedTitles::isEmpty( void ) const{
+bool MP3::CSortedTitles::isEmpty( void ) const{
 
 	//bool flag = false;
 	//if((pAnchor->next) == pAnchor){

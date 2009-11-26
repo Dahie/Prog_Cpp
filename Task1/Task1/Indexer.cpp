@@ -75,7 +75,8 @@ void Indexer::insertSingleWord( const std::string& word, const std::string& titl
 		this->list[insert_index] = keypair;
 		++this->num_words;
 
-	}else{					//add title to this indexed word	
+	}else{					//add title to this indexed word
+    if(!(keypair->listTitles->contains(title)))
 		keypair->listTitles->insertTitle(title);
 	}
 }
