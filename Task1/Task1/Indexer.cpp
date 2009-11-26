@@ -142,7 +142,6 @@ void Indexer::remove( const std::string& title ){
 		//remove unused index word
 		if(this->list[i].listTitles->isEmpty()){
 			this->list[i].key = "";
-			--this->num_words;
 		}
 	}
 	this->sort();
