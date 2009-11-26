@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "Indexer.h"
 #include <stdio.h>
+#include <algorithm>
 
 using namespace Search;
 
@@ -53,13 +54,16 @@ void Indexer::insert( const std::string& word, const std::string& title )
 
 void Indexer::insertSingleWord( const std::string& word, const std::string& title )
 {
+  std::string word_lowercase = word;
+  std::transform(word_lowercase.begin(), word_lowercase.end(), word_lowercase.begin(), tolower);
+
 	// find if the word already exists	
-	KeyPair* keypair = findWord(word);
+	KeyPair* keypair = findWord(word_lowercase);
 
 	if( keypair == 0 ) {	// word not yet indexed
 		
 		// create keypair for word
-		KeyPair* keypair = this->createKeyPair(word, title);
+		KeyPair* keypair = this->createKeyPair(word_lowercase, title);
 		// TODO create keypair for each subvariant of word
 
 		// find insert index one behind the la
