@@ -45,7 +45,7 @@ CMP3Audio* CID3Reader::readMP3Data( const std::string& sFilePath ){
   }
 
   //title - ID3FID_TITLE
-  std::string sTitle = "<no title>";
+  std::string sTitle = "<no_title>";
   id3Lib->getTitle(sTitle);
   
   //interpret - ID3FID_LEADARTIST

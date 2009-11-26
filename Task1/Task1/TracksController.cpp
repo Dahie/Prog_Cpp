@@ -5,7 +5,6 @@
 CTracksController::CTracksController( void ): tracks( new MP3::CTracks() ), sortedTitles( new MP3::CSortedTitles() ), 
   mp3Reader( MP3::CMP3ReaderFactory::createInstance() ), indexer ( new Search::Indexer() )
 {
-
 	if( (!tracks) || (!sortedTitles) || (!mp3Reader) || (!indexer)  ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 			"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
@@ -54,7 +53,6 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 
 		//add title and words of title into indexer
 		this->indexer->insert(name);
-		//this->indexer->insert(name, name);
 
 	}else{ return ALREADY_OPENED; }
 
@@ -79,6 +77,10 @@ unsigned int CTracksController::getIndexLength() const {
 
 unsigned int CTracksController::getIndexCapacity() const {
 	return this->indexer->get_capacity();
+}
+
+void CTracksController::outputListElements(){
+	return this->indexer->outputListElements();
 }
 
 void CTracksController::removeFile( const std::string& name ){
@@ -106,6 +108,8 @@ void CTracksController::removeAllFiles( void ){
 	//remove all tracks in both collections
 	this->tracks->clearTracks();
 	this->sortedTitles->clearTitles();
+	//remove all indizes in indexer
+	this->indexer->clearIndices();
 }
 
 void CTracksController::renameUniqueTitles( const std::string& name, const std::string& title ){
