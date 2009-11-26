@@ -42,8 +42,9 @@ public:
 
 	//find a title, if not found return value is NULL
 	std::string* findTitle( const std::string& name );
-
-  bool contains(const std::string& title);
+	
+	//is title in container
+	bool contains(const std::string& title);
 
 	//removes a title
 	void removeTitle( const std::string& name );

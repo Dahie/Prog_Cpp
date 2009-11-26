@@ -15,10 +15,10 @@ public:
 	MP3::CSortedTitles* listTitles;
 
 	Search::KeyPair& Search::KeyPair::operator =( const Search::KeyPair* rhs ) {
-    this->key = rhs->key;
-    this->listTitles = rhs->listTitles;
-    return *this;
-  };
+		this->key = rhs->key;
+		this->listTitles = rhs->listTitles;
+		return *this;
+	};
 	
 };//class KeyPair
 
@@ -31,12 +31,11 @@ public:
 
 	// insert of several words for one title
 	void insert( const std::string& title );
+	void insert( const std::string& word, const std::string& title );
 
 	// inserts the word and all possible combinations into the indexer
 	// if the word already exists, the title is added to its list
 	void insertSingleWord( const std::string& word, const std::string& title );
-
-  void insert( const std::string& word, const std::string& title );
 
 	//sort list
 	void sort( void );
@@ -81,10 +80,9 @@ private:
 	 // creates a Keypair object
 	 KeyPair* createKeyPair(const std::string& word, const std::string& title);
 	 
-   // sort list with mergeSort algorithm
+	 // sort list with mergeSort algorithm
 	 void merge( KeyPair* list, int left, int right, int mid );
-	 
-   int mergeSort( KeyPair* list, int left, int right );
+	 int mergeSort( KeyPair* list, int left, int right );
 
 };//class Indexer
 

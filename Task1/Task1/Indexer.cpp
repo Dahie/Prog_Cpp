@@ -45,17 +45,17 @@ void Indexer::insert( const std::string& title ){
 
 void Indexer::insert( const std::string& word, const std::string& title )
 {
-  // split each word into substring
-  for(size_t l = 1; l < word.length()+1; ++l) {
-    std::string subword = word.substr(0, l);
-    this->insertSingleWord(subword, title);
-  }
+	// split each word into substring
+	for(size_t l = 1; l < word.length()+1; ++l) {
+		std::string subword = word.substr(0, l);
+		this->insertSingleWord(subword, title);
+	}
 }
 
 void Indexer::insertSingleWord( const std::string& word, const std::string& title )
 {
-  std::string word_lowercase = word;
-  std::transform(word_lowercase.begin(), word_lowercase.end(), word_lowercase.begin(), tolower);
+	std::string word_lowercase = word;
+	std::transform(word_lowercase.begin(), word_lowercase.end(), word_lowercase.begin(), tolower);
 
 	// find if the word already exists	
 	KeyPair* keypair = findWord(word_lowercase);
@@ -73,6 +73,7 @@ void Indexer::insertSingleWord( const std::string& word, const std::string& titl
 		  // number of elements exceeded capacity
 		  // expand list and replace old list
 		  this->list = expand();
+		  if( !this->list ){ /*ERROR*/ return; }
 		}
 		  
 		// add keypair to list 
@@ -80,8 +81,8 @@ void Indexer::insertSingleWord( const std::string& word, const std::string& titl
 		++this->num_words;
 
 	}else{					//add title to this indexed word
-    if(!(keypair->listTitles->contains(title)))
-		keypair->listTitles->insertTitle(title);
+		if(!(keypair->listTitles->contains(title)))
+			keypair->listTitles->insertTitle(title);
 	}
 }
 
@@ -163,6 +164,7 @@ void Indexer::clearIndices( void ){
 KeyPair* Indexer::expand() {
 	// create new longer list
 	KeyPair* new_list = new KeyPair[capacity+growth];
+	if( !new_list ){ /*ERROR*/ return 0; }
 
 	// copy all elements
 	for (unsigned int i = 0; i < num_words; ++i) {
@@ -178,8 +180,10 @@ KeyPair* Indexer::expand() {
 
 KeyPair* Indexer::createKeyPair( const std::string& word, const std::string& title ){
 	KeyPair* keypair = new KeyPair();
+	if( !keypair ){ /*ERROR*/ return 0; }
 	keypair->key = word;
 	keypair->listTitles = new MP3::CSortedTitles();
+	if( !keypair->listTitles ){ /*ERROR*/ return 0; }
 	keypair->listTitles->insertTitle(title);
 	return keypair;
 }
