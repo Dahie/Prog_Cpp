@@ -544,18 +544,17 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
   if(searchterm.empty()){ 
 		this->updateTitleListOutput(this->tracksController->getAllTitles());
-    this->tbSearch->Focus();
-    return;
+		this->tbSearch->Select();
+		return;
   }
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){ 
 		this->updateTitleListOutput(found_titles);
-	} else { 
-    this->lbTracks->Items->Clear();
-    this->tbSearch->Focus();
-    return;
-  }
+		this->tbSearch->Select();
+	} else {
+		
+	}
 		 
 }
 
