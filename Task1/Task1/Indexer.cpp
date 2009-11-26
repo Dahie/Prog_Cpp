@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Indexer.h"
-#include <stdio.h>
 #include <algorithm>
 
 using namespace Search;
