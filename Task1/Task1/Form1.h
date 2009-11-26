@@ -549,9 +549,11 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){ 
-    MessageBox::Show("found somethin");
 		this->updateTitleListOutput(found_titles);
-	}
+	} else { 
+    this->lbTracks->Items->Clear();
+    return;
+  }
 		 
 }
 
