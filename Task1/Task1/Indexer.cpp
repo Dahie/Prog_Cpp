@@ -213,10 +213,14 @@ Search::KeyPair* Indexer::findWord( const std::string& searchterm ) const {
 	return 0;
 }
 
-Search::KeyPair* Indexer::find(const std::string& searchterm) const {
+Search::KeyPair* Indexer::find( const std::string& searchterm ) const {
 
 	// has index values?
 	if( this->num_words == 0 ) return 0;
+
+	size_t searchtermLength = strlen(searchterm.c_str());
+
+	//////////////////////////////////////////////////////binary search
 
 	int size = this->get_length();
 	int begin = 0;
@@ -225,7 +229,7 @@ Search::KeyPair* Indexer::find(const std::string& searchterm) const {
 		if( begin > size ) return (0); // element not found
 		int mid = (begin + size) / 2;
 
-		int comp = this->list[mid].key.compare(searchterm);
+		int comp = this->list[mid].key.compare(0, searchtermLength, searchterm);
 
 		if( comp == 0) {
 			return &this->list[mid];
@@ -281,7 +285,7 @@ MP3::CSortedTitles* Indexer::findAll( const std::string& key ) const {
 	MP3::CSortedTitles* resList;
 	
 	// find word, get keypair
-	KeyPair* keypair = this->findWord(key);
+	KeyPair* keypair = this->find(key);
 	// find all words with this key TODO
 	//this->list;
 	//this->findWord(key); //returns a list with CSortedTitles
