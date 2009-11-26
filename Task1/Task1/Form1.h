@@ -542,14 +542,14 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
   std::string searchterm ="";
   MarshalString(this->tbSearch->Text, searchterm);
 
-  if(searchterm.empty()){ 
+  if(searchterm.empty()){
 		this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
 		this->tbSearch->Select();
 		return;
   }
 
 	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
-	if( found_titles != 0 ){ 
+	if( found_titles != 0 ){
 		this->updateTitleListOutput(found_titles, false);
 	}else{
 		this->lbTracks->Items->Clear();
@@ -686,7 +686,10 @@ private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles, b
 		//clear listBox Items and MP3 Info
 		lbTracks->Items->Clear();
 		clearMP3Infos();
-		if(clearSearchField) tbSearch->Text = "";
+		if(clearSearchField){ 
+			tbSearch->Text = ""; 
+			this->lbTracks->Items->Clear(); 
+		}
 
 		MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
 		for (iter; iter != titles->getEndIterator(); ++iter ) {
