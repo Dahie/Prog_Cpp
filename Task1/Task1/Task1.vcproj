@@ -254,6 +254,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TrackManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TrackManagerFactory.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Tracks.cpp"
 				>
 			</File>
@@ -294,6 +302,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ITrackManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MP3Audio.h"
 				>
 			</File>
@@ -315,6 +327,14 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrackManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrackManagerFactory.h"
 				>
 			</File>
 			<File

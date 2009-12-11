@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "TracksController.h"
+#include "TrackManagerFactory.h"
 #include "Utils.h"
 
 namespace Task1 {
@@ -27,6 +28,7 @@ namespace Task1 {
 
 	private:
 		CTracksController* tracksController;
+		ITrackManager* trackManager;
 	
 	public:
 		Form1(void)
@@ -43,6 +45,14 @@ namespace Task1 {
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
 			}
+		
+			trackManager = CTrackManagerFactory::createInstance();
+			if(!trackManager){
+				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
+				"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
+					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+				exit(0);
+			}	
 		}
 
 	protected:
