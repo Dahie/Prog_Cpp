@@ -25,6 +25,7 @@ class CTracksController
 		~CTracksController( void );
 
 		Response addFile( const std::string& filePath );
+		Response addFile( const std::string& filePath, std::string& titleName );
 		MP3::CMP3Audio* getFile( const std::string& name );
 		MP3::CSortedTitles* getAllTitles( void );
 		MP3::CSortedTitles* findTitles( const std::string& searchword ) const;
@@ -34,7 +35,7 @@ class CTracksController
 		unsigned int getIndexLength() const;
 		unsigned int getIndexCapacity() const;
 		void outputListElements( void );
-
+		
 }; //class CTracksController
 
 #endif //TRACKSCONTROLLER_H

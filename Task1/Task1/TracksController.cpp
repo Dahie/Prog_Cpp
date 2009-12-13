@@ -23,6 +23,36 @@ CTracksController::~CTracksController( void )
 	delete this->tracks;
 }
 
+enum Response CTracksController::addFile( const std::string& filePath, std::string& titleName ){
+	
+	//check if file is a mp3
+	if(!this->mp3Reader->isMP3File(filePath)){
+		return NO_MP3_FILE;
+	}
+
+	//read ID3 tags and create mp3 object
+	MP3::CMP3Audio* mp3audio = this->mp3Reader->readMP3Data(filePath);
+	if(!mp3audio){
+		return NOT_READ;
+	}
+
+	if(!this->tracks->isTitleInCollection(mp3audio)) { //check if with same title exists
+
+		//add mp3 in tracks collection and the title in sorted titlelist
+		this->tracks->addTrack(mp3audio->getTitle(), mp3audio);
+		//this->sortedTitles->insertTitle(name);
+		this->sortedTitles->addTitle(mp3audio->getTitle());
+
+		//add title and words of title into indexer
+		this->indexer->insert(mp3audio->getTitle());
+
+		titleName = mp3audio->getTitle();
+
+	}else{ return ALREADY_OPENED; }
+
+  return OK;
+}
+
 enum Response CTracksController::addFile( const std::string& filePath ){
 
 	//check if file is a mp3
@@ -90,7 +120,8 @@ void CTracksController::removeFile( const std::string& name ){
 	
 	//store information needed from mp3 which should be removed
 	MP3::CMP3Audio* mp3audio = this->tracks->getTrack(name);
-	bool flag = this->tracks->isTitleInCollection(mp3audio);
+	this->tracks->isTitleInCollection(mp3audio);
+	bool flag = (this->tracks->getTitleCount() > 2 ? true : false);
 	const std::string title = mp3audio->getTitle();
 	
 	//remove track in both collections

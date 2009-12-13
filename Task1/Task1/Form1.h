@@ -1,7 +1,8 @@
 #pragma once
 
 #include <stdio.h>
-#include "TracksController.h"
+//#include "TracksController.h"
+#include "SortedTrackInfo.h"
 #include "TrackManagerFactory.h"
 #include "Utils.h"
 
@@ -27,9 +28,10 @@ namespace Task1 {
 	{
 
 	private:
-		CTracksController* tracksController;
+		//CTracksController* tracksController;
 		ITrackManager* trackManager;
-	
+		CSortedTrackInfo* trackInfos;
+			
 	public:
 		Form1(void)
 		{
@@ -38,16 +40,18 @@ namespace Task1 {
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
 			//
-			tracksController = new CTracksController();
+			/*tracksController = new CTracksController();
 			if(!tracksController){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 				"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
-			}
+			}*/
 		
 			trackManager = CTrackManagerFactory::createInstance();
-			if(!trackManager){
+			trackInfos = new CSortedTrackInfo();
+
+			if( (!trackManager) || (!trackInfos) ){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 				"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
@@ -65,7 +69,8 @@ namespace Task1 {
 			{
 				delete components;
 			}
-			delete tracksController;
+			//delete tracksController;
+			delete trackManager;
 		}
 
 	private: System::Windows::Forms::GroupBox^  gbSearch;
@@ -545,34 +550,35 @@ namespace Task1 {
 
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
-	//MessageBox::Show(this->tbSearch->Text + " length of text: " + this->tbSearch->TextLength);
-			 //this->tbSearch->ResetText(); //delete content of textbox
-	//this->tbSearch->CharacterCasing = System::Windows::Forms::CharacterCasing::Upper;
-
   std::string searchterm ="";
   MarshalString(this->tbSearch->Text, searchterm);
 
   if(searchterm.empty()){
-		this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
+		//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
+		this->updateTitleListOutput(true);
 		this->tbSearch->Select();
 		return;
   }
 
-	const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
+	/*const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
 	if( found_titles != 0 ){
 		this->updateTitleListOutput(found_titles, false);
 	}else{
 		this->lbTracks->Items->Clear();
-	}
+	}*/
+
+  TSearchID id;
+  int resultCount = this->trackManager->trackSearchStart(searchterm, id);
+
   this->tbSearch->Select();
 		 
 }
 
 private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
-      unsigned int length = this->tracksController->getIndexLength();
+     /* unsigned int length = this->tracksController->getIndexLength();
       unsigned int capacity = this->tracksController->getIndexCapacity();
       MessageBox::Show("Length: " + length + "\n" + "Capacity: " + capacity);
-	  this->tracksController->outputListElements();
+	  this->tracksController->outputListElements();*/
 }
 
 private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -596,18 +602,21 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
 
 private: System::Void openAllFiles(System::Array^ filenames){
 
+		CTrackInfo trackData;
+		int feedback;
+
 		for(int i=0; i<filenames->Length; ++i){
 
 			//convert String^ filename into std::string
 			std::string target = "target"; 
 			MarshalString(filenames->GetValue(i)->ToString(), target);
 
-			//pass file to controller, read ID3 tags and create mp3 object, store it in collection
-			Response response = this->tracksController->addFile(target);
+			//pass file to track manager, read ID3 tags and store these in CTrackInfo
+			feedback = this->trackManager->addTrack(target, trackData);
 
-			switch(response){
+			switch(feedback){
 
-				case NO_MP3_FILE:{ 
+				case -2:{ 
 					
 					System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
 					+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
@@ -615,28 +624,29 @@ private: System::Void openAllFiles(System::Array^ filenames){
 					lbTracks->Select();
 					break;
 				}
-				case NOT_READ:{ 
+				case -3:{ 
 
 					MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
 					lbTracks->Select();
 					break;
 				}
-				case OK:{
-					
-					MP3::CSortedTitles* titles = this->tracksController->getAllTitles();
-					titles->sortTitles();
-					this->updateTitleListOutput(titles, true);
-					break;
-				}
-				case ALREADY_OPENED:{
+				case INVALID_INDEX:{
 
-					//TODO just the filename!!!!!!!!!!
 					MessageBox::Show("mp3-File \""+filenames->GetValue(i)->ToString()+"\" already exists");
 					lbTracks->Select();
 					break;
 				}
-			}//end of switch			
+				default:{ //file successful added
+
+					//add track meta data in mapping container and sort this container
+					this->trackInfos->addElement(trackData);
+					this->trackInfos->sortElements();
+					//show tracks in listbox
+					this->updateTitleListOutput(true);
+					break;
+				}
+			}//end of switch
 		}//end of for loop
 }
 
@@ -650,14 +660,20 @@ private: System::Void selectTrack_Click(System::Object^  sender, System::EventAr
 			MarshalString(curItem, name);
 
 			//show MP3-Information to this track
-			this->showMP3Infos(name);		
+			this->showMP3Infos(name);	
 		}
 }
 
 private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
 
 		//clear all lists and GUI fields
-		this->tracksController->removeAllFiles();
+		for(unsigned int i = 0; i < this->trackInfos->getSizeOfSortedMapping(); ++i){
+			int index = this->trackInfos->getElement(i).mIndex;
+			this->trackManager->removeTrack(index);
+		}
+		this->trackInfos->clearElements();
+
+		//this->tracksController->removeAllFiles(); //OLD
 		this->lbTracks->Items->Clear();
 		this->clearMP3Infos();
 		this->tbSearch->Text = "";
@@ -675,9 +691,12 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 			MarshalString(curItem, name);
 
 			//remove track
-			this->tracksController->removeFile(name);
-
-			this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
+			this->trackManager->removeTrack(this->trackInfos->getElement(name).mIndex);
+			this->trackInfos->removeElement(lbTracks->SelectedIndex);
+			//this->tracksController->removeFile(name);//OLD
+			
+			this->updateTitleListOutput(true);
+			//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);//OLD
 
 			if(lbTracks->Items->Count>=1){
 				//lbTracks->SelectedIndex = 0;
@@ -686,6 +705,32 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 				this->setButtonsEnabled(false);
 			}
 		}
+}
+
+//fill listBox with names from sorted mapping container
+private: System::Void updateTitleListOutput( bool clearSearchField ){
+
+		String^ title;
+
+		//clear listBox Items and MP3 Info
+		lbTracks->Items->Clear();
+		clearMP3Infos();
+		if(clearSearchField){ 
+			tbSearch->Text = ""; 
+			this->lbTracks->Items->Clear(); 
+		}
+
+		CSortedTrackInfo::mapp_const_it iter = this->trackInfos->getBeginIterator();
+		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
+			
+			title = gcnew String(((*iter).mTitle).c_str());
+			lbTracks->Items->Add(title);
+			lbTracks->SelectedIndex = 0;
+			lbTracks->Select();
+		}
+
+		//output number of read tracks in status strip
+		this->toolStripStatLb->Text = trackInfos->getSizeOfSortedMapping().ToString()+ " tracks";
 }
 
 //fill listBox with names from sorted title list
@@ -729,25 +774,30 @@ private: System::Void setButtonsEnabled(bool flag) {
 
 private: System::Void showMP3Infos(const std::string& name) {
 
-		MP3::CMP3Audio* mp3audio = this->tracksController->getFile(name);
+		CTrackInfo info = this->trackInfos->getElement(name);
+		this->tbTitle->Text = gcnew String(info.mTitle.c_str());
+		this->tbAlbum->Text = gcnew String(info.mAlbum.c_str());
+		this->tbArtist->Text = gcnew String(info.mInterpret.c_str());
 
-		this->tbTitle->Text = gcnew String(mp3audio->getTitle());
-		this->tbAlbum->Text = gcnew String(mp3audio->getAlbum());
-		this->tbArtist->Text = gcnew String(mp3audio->getArtist());
-		this->tbYear->Text = gcnew String(mp3audio->getYear());
-		this->tbTrackNum->Text = gcnew String(mp3audio->getTrackNum());
-		this->tbGenre->Text = gcnew String(mp3audio->getGenre());
-		this->tbComment->Text = gcnew String(mp3audio->getComment());
-		this->tbBPM->Text = gcnew String(mp3audio->getBPM());
-		this->tbSize->Text = gcnew String(mp3audio->getFileSize().ToString());
-		this->tbBitrate->Text = gcnew String(mp3audio->getBitrate().ToString());
-		
-		//show filename in bottom status strip
-		this->toolStripStatLb->Text = gcnew String(mp3audio->getFileName());
+		//show index in bottom status strip
+		this->toolStripStatLb->Text = "track index: "+gcnew String(info.mIndex.ToString());
 
-		/*String^ path = gcnew String(mp3audio->getFilePath());
-		MessageBox::Show("Path: " + path);*/
-				
+		///////////////////////////////////////////////////////////////////////////OLD
+		//MP3::CMP3Audio* mp3audio = this->tracksController->getFile(name);
+
+		//this->tbTitle->Text = gcnew String(mp3audio->getTitle());
+		//this->tbAlbum->Text = gcnew String(mp3audio->getAlbum());
+		//this->tbArtist->Text = gcnew String(mp3audio->getArtist());
+		//this->tbYear->Text = gcnew String(mp3audio->getYear());
+		//this->tbTrackNum->Text = gcnew String(mp3audio->getTrackNum());
+		//this->tbGenre->Text = gcnew String(mp3audio->getGenre());
+		//this->tbComment->Text = gcnew String(mp3audio->getComment());
+		//this->tbBPM->Text = gcnew String(mp3audio->getBPM());
+		//this->tbSize->Text = gcnew String(mp3audio->getFileSize().ToString());
+		//this->tbBitrate->Text = gcnew String(mp3audio->getBitrate().ToString());
+		//
+		////show filename in bottom status strip
+		//this->toolStripStatLb->Text = gcnew String(mp3audio->getFileName());			
 }
 
 private: System::Void clearMP3Infos( void ) {
@@ -755,13 +805,13 @@ private: System::Void clearMP3Infos( void ) {
 		this->tbTitle->Text = "";
 		this->tbAlbum->Text = "";
 		this->tbArtist->Text = "";
-		this->tbYear->Text = "";
+	/*	this->tbYear->Text = "";
 		this->tbTrackNum->Text = "";
 		this->tbGenre->Text = "";
 		this->tbComment->Text = "";
 		this->tbBPM->Text = "";
 		this->tbSize->Text = "";
-		this->tbBitrate->Text = "";
+		this->tbBitrate->Text = "";*/
 
 		this->toolStripStatLb->Text = "no tracks";		  
 }
