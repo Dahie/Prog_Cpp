@@ -89,7 +89,10 @@ int CTrackManager::trackSearchStart( const string &pTitleBeginn, /*out*/ TSearch
 	++this->indexSearch;
 	this->searches[pID] = foundTitles;
 
-	if(foundTitles == 0)return 0;
+	if(foundTitles == 0){
+		this->searches[pID] = new MP3::CSortedTitles();
+		return 0;
+	}
 	return static_cast<int>(foundTitles->getSizeOfSortedTitles());
 }
 
@@ -125,7 +128,7 @@ bool CTrackManager::trackGetNext( TSearchID pID, /*out*/ CTrackInfo &pNextTrack 
 }
 
 void CTrackManager::trackSearchStop( TSearchID pID ){
-	delete this->searches.find(pID)->second;
+	this->searches.find(pID)->second->clearTitles();
 	this->searches.erase(pID);
 	if(this->searches.empty()) this->indexSearch = 0;
 }

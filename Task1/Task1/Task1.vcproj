@@ -274,6 +274,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TrackSearches.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Utils.cpp"
 				>
 			</File>
@@ -351,6 +355,10 @@
 			</File>
 			<File
 				RelativePath=".\TracksController.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TrackSearches.h"
 				>
 			</File>
 			<File

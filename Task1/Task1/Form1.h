@@ -1,9 +1,10 @@
 #pragma once
 
 #include <stdio.h>
-//#include "TracksController.h"
-#include "SortedTrackInfos.h"
 #include "TrackManagerFactory.h"
+#include "SortedTrackInfos.h"
+#include "TrackSearches.h"
+//#include "TracksController.h"
 #include "Utils.h"
 
 namespace Task1 {
@@ -31,6 +32,7 @@ namespace Task1 {
 		//CTracksController* tracksController;
 		ITrackManager* trackManager;
 		CSortedTrackInfos* trackInfos;
+		CTrackSearches* trackSearches;
 			
 	public:
 		Form1(void)
@@ -50,8 +52,9 @@ namespace Task1 {
 		
 			trackManager = CTrackManagerFactory::createInstance();
 			trackInfos = new CSortedTrackInfos();
+			trackSearches = new CTrackSearches();
 
-			if( (!trackManager) || (!trackInfos) ){
+			if( (!trackManager) || (!trackInfos) || (!trackSearches) ){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
 				"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
@@ -72,6 +75,7 @@ namespace Task1 {
 			//delete tracksController;
 			delete trackManager;
 			delete trackInfos;
+			delete trackSearches;
 		}
 
 	private: System::Windows::Forms::GroupBox^  gbSearch;
@@ -556,8 +560,6 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
 		if(searchterm.empty()){
 			this->updateTitleListOutput(this->trackInfos, true);
-			//stop search
-			//this->trackManager->trackSearchStop(id);
 			this->tbSearch->Select();
 			return;
 		}
@@ -572,9 +574,11 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 		  flag = this->trackManager->trackGetNext(id, trackData);
 		  searchResults->addElement(trackData);
 		}
+		this->trackSearches->addTrackSearch(id, searchResults);
 
 		if(!searchResults->isEmpty()){
-			this->updateTitleListOutput(searchResults, false);
+			//this->updateTitleListOutput(searchResults, false);
+			this->updateTitleListOutput(this->trackSearches->getTrackSearch(id), false);
 		}else{
 			this->lbTracks->Items->Clear();
 		}
@@ -685,6 +689,7 @@ private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^ 
 		this->lbTracks->Items->Clear();
 		this->clearMP3Infos();
 		this->tbSearch->Text = "";
+		this->endAllSearches();
 
 		this->setButtonsEnabled(false);
 }
@@ -824,6 +829,13 @@ private: System::Void clearMP3Infos( void ) {
 		this->toolStripStatLb->Text = "no tracks";		  
 }
 
+private: System::Void endAllSearches( void ){
+		CTrackSearches::tracksearch_it it = this->trackSearches->getBeginIterator();
+		for (it; it != this->trackSearches->getEndIterator(); ++it ) {
+			this->trackManager->trackSearchStop(it->first);
+		}
+		this->trackSearches->clearTrackSearches(); 
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //Drag and drop methods
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
