@@ -25,8 +25,9 @@ class CTrackManager : public ITrackManager{
 	private:
 		CTracksController* controller;
 		index_sz_type indexCount;
+		index_sz_type indexSearch;
 		std::map<index_sz_type, std::string> mapping;
-		std::vector<MP3::CSortedTitles*> searches;
+		std::map<index_sz_type, MP3::CSortedTitles*> searches;
 
 };//class CTrackManager
 

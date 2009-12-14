@@ -3,7 +3,7 @@
 
 using namespace MP3;
 
-CSortedTitles::CSortedTitles ( void ): pAnchor(new CElement()), pNode(NULL), mCounter(0)
+CSortedTitles::CSortedTitles ( void ): pAnchor(new CElement()), pNode(NULL), mCounter(0),mCurrenIter(NULL)
 {
 	if( !pAnchor ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -17,6 +17,7 @@ CSortedTitles::CSortedTitles ( void ): pAnchor(new CElement()), pNode(NULL), mCo
 	pAnchor->prev = pAnchor;
 	pAnchor->sTitleName = "";
 
+	mCurrenIter = pAnchor->next;//set current to begin iterator
 }
 
 CSortedTitles::~CSortedTitles( void )
@@ -154,6 +155,16 @@ MP3::CSortedTitles::const_iterator CSortedTitles::getBeginIterator( void ) const
 //const_end-iterator
 MP3::CSortedTitles::const_iterator CSortedTitles::getEndIterator( void ) const {
 	return const_iterator(pAnchor);
+}
+
+//get current iterator
+MP3::CSortedTitles::iterator CSortedTitles::getCurrentIterator( void ){
+	return this->mCurrenIter;
+}
+
+//set current iterator
+void MP3::CSortedTitles::setCurrentIterator( MP3::CSortedTitles::iterator iter ){
+	this->mCurrenIter = iter;
 }
 
 void MP3::CSortedTitles::sortTitles( void ){

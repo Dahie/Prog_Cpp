@@ -70,6 +70,10 @@ public:
 	//const_end-iterator
 	const_iterator getEndIterator( void ) const;
 
+	//current iterator
+	iterator getCurrentIterator( void );
+	void setCurrentIterator( iterator iter );
+
 private:
 
 	CElement* pAnchor;		//pointer to double linked list	
@@ -111,6 +115,8 @@ private:
 			bool operator== (const Const_Iter& it) const { return position == it.position; }
 			bool operator!= (const Const_Iter& it) const { return position != it.position; }
 	};//class Const_Iter
+
+	iterator mCurrenIter;
 
 }; //class CSortedTitles
 }

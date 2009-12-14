@@ -106,6 +106,18 @@ void CSortedTrackInfo::removeElement( const mapp_sz_type index ){
 	}
 }
 
+void CSortedTrackInfo::removeElement( const std::string& name ){
+	if(!vec.empty()){
+		mapp_it	iter;
+		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
+			if((*iter).mTitle == name){
+				vec.erase(iter);
+				return;
+			}
+		}	
+	}		 
+}
+
 //delete all elements in container
 void CSortedTrackInfo::clearElements( void ){
 

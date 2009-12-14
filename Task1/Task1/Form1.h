@@ -550,28 +550,35 @@ namespace Task1 {
 
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
-  std::string searchterm ="";
-  MarshalString(this->tbSearch->Text, searchterm);
+		std::string searchterm ="";
+		MarshalString(this->tbSearch->Text, searchterm);
 
-  if(searchterm.empty()){
-		//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);
-		this->updateTitleListOutput(true);
+		if(searchterm.empty()){
+			this->updateTitleListOutput(this->trackInfos, true);
+			//stop search
+			//this->trackManager->trackSearchStop(id);
+			this->tbSearch->Select();
+			return;
+		}
+
+		CTrackInfo trackData;
+		TSearchID id;
+		CSortedTrackInfo* searchResults = new CSortedTrackInfo();
+
+		int resultCount = this->trackManager->trackSearchStart(searchterm, id);
+		bool flag = ((resultCount > 0) ? true : false);
+		while(flag){
+		  flag = this->trackManager->trackGetNext(id, trackData);
+		  searchResults->addElement(trackData);
+		}
+
+		if(!searchResults->isEmpty()){
+			this->updateTitleListOutput(searchResults, false);
+		}else{
+			this->lbTracks->Items->Clear();
+		}
 		this->tbSearch->Select();
-		return;
-  }
-
-	/*const MP3::CSortedTitles* found_titles = this->tracksController->findTitles(searchterm);
-	if( found_titles != 0 ){
-		this->updateTitleListOutput(found_titles, false);
-	}else{
-		this->lbTracks->Items->Clear();
-	}*/
-
-  TSearchID id;
-  int resultCount = this->trackManager->trackSearchStart(searchterm, id);
-
-  this->tbSearch->Select();
-		 
+		
 }
 
 private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -643,7 +650,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 					this->trackInfos->addElement(trackData);
 					this->trackInfos->sortElements();
 					//show tracks in listbox
-					this->updateTitleListOutput(true);
+					this->updateTitleListOutput(this->trackInfos, true);
 					break;
 				}
 			}//end of switch
@@ -692,10 +699,10 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 
 			//remove track
 			this->trackManager->removeTrack(this->trackInfos->getElement(name).mIndex);
-			this->trackInfos->removeElement(lbTracks->SelectedIndex);
+			this->trackInfos->removeElement(name);
 			//this->tracksController->removeFile(name);//OLD
 			
-			this->updateTitleListOutput(true);
+			this->updateTitleListOutput(this->trackInfos, true);
 			//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);//OLD
 
 			if(lbTracks->Items->Count>=1){
@@ -707,8 +714,8 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 		}
 }
 
-//fill listBox with names from sorted mapping container
-private: System::Void updateTitleListOutput( bool clearSearchField ){
+//fill listBox with names from sorted track info container
+private: System::Void updateTitleListOutput( const CSortedTrackInfo* trackInfos, bool clearSearchField ){
 
 		String^ title;
 
@@ -720,7 +727,7 @@ private: System::Void updateTitleListOutput( bool clearSearchField ){
 			this->lbTracks->Items->Clear(); 
 		}
 
-		CSortedTrackInfo::mapp_const_it iter = this->trackInfos->getBeginIterator();
+		CSortedTrackInfo::mapp_const_it iter = trackInfos->getBeginIterator();
 		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
 			
 			title = gcnew String(((*iter).mTitle).c_str());

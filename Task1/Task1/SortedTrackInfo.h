@@ -35,6 +35,7 @@ class CSortedTrackInfo
 
 		//removes an element
 		void removeElement( const mapp_sz_type index );
+		void removeElement( const std::string& name );
 
 		//delete all elements in container
 		void clearElements( void );

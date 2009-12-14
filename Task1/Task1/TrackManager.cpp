@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "TrackManager.h"
 
-CTrackManager::CTrackManager( void ): controller( new CTracksController() ), indexCount(0)
+CTrackManager::CTrackManager( void ): controller( new CTracksController() ), indexCount(0), indexSearch(0)
 {
 	if( (!controller) ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -59,7 +59,11 @@ bool CTrackManager::removeTrack( int pIndex ){
 	if(!this->mapping.empty()){
 		std::map<unsigned int, std::string>::iterator iter = this->mapping.find(pIndex);
 		if( iter != this->mapping.end() ){
-			this->controller->removeFile(iter->second);
+			if(this->mapping.size() <= 1){
+				this->controller->removeAllFiles();
+			}else{
+				this->controller->removeFile(iter->second);
+			}
 			this->mapping.erase(pIndex);
 			flag = true;
 		}else{
@@ -72,18 +76,56 @@ bool CTrackManager::removeTrack( int pIndex ){
 
 int CTrackManager::trackSearchStart( const string &pTitleBeginn, /*out*/ TSearchID &pID ){
 
+	//fill indexer and get search result as title list
 	MP3::CSortedTitles* foundTitles = this->controller->findTitles(pTitleBeginn);
-	pID = static_cast<int>(this->searches.size());
-	this->searches.push_back(foundTitles);
 	
+	///set current iterator to begin
+	if(foundTitles != 0){
+		foundTitles->setCurrentIterator(foundTitles->getBeginIterator());
+	}
+	
+	//get and set searchID
+	pID = this->indexSearch;
+	++this->indexSearch;
+	this->searches[pID] = foundTitles;
+
 	if(foundTitles == 0)return 0;
 	return static_cast<int>(foundTitles->getSizeOfSortedTitles());
 }
+
 bool CTrackManager::trackGetNext( TSearchID pID, /*out*/ CTrackInfo &pNextTrack ){
 	
-	this->searches.at(pID);
-	return false; //true if next track is in list
-}
-void CTrackManager::trackSearchStop( TSearchID pID ){
+	bool flag = false;
+	MP3::CSortedTitles* foundTitles = 0;
 
+	std::map<unsigned int, MP3::CSortedTitles*>::iterator it = this->searches.find(pID);
+	if( it != this->searches.end() ){
+		foundTitles = it->second;
+	}
+
+	//get current iterator of title list
+	MP3::CSortedTitles::iterator iter = foundTitles->getCurrentIterator();
+	
+	if(foundTitles != 0 && (iter != foundTitles->getEndIterator())){
+	
+		//get and store data for track info object
+		pNextTrack.mTitle = (*iter).sTitleName;
+		MP3::CMP3Audio* mp3audio = this->controller->getFile(pNextTrack.mTitle);
+		pNextTrack.mAlbum = mp3audio->getAlbum();
+		pNextTrack.mInterpret = mp3audio->getArtist();
+
+		//set current iterator to next element in list
+		foundTitles->setCurrentIterator(++iter);
+
+		if(iter != foundTitles->getEndIterator()){
+			flag = true;
+		}
+	}
+	return flag; //true if iterator points to a track in list
+}
+
+void CTrackManager::trackSearchStop( TSearchID pID ){
+	delete this->searches.find(pID)->second;
+	this->searches.erase(pID);
+	if(this->searches.empty()) this->indexSearch = 0;
 }

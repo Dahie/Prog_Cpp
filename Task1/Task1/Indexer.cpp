@@ -72,7 +72,7 @@ void Indexer::insertSingleWord( const std::string& word, const std::string& titl
 		  // number of elements exceeded capacity
 		  // expand list and replace old list
 		  this->list = expand();
-		  if( !this->list ){ /*ERROR*/ return; }
+		  if( !this->list ){ /*ERROR*/ return; }  
 		}
 		  
 		// add keypair to list 
@@ -137,7 +137,7 @@ void Indexer::merge( KeyPair* list, int left, int right, int mid ){
 void Indexer::remove( const std::string& title ){
 
 	KeyPair* keypair = 0;
-	for( unsigned int i = 0; i < num_words; ++i ){
+	for( unsigned int i = 0; i < this->get_length(); ++i ){
 		this->list[i].listTitles->removeTitle(title);
 		//remove unused index word
 		if(this->list[i].listTitles->isEmpty()){
@@ -171,6 +171,8 @@ KeyPair* Indexer::expand() {
 
 	// delete old list
 	delete[] this->list;
+	this->capacity = capacity+growth;
+	this->growth = this->capacity;
 
 	// replace list
 	return new_list;
