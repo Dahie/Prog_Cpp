@@ -66,7 +66,7 @@ void CSortedTrackInfos::addElement( CTrackInfo trackInfo ){
 bool CSortedTrackInfos::contains( const CTrackInfo trackInfo ){
 	bool flag = false;
 	if(!vec.empty()){
-		mapp_it	iter;
+		trackInfos_it iter;
 		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
 			if((*iter).mTitle == trackInfo.mTitle ){
 				return flag = true;
@@ -76,17 +76,17 @@ bool CSortedTrackInfos::contains( const CTrackInfo trackInfo ){
 	return flag;
 }
 
-const CTrackInfo& CSortedTrackInfos::getElement( const mapp_sz_type index ) const{
+const CTrackInfo& CSortedTrackInfos::getElement( const trackInfos_sz_type index ) const{
 	return vec.at(index);
 }
 
-CTrackInfo& CSortedTrackInfos::getElement( const mapp_sz_type index ){
+CTrackInfo& CSortedTrackInfos::getElement( const trackInfos_sz_type index ){
 	return vec.at(index);
 }
 
 CTrackInfo& CSortedTrackInfos::getElement( const std::string& name){
 	if(!vec.empty()){
-		mapp_it	iter;
+		trackInfos_it	iter;
 		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
 			if((*iter).mTitle == name){
 				return (*iter);
@@ -97,18 +97,18 @@ CTrackInfo& CSortedTrackInfos::getElement( const std::string& name){
 }
 
 //removes an element
-void CSortedTrackInfos::removeElement( const mapp_sz_type index ){
+void CSortedTrackInfos::removeElement( const trackInfos_sz_type index ){
 	if( index >= vec.size() ){
 		//not such index
 	}else{
-		const mapp_it iter = vec.begin() + index;
+		const trackInfos_it iter = vec.begin() + index;
 		vec.erase(iter); 
 	}
 }
 
 void CSortedTrackInfos::removeElement( const std::string& name ){
 	if(!vec.empty()){
-		mapp_it	iter;
+		trackInfos_it iter;
 		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
 			if((*iter).mTitle == name){
 				vec.erase(iter);
@@ -136,26 +136,26 @@ bool CSortedTrackInfos::isEmpty( void ) const{
 }
 
 //size of mapping collection
-const CSortedTrackInfos::mapp_sz_type CSortedTrackInfos::getSizeOfSortedMapping( void ) const {
+const CSortedTrackInfos::trackInfos_sz_type CSortedTrackInfos::getSizeOfSortedMapping( void ) const {
 	return vec.size();
 }
 
 //begin-iterator
-CSortedTrackInfos::mapp_it CSortedTrackInfos::getBeginIterator( void ){
+CSortedTrackInfos::trackInfos_it CSortedTrackInfos::getBeginIterator( void ){
 	return vec.begin();
 }
 
 //end-iterator
-CSortedTrackInfos::mapp_it CSortedTrackInfos::getEndIterator( void ){
+CSortedTrackInfos::trackInfos_it CSortedTrackInfos::getEndIterator( void ){
 	return vec.end();
 }
 
 //const_begin-iterator
-CSortedTrackInfos::mapp_const_it CSortedTrackInfos::getBeginIterator( void) const {
+CSortedTrackInfos::trackInfos_const_it CSortedTrackInfos::getBeginIterator( void) const {
 	return vec.begin();
 }
 
 //const_end-iterator
-CSortedTrackInfos::mapp_const_it CSortedTrackInfos::getEndIterator( void ) const{
+CSortedTrackInfos::trackInfos_const_it CSortedTrackInfos::getEndIterator( void ) const{
 	return vec.end();
 }

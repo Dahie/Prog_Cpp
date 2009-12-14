@@ -31,7 +31,7 @@ namespace Task1 {
 	private:
 		//CTracksController* tracksController;
 		ITrackManager* trackManager;
-		CSortedTrackInfos* trackInfos;
+		CSortedTrackInfos* trackInfos; //is necessary to show metadata information for a track
 		CTrackSearches* trackSearches;
 			
 	public:
@@ -733,7 +733,7 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 			this->lbTracks->Items->Clear(); 
 		}
 
-		CSortedTrackInfos::mapp_const_it iter = trackInfos->getBeginIterator();
+		CSortedTrackInfos::trackInfos_const_it iter = trackInfos->getBeginIterator();
 		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
 			
 			title = gcnew String(((*iter).mTitle).c_str());

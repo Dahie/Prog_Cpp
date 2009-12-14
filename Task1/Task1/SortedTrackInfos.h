@@ -16,9 +16,9 @@ class CSortedTrackInfos
 		~CSortedTrackInfos(void);
 
 		//type definition for size-type and iterators
-		typedef mapp_cont::size_type mapp_sz_type;
-		typedef mapp_cont::iterator mapp_it;
-		typedef mapp_cont::const_iterator mapp_const_it;
+		typedef mapp_cont::size_type trackInfos_sz_type;
+		typedef mapp_cont::iterator trackInfos_it;
+		typedef mapp_cont::const_iterator trackInfos_const_it;
 
 		//sort elements in vector
 		void sortElements( void );
@@ -27,14 +27,14 @@ class CSortedTrackInfos
 		void addElement( CTrackInfo trackInfo );
 
 		//get element by index
-		const CTrackInfo& getElement( const mapp_sz_type index ) const;
-		CTrackInfo& getElement( const mapp_sz_type index );
+		const CTrackInfo& getElement( const trackInfos_sz_type index ) const;
+		CTrackInfo& getElement( const trackInfos_sz_type index );
 
 		//get element by title name
 		CTrackInfo& getElement( const std::string& name);
 
 		//removes an element
-		void removeElement( const mapp_sz_type index );
+		void removeElement( const trackInfos_sz_type index );
 		void removeElement( const std::string& name );
 
 		//delete all elements in container
@@ -47,19 +47,19 @@ class CSortedTrackInfos
 		bool isEmpty( void ) const;
 
 		//size of mapping collection
-		const mapp_sz_type getSizeOfSortedMapping( void ) const ;
+		const trackInfos_sz_type getSizeOfSortedMapping( void ) const ;
 		
 		//begin-iterator
-		mapp_it getBeginIterator( void ) ;
+		trackInfos_it getBeginIterator( void ) ;
 
 		//end-iterator
-		mapp_it getEndIterator( void );
+		trackInfos_it getEndIterator( void );
 
 		//const_begin-iterator
-		mapp_const_it getBeginIterator( void) const ;
+		trackInfos_const_it getBeginIterator( void) const ;
 
 		//const_end-iterator
-		mapp_const_it getEndIterator( void ) const;
+		trackInfos_const_it getEndIterator( void ) const;
 
 	private:
 		mapp_cont vec;
