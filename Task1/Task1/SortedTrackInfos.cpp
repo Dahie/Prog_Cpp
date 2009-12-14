@@ -1,19 +1,19 @@
 #include "StdAfx.h"
-#include "SortedTrackInfo.h"
+#include "SortedTrackInfos.h"
 
-CSortedTrackInfo::CSortedTrackInfo(void){
+CSortedTrackInfos::CSortedTrackInfos(void){
 }
 
-CSortedTrackInfo::~CSortedTrackInfo(void){
+CSortedTrackInfos::~CSortedTrackInfos(void){
 }
 
 //sort elements in list
-void CSortedTrackInfo::sortElements( void ){
+void CSortedTrackInfos::sortElements( void ){
 	int size = this->getSizeOfSortedMapping()-1;
 	this->mergeSort(this->vec, 0, size);
 }
 
-int CSortedTrackInfo::mergeSort( mapp_cont& vec, int left, int right ){
+int CSortedTrackInfos::mergeSort( mapp_cont& vec, int left, int right ){
 	int mid;
 	if( left < right ){
 		mid = ( left+right )/2;
@@ -24,7 +24,7 @@ int CSortedTrackInfo::mergeSort( mapp_cont& vec, int left, int right ){
 	return(0);
 }
 
-void CSortedTrackInfo::merge( mapp_cont& vec, int left, int right, int mid ){
+void CSortedTrackInfos::merge( mapp_cont& vec, int left, int right, int mid ){
 
 	std::vector<CTrackInfo> buffer = vec;
 	int indexLeft = left;
@@ -58,12 +58,12 @@ void CSortedTrackInfo::merge( mapp_cont& vec, int left, int right, int mid ){
 }
 
 //add element at the end of container
-void CSortedTrackInfo::addElement( CTrackInfo trackInfo ){
+void CSortedTrackInfos::addElement( CTrackInfo trackInfo ){
 	vec.push_back(trackInfo);
 }
 
 //find an element with same title
-bool CSortedTrackInfo::contains( const CTrackInfo trackInfo ){
+bool CSortedTrackInfos::contains( const CTrackInfo trackInfo ){
 	bool flag = false;
 	if(!vec.empty()){
 		mapp_it	iter;
@@ -76,15 +76,15 @@ bool CSortedTrackInfo::contains( const CTrackInfo trackInfo ){
 	return flag;
 }
 
-const CTrackInfo& CSortedTrackInfo::getElement( const mapp_sz_type index ) const{
+const CTrackInfo& CSortedTrackInfos::getElement( const mapp_sz_type index ) const{
 	return vec.at(index);
 }
 
-CTrackInfo& CSortedTrackInfo::getElement( const mapp_sz_type index ){
+CTrackInfo& CSortedTrackInfos::getElement( const mapp_sz_type index ){
 	return vec.at(index);
 }
 
-CTrackInfo& CSortedTrackInfo::getElement( const std::string& name){
+CTrackInfo& CSortedTrackInfos::getElement( const std::string& name){
 	if(!vec.empty()){
 		mapp_it	iter;
 		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
@@ -97,7 +97,7 @@ CTrackInfo& CSortedTrackInfo::getElement( const std::string& name){
 }
 
 //removes an element
-void CSortedTrackInfo::removeElement( const mapp_sz_type index ){
+void CSortedTrackInfos::removeElement( const mapp_sz_type index ){
 	if( index >= vec.size() ){
 		//not such index
 	}else{
@@ -106,7 +106,7 @@ void CSortedTrackInfo::removeElement( const mapp_sz_type index ){
 	}
 }
 
-void CSortedTrackInfo::removeElement( const std::string& name ){
+void CSortedTrackInfos::removeElement( const std::string& name ){
 	if(!vec.empty()){
 		mapp_it	iter;
 		for ( iter = vec.begin(); iter != vec.end(); ++iter ){
@@ -119,7 +119,7 @@ void CSortedTrackInfo::removeElement( const std::string& name ){
 }
 
 //delete all elements in container
-void CSortedTrackInfo::clearElements( void ){
+void CSortedTrackInfos::clearElements( void ){
 
 	if(!vec.empty()){
 		/*mapp_it	iter;
@@ -131,31 +131,31 @@ void CSortedTrackInfo::clearElements( void ){
 }
 
 //is container empty
-bool CSortedTrackInfo::isEmpty( void ) const{
+bool CSortedTrackInfos::isEmpty( void ) const{
 	return vec.empty();
 }
 
 //size of mapping collection
-const CSortedTrackInfo::mapp_sz_type CSortedTrackInfo::getSizeOfSortedMapping( void ) const {
+const CSortedTrackInfos::mapp_sz_type CSortedTrackInfos::getSizeOfSortedMapping( void ) const {
 	return vec.size();
 }
 
 //begin-iterator
-CSortedTrackInfo::mapp_it CSortedTrackInfo::getBeginIterator( void ){
+CSortedTrackInfos::mapp_it CSortedTrackInfos::getBeginIterator( void ){
 	return vec.begin();
 }
 
 //end-iterator
-CSortedTrackInfo::mapp_it CSortedTrackInfo::getEndIterator( void ){
+CSortedTrackInfos::mapp_it CSortedTrackInfos::getEndIterator( void ){
 	return vec.end();
 }
 
 //const_begin-iterator
-CSortedTrackInfo::mapp_const_it CSortedTrackInfo::getBeginIterator( void) const {
+CSortedTrackInfos::mapp_const_it CSortedTrackInfos::getBeginIterator( void) const {
 	return vec.begin();
 }
 
 //const_end-iterator
-CSortedTrackInfo::mapp_const_it CSortedTrackInfo::getEndIterator( void ) const{
+CSortedTrackInfos::mapp_const_it CSortedTrackInfos::getEndIterator( void ) const{
 	return vec.end();
 }

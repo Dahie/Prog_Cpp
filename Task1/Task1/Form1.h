@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 //#include "TracksController.h"
-#include "SortedTrackInfo.h"
+#include "SortedTrackInfos.h"
 #include "TrackManagerFactory.h"
 #include "Utils.h"
 
@@ -30,7 +30,7 @@ namespace Task1 {
 	private:
 		//CTracksController* tracksController;
 		ITrackManager* trackManager;
-		CSortedTrackInfo* trackInfos;
+		CSortedTrackInfos* trackInfos;
 			
 	public:
 		Form1(void)
@@ -49,7 +49,7 @@ namespace Task1 {
 			}*/
 		
 			trackManager = CTrackManagerFactory::createInstance();
-			trackInfos = new CSortedTrackInfo();
+			trackInfos = new CSortedTrackInfos();
 
 			if( (!trackManager) || (!trackInfos) ){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -71,6 +71,7 @@ namespace Task1 {
 			}
 			//delete tracksController;
 			delete trackManager;
+			delete trackInfos;
 		}
 
 	private: System::Windows::Forms::GroupBox^  gbSearch;
@@ -563,7 +564,7 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 
 		CTrackInfo trackData;
 		TSearchID id;
-		CSortedTrackInfo* searchResults = new CSortedTrackInfo();
+		CSortedTrackInfos* searchResults = new CSortedTrackInfos();
 
 		int resultCount = this->trackManager->trackSearchStart(searchterm, id);
 		bool flag = ((resultCount > 0) ? true : false);
@@ -715,7 +716,7 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 }
 
 //fill listBox with names from sorted track info container
-private: System::Void updateTitleListOutput( const CSortedTrackInfo* trackInfos, bool clearSearchField ){
+private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos, bool clearSearchField ){
 
 		String^ title;
 
@@ -727,7 +728,7 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfo* trackInfos,
 			this->lbTracks->Items->Clear(); 
 		}
 
-		CSortedTrackInfo::mapp_const_it iter = trackInfos->getBeginIterator();
+		CSortedTrackInfos::mapp_const_it iter = trackInfos->getBeginIterator();
 		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
 			
 			title = gcnew String(((*iter).mTitle).c_str());

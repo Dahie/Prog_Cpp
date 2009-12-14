@@ -5,15 +5,15 @@
 #include <vector>
 #include "ITrackManager.h"
 
-class CSortedTrackInfo
+class CSortedTrackInfos
 {
 	private:
 		//type definition for container
 		typedef std::vector<CTrackInfo> mapp_cont;
 
 	public:
-		CSortedTrackInfo(void);
-		~CSortedTrackInfo(void);
+		CSortedTrackInfos(void);
+		~CSortedTrackInfos(void);
 
 		//type definition for size-type and iterators
 		typedef mapp_cont::size_type mapp_sz_type;
