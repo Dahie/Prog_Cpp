@@ -6,11 +6,17 @@
 #include "SortedTrackInfos.h"
 #include "ITrackManager.h"
 
+struct CSearchInfo
+{
+	std::string searchterm;
+	CSortedTrackInfos* trackInfos;
+};
+
 class CTrackSearches{
 
 	private:
 		//type-definition for container
-		typedef std::map<TSearchID, CSortedTrackInfos*> tracksearch_cont;
+		typedef std::map<TSearchID, CSearchInfo> tracksearch_cont;
 
 
 	public:
@@ -22,15 +28,15 @@ class CTrackSearches{
 		typedef tracksearch_cont::iterator tracksearch_it;
 		typedef tracksearch_cont::const_iterator tracksearch_const_it;
 
-		void addTrackSearch( const TSearchID id, CSortedTrackInfos* trackInfos );
-		CSortedTrackInfos* getTrackSearch( const TSearchID id );
+		void addTrackSearch( const TSearchID id, CSearchInfo searchInfos );
+		CSearchInfo* getTrackSearch( const TSearchID id );
 		void removeTrackSearch( const TSearchID id );
 		
 		//delete all searches in container
 		void clearTrackSearches( void );
 
 		//is search in container
-		bool isInCollection( const std::string& searchterm );
+		TSearchID contains( const std::string& searchterm );
 
 		//is container empty
 		bool isEmpty( void ) const;

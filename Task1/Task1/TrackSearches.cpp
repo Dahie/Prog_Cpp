@@ -9,14 +9,14 @@ CTrackSearches::~CTrackSearches(void)
 {
 }
 
-void CTrackSearches::addTrackSearch( const TSearchID id, CSortedTrackInfos* trackInfos ){
-	searches[id]=trackInfos;
+void CTrackSearches::addTrackSearch( const TSearchID id, CSearchInfo searchInfos ){
+	searches[id] = searchInfos;
 }
 
-CSortedTrackInfos* CTrackSearches::getTrackSearch( const TSearchID id ){
+CSearchInfo* CTrackSearches::getTrackSearch( const TSearchID id ){
 	if(!searches.empty()){
 		tracksearch_it iter = searches.find(id);
-		return (iter != searches.end() ? iter->second : NULL);
+		return (iter != searches.end() ? &(iter->second) : NULL);
 	}
 	return NULL;
 }
@@ -25,7 +25,7 @@ void CTrackSearches::removeTrackSearch( const TSearchID id ){
 	if(!searches.empty()){
 		tracksearch_it iter = searches.find(id);
 		if(iter != searches.end()){
-			delete iter->second;
+			delete iter->second.trackInfos;
 			searches.erase(id);
 		}
 	}
@@ -36,26 +36,25 @@ void CTrackSearches::clearTrackSearches( void ){
 	if(!searches.empty()){
 		tracksearch_it	iter;
 		for ( iter = searches.begin(); iter != searches.end(); ++iter ){
-			delete iter->second;
+			delete iter->second.trackInfos;
 		}
 		searches.clear();
 	}
 }
 
 //is search in container
-bool CTrackSearches::isInCollection( const std::string& searchterm ){
-	bool flag = false;
+TSearchID CTrackSearches::contains( const std::string& searchterm ){
+	TSearchID id = -1;
 
 	if(!searches.empty()){
 		tracksearch_it iter;
 		for ( iter = searches.begin(); iter != searches.end(); ++iter ) {
-			/*std::string trackName((*(iter->second)).getFileName());
-			if(trackName == track->getFileName()){
-				flag = true;
-			}*/
+			if(iter->second.searchterm == searchterm){
+				id = iter->first;
+			}
 		}
 	}
-	return flag;
+	return id;
 }
 
 //is container empty

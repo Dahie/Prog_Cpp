@@ -565,20 +565,33 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 		}
 
 		CTrackInfo trackData;
-		TSearchID id;
-		CSortedTrackInfos* searchResults = new CSortedTrackInfos();
+		TSearchID id = this->trackSearches->contains(searchterm);
+		CSortedTrackInfos* searchResults;
 
-		int resultCount = this->trackManager->trackSearchStart(searchterm, id);
-		bool flag = ((resultCount > 0) ? true : false);
-		while(flag){
-		  flag = this->trackManager->trackGetNext(id, trackData);
-		  searchResults->addElement(trackData);
+		if(id >= 0){
+			//search is already there use id to show result
+			searchResults = this->trackSearches->getTrackSearch(id)->trackInfos;
+			
+		}else{
+			searchResults = new CSortedTrackInfos();
+
+			int resultCount = this->trackManager->trackSearchStart(searchterm, id);
+			bool flag = ((resultCount > 0) ? true : false);
+			while(flag){
+			  flag = this->trackManager->trackGetNext(id, trackData);
+			  searchResults->addElement(trackData);
+			}
+			
+			CSearchInfo searchinfo;
+			searchinfo.searchterm = searchterm;
+			searchinfo.trackInfos = searchResults;
+
+			this->trackSearches->addTrackSearch(id, searchinfo);
 		}
-		this->trackSearches->addTrackSearch(id, searchResults);
 
 		if(!searchResults->isEmpty()){
-			//this->updateTitleListOutput(searchResults, false);
-			this->updateTitleListOutput(this->trackSearches->getTrackSearch(id), false);
+			this->updateTitleListOutput(searchResults, false);
+			//this->updateTitleListOutput(this->trackSearches->getTrackSearch(id)->trackInfos, false);
 		}else{
 			this->lbTracks->Items->Clear();
 		}
