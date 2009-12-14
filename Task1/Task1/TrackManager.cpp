@@ -128,7 +128,7 @@ bool CTrackManager::trackGetNext( TSearchID pID, /*out*/ CTrackInfo &pNextTrack 
 }
 
 void CTrackManager::trackSearchStop( TSearchID pID ){
-	this->searches.find(pID)->second->clearTitles();
+	//this->searches.find(pID)->second->clearTitles();
 	this->searches.erase(pID);
 	if(this->searches.empty()) this->indexSearch = 0;
 }

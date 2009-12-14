@@ -656,6 +656,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 					this->trackInfos->sortElements();
 					//show tracks in listbox
 					this->updateTitleListOutput(this->trackInfos, true);
+					if(!this->trackSearches->isEmpty()) this->endAllSearches();
 					break;
 				}
 			}//end of switch
@@ -709,6 +710,7 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 			//this->tracksController->removeFile(name);//OLD
 			
 			this->updateTitleListOutput(this->trackInfos, true);
+			if(!this->trackSearches->isEmpty()) this->endAllSearches();
 			//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);//OLD
 
 			if(lbTracks->Items->Count>=1){
