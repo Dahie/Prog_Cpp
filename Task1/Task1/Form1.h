@@ -4,7 +4,6 @@
 #include "TrackManagerFactory.h"
 #include "SortedTrackInfos.h"
 #include "TrackSearches.h"
-//#include "TracksController.h"
 #include "Utils.h"
 
 namespace Task1 {
@@ -29,7 +28,6 @@ namespace Task1 {
 	{
 
 	private:
-		//CTracksController* tracksController;
 		ITrackManager* trackManager;
 		CSortedTrackInfos* trackInfos; //is necessary to show metadata information for a track
 		CTrackSearches* trackSearches;
@@ -41,15 +39,7 @@ namespace Task1 {
 			InitializeComponent();
 			//
 			//TODO: Konstruktorcode hier hinzufügen.
-			//
-			/*tracksController = new CTracksController();
-			if(!tracksController){
-				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
-				"\n              ----- MP3Tagger will be closed. -----\n\n\n         Please try to restart the application later!!!\n\n\n","MP3 Tagger",
-					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
-				exit(0);
-			}*/
-		
+			//		
 			trackManager = CTrackManagerFactory::createInstance();
 			trackInfos = new CSortedTrackInfos();
 			trackSearches = new CTrackSearches();
@@ -72,7 +62,6 @@ namespace Task1 {
 			{
 				delete components;
 			}
-			//delete tracksController;
 			delete trackManager;
 			delete trackInfos;
 			delete trackSearches;
@@ -732,7 +721,6 @@ private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^ 
 		}
 		this->trackInfos->clearElements();
 
-		//this->tracksController->removeAllFiles(); //OLD
 		this->lbTracks->Items->Clear();
 		this->clearMP3Infos();
 		this->tbSearch->Text = "";
@@ -753,11 +741,9 @@ private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^ 
 			//remove track
 			this->trackManager->removeTrack(this->trackInfos->getElement(name).mIndex);
 			this->trackInfos->removeElement(name);
-			//this->tracksController->removeFile(name);//OLD
 			
 			this->updateTitleListOutput(this->trackInfos, true);
 			if(!this->trackSearches->isEmpty()) this->endAllSearches();
-			//this->updateTitleListOutput(this->tracksController->getAllTitles(), true);//OLD
 
 			if(lbTracks->Items->Count>=1){
 				//lbTracks->SelectedIndex = 0;
@@ -792,33 +778,6 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 
 		//output number of read tracks in status strip
 		this->toolStripStatLb->Text = trackInfos->getSizeOfSortedMapping().ToString()+ " tracks";
-}
-
-//fill listBox with names from sorted title list
-private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles, bool clearSearchField ){
-
-		String^ title;
-
-		//clear listBox Items and MP3 Info
-		lbTracks->Items->Clear();
-		clearMP3Infos();
-		if(clearSearchField){ 
-			tbSearch->Text = "";
-			this->lbTracks->Items->Clear(); 
-		}
-
-		MP3::CSortedTitles::const_iterator iter = titles->getBeginIterator();
-		for (iter; iter != titles->getEndIterator(); ++iter ) {
-			
-			title = gcnew String((iter->sTitleName).c_str());
-			//title = gcnew String((*iter).c_str());
-			lbTracks->Items->Add(title);
-			lbTracks->SelectedIndex = 0;
-			lbTracks->Select();
-		}
-
-		//output number of read tracks in status strip
-		this->toolStripStatLb->Text = titles->getSizeOfSortedTitles().ToString()+ " tracks";
 }
 
 private: System::Void setButtonsEnabled(bool flag) {
