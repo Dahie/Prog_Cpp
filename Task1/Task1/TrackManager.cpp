@@ -22,13 +22,10 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
 	Response response = this->controller->addFile(pFileName, name);
 
 	switch(response){
-
-		case NO_MP3_FILE:{ 
+		case NO_MP3_FILE: 
 			return -2;
-		}
-		case NOT_READ:{ 
+		case NOT_READ: 
 			return -3;
-		}
 		case OK:{
 
 			//copy mp3 data into CTrackInfo object
@@ -69,8 +66,8 @@ bool CTrackManager::removeTrack( int pIndex ){
 		}else{
 			flag = false;
 		}
-	}
-	if(this->mapping.empty()) this->indexCount=0;
+	} else 
+	  this->indexCount=0;
 	return flag;
 }
 

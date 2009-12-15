@@ -5,7 +5,6 @@
 #include "ITrackManager.h"
 #include "TracksController.h"
 #include <map>
-#include <vector>
 
 class CTrackManager : public ITrackManager{
 	
@@ -24,10 +23,10 @@ class CTrackManager : public ITrackManager{
 
 	private:
 		CTracksController* controller;
-		index_sz_type indexCount;
-		index_sz_type indexSearch;
-		std::map<index_sz_type, std::string> mapping;
-		std::map<index_sz_type, MP3::CSortedTitles*> searches;
+		index_sz_type indexCount; // number of opened files
+		index_sz_type indexSearch; // number of saved searches
+		std::map<index_sz_type, std::string> mapping; // maps unique titel to unique id
+		std::map<index_sz_type, MP3::CSortedTitles*> searches; // saves searches
 
 };//class CTrackManager
 

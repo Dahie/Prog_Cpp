@@ -18,7 +18,6 @@ void CTracks::addTrack( const std::string& name, MP3::CMP3Audio* track ) {
 
 //get a mp3
 MP3::CMP3Audio* CTracks::getTrack( const std::string& name ) {
-	
 	if(!tracks.empty()){
 		mp3_it iter = tracks.find(name);
 		return (iter != tracks.end() ? iter->second : NULL);
@@ -28,7 +27,6 @@ MP3::CMP3Audio* CTracks::getTrack( const std::string& name ) {
 
 //remove a mp3 in container
 void CTracks::removeTrack( const std::string& name ){
-	
 	if(!tracks.empty()){
 		mp3_it iter = tracks.find(name);
 		if(iter != tracks.end()){
@@ -40,7 +38,6 @@ void CTracks::removeTrack( const std::string& name ){
 
 //remove item in container but save oject
 void CTracks::eraseTrack( const std::string& name ){
-	
 	if(!tracks.empty()){
 		mp3_it iter = tracks.find(name);
 		if(iter != tracks.end()){
@@ -51,7 +48,6 @@ void CTracks::eraseTrack( const std::string& name ){
 
 //delete all mp3 in container
 void CTracks::clearTracks( void ){
-
 	if(!tracks.empty()){
 		mp3_it	iter;
 		for ( iter = tracks.begin(); iter != tracks.end(); ++iter ){

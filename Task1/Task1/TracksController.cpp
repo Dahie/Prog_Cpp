@@ -121,7 +121,7 @@ void CTracksController::removeFile( const std::string& name ){
 	//store information needed from mp3 which should be removed
 	MP3::CMP3Audio* mp3audio = this->tracks->getTrack(name);
 	this->tracks->isTitleInCollection(mp3audio);
-	bool flag = (this->tracks->getTitleCount() > 2 ? true : false);
+	bool flag = this->tracks->getTitleCount() > 2;
 	const std::string title = mp3audio->getTitle();
 	
 	//remove track in both collections
@@ -131,11 +131,10 @@ void CTracksController::removeFile( const std::string& name ){
 	//remove title and all entries to words from indexer
 	this->indexer->remove(name);
 
-	//if tracks with same title rename them if necessary TODO: update indexer
+	//if tracks with same title, rename them if necessary TODO: update indexer
 	if(flag){	
 		this->renameUniqueTitles( name, title );
 	}
-
 }
 
 void CTracksController::removeAllFiles( void ){
@@ -149,21 +148,16 @@ void CTracksController::removeAllFiles( void ){
 void CTracksController::renameUniqueTitles( const std::string& name, const std::string& title ){
 
 		std::string compName = name;
-
 		MP3::CTracks* help = new MP3::CTracks();
 		MP3::CSortedTitles* helpTitles = new MP3::CSortedTitles();
 
 		MP3::CTracks::mp3_it iter = this->tracks->getBeginIterator();
 		for(iter; iter != this->tracks->getEndIterator(); ++iter){
-		
-			if( title == iter->second->getTitle()){
-				
-				if(compName < iter->first){
-				
-					help->addTrack(compName, iter->second);
-					compName = iter->first;
-					helpTitles->addTitle(compName);
-				}
+			if( title == iter->second->getTitle()
+        && compName < iter->first){
+				help->addTrack(compName, iter->second);
+				compName = iter->first;
+				helpTitles->addTitle(compName);
 			}
 		}
 
