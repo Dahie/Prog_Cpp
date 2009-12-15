@@ -79,6 +79,7 @@ namespace Task1 {
 		}
 
 	private: System::Windows::Forms::GroupBox^  gbSearch;
+	private: System::Windows::Forms::ComboBox^  cbSearch;
 	private: System::Windows::Forms::TextBox^  tbSearch;
 	private: System::Windows::Forms::Label^  lbSearch;
 	private: System::Windows::Forms::Button^  btOpen;
@@ -161,6 +162,7 @@ namespace Task1 {
 			this->gbSearch = (gcnew System::Windows::Forms::GroupBox());
 			this->lbSearch = (gcnew System::Windows::Forms::Label());
 			this->tbSearch = (gcnew System::Windows::Forms::TextBox());
+			this->cbSearch = (gcnew System::Windows::Forms::ComboBox());
 			this->btRemove = (gcnew System::Windows::Forms::Button());
 			this->btAdd = (gcnew System::Windows::Forms::Button());
 			this->btn_indexinfo = (gcnew System::Windows::Forms::Button());
@@ -393,7 +395,7 @@ namespace Task1 {
 			this->btClear->Location = System::Drawing::Point(404, 70);
 			this->btClear->Name = L"btClear";
 			this->btClear->Size = System::Drawing::Size(90, 29);
-			this->btClear->TabIndex = 26;
+			this->btClear->TabIndex = 27;
 			this->btClear->Text = L"Clear List";
 			this->btClear->UseVisualStyleBackColor = true;
 			this->btClear->Click += gcnew System::EventHandler(this, &Form1::btClear_Click);
@@ -404,7 +406,7 @@ namespace Task1 {
 			this->statusStrip1->Location = System::Drawing::Point(0, 509);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(622, 22);
-			this->statusStrip1->TabIndex = 29;
+			this->statusStrip1->TabIndex = 33;
 			this->statusStrip1->Text = L"statusStrip1";
 			// 
 			// toolStripStatLb
@@ -440,7 +442,7 @@ namespace Task1 {
 			this->gbMP3Infos->Location = System::Drawing::Point(7, 287);
 			this->gbMP3Infos->Name = L"gbMP3Infos";
 			this->gbMP3Infos->Size = System::Drawing::Size(386, 207);
-			this->gbMP3Infos->TabIndex = 30;
+			this->gbMP3Infos->TabIndex = 32;
 			this->gbMP3Infos->TabStop = false;
 			this->gbMP3Infos->Text = L"MP3 Info";
 			// 
@@ -459,6 +461,7 @@ namespace Task1 {
 			this->gbSearch->Controls->Add(this->lbSearch);
 			this->gbSearch->Controls->Add(this->tbSearch);
 			this->gbSearch->Controls->Add(this->btOpen);
+			this->gbSearch->Controls->Add(this->cbSearch);
 			this->gbSearch->Location = System::Drawing::Point(7, 1);
 			this->gbSearch->Name = L"gbSearch";
 			this->gbSearch->Size = System::Drawing::Size(603, 45);
@@ -473,7 +476,7 @@ namespace Task1 {
 			this->lbSearch->Location = System::Drawing::Point(340, 17);
 			this->lbSearch->Name = L"lbSearch";
 			this->lbSearch->Size = System::Drawing::Size(51, 16);
-			this->lbSearch->TabIndex = 30;
+			this->lbSearch->TabIndex = 31;
 			this->lbSearch->Text = L"Search";
 			this->lbSearch->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 			// 
@@ -482,14 +485,32 @@ namespace Task1 {
 			this->tbSearch->BackColor = System::Drawing::SystemColors::Window;
 			this->tbSearch->Cursor = System::Windows::Forms::Cursors::IBeam;
 			this->tbSearch->Enabled = false;
-			this->tbSearch->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->tbSearch->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(0)));
-			this->tbSearch->Location = System::Drawing::Point(397, 14);
+			this->tbSearch->Location = System::Drawing::Point(417, 14);
 			this->tbSearch->Name = L"tbSearch";
-			this->tbSearch->Size = System::Drawing::Size(200, 22);
+			this->tbSearch->Size = System::Drawing::Size(180, 23);
 			this->tbSearch->TabIndex = 25;
 			this->tbSearch->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
 			this->tbSearch->TextChanged += gcnew System::EventHandler(this, &Form1::searchField_textChanged);
+			// 
+			// cbSearch
+			// 
+			this->cbSearch->Cursor = System::Windows::Forms::Cursors::Default;
+			this->cbSearch->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->cbSearch->Enabled = false;
+			this->cbSearch->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(0)));
+			this->cbSearch->IntegralHeight = false;
+			this->cbSearch->ItemHeight = 15;
+			this->cbSearch->Location = System::Drawing::Point(399, 14);
+			this->cbSearch->Name = L"cbSearch";
+			this->cbSearch->RightToLeft = System::Windows::Forms::RightToLeft::Yes;
+			this->cbSearch->Size = System::Drawing::Size(198, 23);
+			this->cbSearch->Sorted = true;
+			this->cbSearch->TabIndex = 26;
+			this->cbSearch->TabStop = false;
+			this->cbSearch->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::search_SelectClick);
 			// 
 			// btRemove
 			// 
@@ -497,7 +518,7 @@ namespace Task1 {
 			this->btRemove->Location = System::Drawing::Point(404, 140);
 			this->btRemove->Name = L"btRemove";
 			this->btRemove->Size = System::Drawing::Size(90, 29);
-			this->btRemove->TabIndex = 28;
+			this->btRemove->TabIndex = 29;
 			this->btRemove->Text = L"Remove";
 			this->btRemove->UseVisualStyleBackColor = true;
 			this->btRemove->Click += gcnew System::EventHandler(this, &Form1::btRemoveClick);
@@ -508,7 +529,7 @@ namespace Task1 {
 			this->btAdd->Location = System::Drawing::Point(404, 105);
 			this->btAdd->Name = L"btAdd";
 			this->btAdd->Size = System::Drawing::Size(90, 29);
-			this->btAdd->TabIndex = 27;
+			this->btAdd->TabIndex = 28;
 			this->btAdd->Text = L"Add";
 			this->btAdd->UseVisualStyleBackColor = true;
 			this->btAdd->Click += gcnew System::EventHandler(this, &Form1::btOpen_Click);
@@ -518,7 +539,7 @@ namespace Task1 {
 			this->btn_indexinfo->Location = System::Drawing::Point(404, 175);
 			this->btn_indexinfo->Name = L"btn_indexinfo";
 			this->btn_indexinfo->Size = System::Drawing::Size(90, 29);
-			this->btn_indexinfo->TabIndex = 31;
+			this->btn_indexinfo->TabIndex = 30;
 			this->btn_indexinfo->Text = L"Index Info";
 			this->btn_indexinfo->UseVisualStyleBackColor = true;
 			this->btn_indexinfo->Visible = false;
@@ -565,6 +586,7 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 		}
 
 		CTrackInfo trackData;
+		//get id from trackSearch collection return -1 if search is not is collection
 		TSearchID id = this->trackSearches->contains(searchterm);
 		CSortedTrackInfos* searchResults;
 
@@ -587,6 +609,9 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 			searchinfo.trackInfos = searchResults;
 
 			this->trackSearches->addTrackSearch(id, searchinfo);
+			//add searchterm to dropdown list of searchfield in gui
+			//if(resultCount > 0) //add only if there are results for this searchterm
+			this->cbSearch->Items->Add(gcnew String(searchterm.c_str()));
 		}
 
 		if(!searchResults->isEmpty()){
@@ -594,9 +619,14 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 			//this->updateTitleListOutput(this->trackSearches->getTrackSearch(id)->trackInfos, false);
 		}else{
 			this->lbTracks->Items->Clear();
+			this->clearMP3Infos();
 		}
 		this->tbSearch->Select();
 		
+}
+
+private: System::Void search_SelectClick(System::Object^  sender, System::EventArgs^  e) {
+		this->tbSearch->Text = this->cbSearch->Text;
 }
 
 private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -646,6 +676,7 @@ private: System::Void openAllFiles(System::Array^ filenames){
 					System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
 					+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+					this->tbSearch->Text = "";
 					lbTracks->Select();
 					break;
 				}
@@ -653,12 +684,14 @@ private: System::Void openAllFiles(System::Array^ filenames){
 
 					MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
 					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+					this->tbSearch->Text = "";
 					lbTracks->Select();
 					break;
 				}
 				case INVALID_INDEX:{
 
 					MessageBox::Show("mp3-File \""+filenames->GetValue(i)->ToString()+"\" already exists");
+					this->tbSearch->Text = "";
 					lbTracks->Select();
 					break;
 				}
@@ -744,7 +777,7 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 		lbTracks->Items->Clear();
 		clearMP3Infos();
 		if(clearSearchField){ 
-			tbSearch->Text = ""; 
+			tbSearch->Text = "";
 			this->lbTracks->Items->Clear(); 
 		}
 
@@ -770,7 +803,7 @@ private: System::Void updateTitleListOutput( const MP3::CSortedTitles* titles, b
 		lbTracks->Items->Clear();
 		clearMP3Infos();
 		if(clearSearchField){ 
-			tbSearch->Text = ""; 
+			tbSearch->Text = "";
 			this->lbTracks->Items->Clear(); 
 		}
 
@@ -794,6 +827,7 @@ private: System::Void setButtonsEnabled(bool flag) {
 		this->btRemove->Enabled = flag;
 		this->btAdd->Enabled = flag;
 		this->tbSearch->Enabled = flag;
+		this->cbSearch->Enabled = flag;
 
 		this->btOpen->Enabled = !flag;
 		if(!flag)
@@ -850,6 +884,7 @@ private: System::Void endAllSearches( void ){
 			this->trackManager->trackSearchStop(it->first);
 		}
 		this->trackSearches->clearTrackSearches(); 
+		this->cbSearch->Items->Clear();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //Drag and drop methods
@@ -875,7 +910,6 @@ private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::
 }
 
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {}
-
 };//class Form1
 
 }
