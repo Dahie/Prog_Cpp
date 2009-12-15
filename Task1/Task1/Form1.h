@@ -30,7 +30,8 @@ namespace Task1 {
 	private:
 		ITrackManager* trackManager;
 		CSortedTrackInfos* trackInfos; //is necessary to show metadata information for a track
-		CTrackSearches* trackSearches;
+  private: System::Windows::Forms::ComboBox^  comboBox1;
+           CTrackSearches* trackSearches;
 			
 	public:
 		Form1(void)
@@ -561,6 +562,7 @@ namespace Task1 {
 			this->PerformLayout();
 
 		}
+
 #pragma endregion
 
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
