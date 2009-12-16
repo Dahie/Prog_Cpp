@@ -66,9 +66,8 @@ bool CTrackManager::removeTrack( int pIndex ){
 		}else{
 			flag = false;
 		}
-	} else {
-		this->indexCount=0;
-	}
+	} 
+	if(this->mapping.empty()) this->indexCount=0;
 	return flag;
 }
 
