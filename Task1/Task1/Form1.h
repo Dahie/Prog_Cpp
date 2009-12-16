@@ -30,8 +30,7 @@ namespace Task1 {
 	private:
 		ITrackManager* trackManager;
 		CSortedTrackInfos* trackInfos; //is necessary to show metadata information for a track
-  private: System::Windows::Forms::ComboBox^  comboBox1;
-           CTrackSearches* trackSearches;
+		CTrackSearches* trackSearches;
 			
 	public:
 		Form1(void)
@@ -629,20 +628,20 @@ private: System::Void btn_indexinfo_Click(System::Object^  sender, System::Event
 
 private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
       
-	  // Displays an OpenFileDialog so the user can select mp3 Files
-    OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
-	  openFileDialog1->Multiselect = true;
-    openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
-    openFileDialog1->Title = "Select a MP3 Audio";
+		 // Displays an OpenFileDialog so the user can select mp3 Files
+		 OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
+		 openFileDialog1->Multiselect = true;
+		 openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
+		 openFileDialog1->Title = "Select a MP3 Audio";
 
-    // Show the Dialog: If the user clicked OK in the dialog and
-    // a .mp3 file was selected, open it.
-    if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
-        		
-		  this->openAllFiles(openFileDialog1->FileNames);
-		  //set right buttons enabled and disable Open Audio button
-		  this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
-    }
+		// Show the Dialog: If the user clicked OK in the dialog and
+		// a .mp3 file was selected, open it.
+		if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
+	        		
+			  this->openAllFiles(openFileDialog1->FileNames);
+			  //set right buttons enabled and disable Open Audio button
+			  this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
+		}
 }
 
 private: System::Void openAllFiles(System::Array^ filenames){
@@ -765,7 +764,8 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 			this->lbTracks->Items->Clear(); 
 		}
 
-    String^ title;
+		String^ title;
+
 		CSortedTrackInfos::trackInfos_const_it iter = trackInfos->getBeginIterator();
 		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
 			title = gcnew String(((*iter).mTitle).c_str());
