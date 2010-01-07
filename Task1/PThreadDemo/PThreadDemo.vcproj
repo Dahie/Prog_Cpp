@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="MP3Tagger"
-	ProjectGUID="{19BB9166-0B08-444C-AA3E-E57D3CD03B45}"
-	RootNamespace="Task1"
+	Name="PThreadDemo"
+	ProjectGUID="{31C02DB6-8368-4E9B-A42D-D59089CD0EE8}"
+	RootNamespace="PThreadDemo"
 	Keyword="ManagedCProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -42,8 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\id3lib\id3lib-3.8.3\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;ID3LIB_LINKOPTION=1"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -60,13 +59,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="id3lib.lib $(NOINHERIT)"
+				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\id3lib\id3lib-3.8.3binaries\Debug&quot;;&quot;..\id3lib\id3lib-3.8.3binaries\Release&quot;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
-				SubSystem="2"
-				EntryPointSymbol="main"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -97,7 +93,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
-			ManagedExtensions="2"
+			ManagedExtensions="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -137,8 +133,6 @@
 				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="2"
-				EntryPointSymbol="main"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -176,16 +170,6 @@
 			MinFrameworkVersion="131072"
 		/>
 		<AssemblyReference
-			RelativePath="System.Drawing.dll"
-			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="System.Windows.Forms.dll"
-			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
 			RelativePath="System.XML.dll"
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
@@ -202,35 +186,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ID3LibWrapper.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ID3Reader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Indexer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3Audio.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3Reader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3ReaderFactory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SortedTitles.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SortedTrackInfos.cpp"
+				RelativePath=".\PThreadDemo.cpp"
 				>
 			</File>
 			<File
@@ -253,34 +209,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\Task1.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackManagerFactory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Tracks.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TracksController.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackSearches.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Utils.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Headerdateien"
@@ -288,89 +216,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Form1.h"
-				FileType="3"
-				>
-				<File
-					RelativePath=".\Form1.resX"
-					SubType="Designer"
-					>
-				</File>
-			</File>
-			<File
-				RelativePath=".\ID3LibWrapper.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ID3Reader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Indexer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IThreadAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ITrackManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LockClasses.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3Audio.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3Reader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MP3ReaderFactory.h"
-				>
-			</File>
-			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SortedTitles.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SortedTrackInfos.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackManagerFactory.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Tracks.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TracksController.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TrackSearches.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Utils.h"
 				>
 			</File>
 		</Filter>
