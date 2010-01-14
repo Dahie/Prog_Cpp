@@ -209,6 +209,14 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\UnixThread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WindowsThread.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Headerdateien"
@@ -216,11 +224,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\Task1\IThreadAdapter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UnixThread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WindowsThread.h"
 				>
 			</File>
 		</Filter>

@@ -16,14 +16,15 @@ void *PrintHello(void *threadid)
 
 int main(int argc, char *argv[])
 {
-  pthread_t threads[NUM_THREADS];
+  Thread* threads[NUM_THREADS];
   int rc;
   long t;
   for(t=0;t<NUM_THREADS;t++)
   {
     printf("In main: creating thread %\n", t);
-    rc = pthread_create(&threads[t], NULL, PrintHello, (void*)t);
-    if() {
+    ThreadAdapter thread(&threads[t], NULL, PrintHello, (void*)t); // from old posix stuff
+    thread.start();
+    if(rc) {
       printf("ERROR: return code of pthread_create is %d\n", rc);
       exit(-1);
     }
