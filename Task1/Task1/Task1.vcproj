@@ -281,6 +281,10 @@
 				RelativePath=".\Utils.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\PThreadDemo\WindowsThread.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Headerdateien"
@@ -371,6 +375,10 @@
 			</File>
 			<File
 				RelativePath=".\Utils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PThreadDemo\WindowsThread.h"
 				>
 			</File>
 		</Filter>
