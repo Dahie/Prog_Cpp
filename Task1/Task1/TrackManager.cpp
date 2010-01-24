@@ -1,7 +1,9 @@
 #include "StdAfx.h"
 #include "TrackManager.h"
+#include "LockClasses.h"
 
-CTrackManager::CTrackManager( void ): controller( new CTracksController() ), indexCount(0), indexSearch(0)
+CTrackManager::CTrackManager( void ): controller( new CTracksController() ), 
+  lock_add_track( new CReadWriteLock() ), indexCount(0), indexSearch(0)
 {
 	if( (!controller) ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -17,15 +19,21 @@ CTrackManager::~CTrackManager( void ){
 
 int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackData ){
 	
+  lock_add_track->lockReader();
+  lock_add_track->lockWriter();
+  
+
 	//pass file to controller, read ID3 tags and create mp3 object, store it in collection
 	std::string name = "";
 	Response response = this->controller->addFile(pFileName, name);
-
+  unsigned int return_value = 0;
 	switch(response){
 		case NO_MP3_FILE: 
-			return -2;
+			return_value = -2;
+      break;
 		case NOT_READ: 
-			return -3;
+			return_value = -3;
+      break;
 		case OK:{
 
 			//copy mp3 data into CTrackInfo object
@@ -39,14 +47,21 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
 			pTrackData.mIndex = this->indexCount;
 			++this->indexCount;
 			
-			return pTrackData.mIndex;
+			return_value = pTrackData.mIndex;
+      break;
 		}
-		case ALREADY_OPENED:{
-			return INVALID_INDEX;
-		}
+		case ALREADY_OPENED:
+			return_value = INVALID_INDEX;
+      break;
+    default:
+      return_value = INVALID_INDEX;
+      break;
 	}//end of switch
 
-	return INVALID_INDEX;
+  lock_add_track->unlockReader();
+  lock_add_track->unlockWriter();
+
+	return return_value;
 }
 
 bool CTrackManager::removeTrack( int pIndex ){

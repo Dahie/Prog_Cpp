@@ -4,6 +4,7 @@
 
 #include "ITrackManager.h"
 #include "TracksController.h"
+#include "LockClasses.h"
 #include <map>
 
 class CTrackManager : public ITrackManager{
@@ -27,6 +28,9 @@ class CTrackManager : public ITrackManager{
 		index_sz_type indexSearch; // number of saved searches
 		std::map<index_sz_type, std::string> mapping; // maps unique titel to unique id
 		std::map<index_sz_type, MP3::CSortedTitles*> searches; // saves searches
+
+    // Read/write locks
+    CReadWriteLock* lock_add_track;
 
 };//class CTrackManager
 

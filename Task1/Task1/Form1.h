@@ -645,11 +645,8 @@ private: System::Void btn_indexinfo_Click(System::Object^  sender, System::Event
   thread->start();
 }
 
-private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
-      
-    // TODO this as writer thread
-
-		 // Displays an OpenFileDialog so the user can select mp3 Files
+private: void open_click() {
+    // Displays an OpenFileDialog so the user can select mp3 Files
 		 OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
 		 openFileDialog1->Multiselect = true;
 		 openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
@@ -659,10 +656,17 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
 		// a .mp3 file was selected, open it.
 		if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
 	        		
-			  this->openAllFiles(openFileDialog1->FileNames);
+			  //this->openAllFiles(openFileDialog1->FileNames);
 			  //set right buttons enabled and disable Open Audio button
-			  this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
+			  //this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
 		}
+}
+
+private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
+      
+    // TODO this as writer thread
+    WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::open_click));
+    thread->start(); 
 }
 
 private: System::Void openAllFiles(System::Array^ filenames){
