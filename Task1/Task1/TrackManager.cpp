@@ -3,7 +3,9 @@
 #include "LockClasses.h"
 
 CTrackManager::CTrackManager( void ): controller( new CTracksController() ), 
-  lock_add_track( new CReadWriteLock() ), indexCount(0), indexSearch(0)
+  lock_add_track( new CReadWriteLock() ),
+  lock_remove_track( new CReadWriteLock() ),
+  indexCount(0), indexSearch(0)
 {
 	if( (!controller) ){ 
 		System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -19,10 +21,8 @@ CTrackManager::~CTrackManager( void ){
 
 int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackData ){
 	
-  lock_add_track->lockReader();
   lock_add_track->lockWriter();
   
-
 	//pass file to controller, read ID3 tags and create mp3 object, store it in collection
 	std::string name = "";
 	Response response = this->controller->addFile(pFileName, name);
@@ -58,7 +58,6 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
       break;
 	}//end of switch
 
-  lock_add_track->unlockReader();
   lock_add_track->unlockWriter();
 
 	return return_value;
@@ -66,16 +65,20 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
 
 bool CTrackManager::removeTrack( int pIndex ){
 
+
 	bool flag = true;
 
+  
 	if(!this->mapping.empty()){
 		std::map<unsigned int, std::string>::iterator iter = this->mapping.find(pIndex);
 		if( iter != this->mapping.end() ){
-			if(this->mapping.size() <= 1){
+	    this->lock_remove_track->lockWriter();	
+      if(this->mapping.size() <= 1){
 				this->controller->removeAllFiles();
 			}else{
 				this->controller->removeFile(iter->second);
 			}
+      this->lock_remove_track->unlockWriter();
 			this->mapping.erase(pIndex);
 			flag = true;
 		}else{

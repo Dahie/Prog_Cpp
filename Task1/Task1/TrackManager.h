@@ -22,6 +22,11 @@ class CTrackManager : public ITrackManager{
 		bool trackGetNext( TSearchID pID, /*out*/ CTrackInfo &pNextTrack );
 		void trackSearchStop( TSearchID pID );
 
+
+    CTracksController* get_controller() { return this->controller;};
+    index_sz_type get_index_count(){ return this->indexCount;};
+    index_sz_type get_index_search(){ return this->indexSearch;};
+
 	private:
 		CTracksController* controller;
 		index_sz_type indexCount; // number of opened files
@@ -31,6 +36,7 @@ class CTrackManager : public ITrackManager{
 
     // Read/write locks
     CReadWriteLock* lock_add_track;
+    CReadWriteLock* lock_remove_track;
 
 };//class CTrackManager
 

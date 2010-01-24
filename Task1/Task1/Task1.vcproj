@@ -282,7 +282,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\PThreadDemo\WindowsThread.cpp"
+				RelativePath=".\WindowsThread.cpp"
 				>
 			</File>
 		</Filter>
@@ -378,7 +378,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\PThreadDemo\WindowsThread.h"
+				RelativePath=".\WindowsThread.h"
 				>
 			</File>
 		</Filter>

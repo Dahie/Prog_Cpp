@@ -18,6 +18,7 @@ WindowsThread::~WindowsThread(void)
 void WindowsThread::start()
 {
   trd = gcnew Thread(myThreadDelegate);
+  trd->SetApartmentState(ApartmentState::STA);
   trd->Start();
 }
 

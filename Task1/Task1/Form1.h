@@ -6,6 +6,7 @@
 #include "TrackSearches.h"
 #include "WindowsThread.h"
 #include "Utils.h"
+#include "LockClasses.h"
 
 namespace Task1 {
 
@@ -32,8 +33,9 @@ namespace Task1 {
 	private:
 		ITrackManager* trackManager;
 		CSortedTrackInfos* trackInfos; //is necessary to show metadata information for a track
+    CReadWriteLock* lock_trackInfos;
 		CTrackSearches* trackSearches;
-			
+		CReadWriteLock* lock_trackSearches;	
 	public:
 		Form1(void)
 		{
@@ -44,7 +46,9 @@ namespace Task1 {
 			//		
 			trackManager = CTrackManagerFactory::createInstance();
 			trackInfos = new CSortedTrackInfos();
+      lock_trackInfos = new CReadWriteLock();
 			trackSearches = new CTrackSearches();
+      lock_trackSearches = new CReadWriteLock();
 
 			if( (!trackManager) || (!trackInfos) || (!trackSearches) ){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -655,23 +659,27 @@ private: void open_click() {
 		// Show the Dialog: If the user clicked OK in the dialog and
 		// a .mp3 file was selected, open it.
 		if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
-	        		
-			  //this->openAllFiles(openFileDialog1->FileNames);
-			  //set right buttons enabled and disable Open Audio button
-			  //this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
-		}
+			  this->openAllFiles(openFileDialog1->FileNames);
+		} 
 }
 
 private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e) {
       
-    // TODO this as writer thread
+    // this as writer thread
     WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::open_click));
     thread->start(); 
+    thread->get_instance()->Join();
+
+    //show tracks in listbox
+    this->lock_trackInfos->lockReader();
+		this->updateTitleListOutput(this->trackInfos, true);
+    this->lock_trackInfos->unlockReader();
+		if(!this->trackSearches->isEmpty()) this->endAllSearches();
+    this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
 }
 
-private: System::Void openAllFiles(System::Array^ filenames){
 
-    // TODO this as writer thread
+private: System::Void openAllFiles(System::Array^ filenames){
 
 		CTrackInfo trackData;
 		int feedback;
@@ -684,7 +692,6 @@ private: System::Void openAllFiles(System::Array^ filenames){
 
 			//pass file to track manager, read ID3 tags and store these in CTrackInfo
 			feedback = this->trackManager->addTrack(target, trackData);
-
 			switch(feedback){
 				case -2:{ 
 					
@@ -713,11 +720,13 @@ private: System::Void openAllFiles(System::Array^ filenames){
 				default:{ //file successful added
 
 					//add track meta data in mapping container and sort this container
-					this->trackInfos->addElement(trackData);
-					this->trackInfos->sortElements();
+          this->lock_trackInfos->lockWriter();
+					  this->trackInfos->addElement(trackData);
+					  this->trackInfos->sortElements();
+          this->lock_trackInfos->unlockWriter();
 					//show tracks in listbox
-					this->updateTitleListOutput(this->trackInfos, true);
-					if(!this->trackSearches->isEmpty()) this->endAllSearches();
+					//this->updateTitleListOutput(this->trackInfos, true);
+					//if(!this->trackSearches->isEmpty()) this->endAllSearches();
 					break;
 				}
 			}//end of switch
@@ -738,46 +747,69 @@ private: System::Void selectTrack_Click(System::Object^  sender, System::EventAr
 		}
 }
 
-private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
+private: void clear_list() {
 
 		//clear all lists and GUI fields
 		for(unsigned int i = 0; i < this->trackInfos->getSizeOfSortedMapping(); ++i){
 			int index = this->trackInfos->getElement(i).mIndex;
 			this->trackManager->removeTrack(index);
 		}
-		this->trackInfos->clearElements();
+    this->lock_trackInfos->lockWriter();
+    this->trackInfos->clearElements();
+    this->lock_trackInfos->unlockWriter();
 
 		this->lbTracks->Items->Clear();
 		this->clearMP3Infos();
 		this->tbSearch->Text = "";
 		this->endAllSearches();
 
+}
+
+private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::clear_list));
+    thread->start(); 
+    thread->get_instance()->Join();
+
 		this->setButtonsEnabled(false);
 }
 
-private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^  e) {
+private: void remove_track(String^ curItem){
 
-		if(lbTracks->SelectedIndex != -1){
+		
 
-			String^ curItem = lbTracks->SelectedItem->ToString();
+			//String^ curItem = lbTracks->SelectedItem->ToString();
 
 			std::string name ="";
 			MarshalString(curItem, name);
 
 			//remove track
+      this->lock_trackInfos->lockReader();
 			this->trackManager->removeTrack(this->trackInfos->getElement(name).mIndex);
+      this->lock_trackInfos->unlockReader();
+      this->lock_trackInfos->lockWriter();
 			this->trackInfos->removeElement(name);
-			
-			this->updateTitleListOutput(this->trackInfos, true);
-			if(!this->trackSearches->isEmpty()) this->endAllSearches();
+			this->lock_trackInfos->unlockWriter();
+    
+}
 
-			if(lbTracks->Items->Count>=1){
-				//lbTracks->SelectedIndex = 0;
-			}else{
-				this->clearMP3Infos();
-				this->setButtonsEnabled(false);
-			}
-		}
+private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^  e) {
+
+   if(lbTracks->SelectedIndex != -1){
+		  WindowsThread^ thread = gcnew WindowsThread(gcnew ParameterizedThreadStart(this, &Form1::remove_track));
+      thread->start(lbTracks->SelectedItem->ToString()); 
+      thread->get_instance()->Join();
+
+		  this->updateTitleListOutput(this->trackInfos, true);
+		  if(!this->trackSearches->isEmpty()) this->endAllSearches();
+
+		  if(lbTracks->Items->Count>=1){
+			  //lbTracks->SelectedIndex = 0;
+		  }else{
+			  this->clearMP3Infos();
+			  this->setButtonsEnabled(false);
+		  }
+    }
 }
 
 //fill listBox with names from sorted track info container
@@ -793,6 +825,7 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 
 		String^ title;
 
+    this->lock_trackInfos->lockReader();
 		CSortedTrackInfos::trackInfos_const_it iter = trackInfos->getBeginIterator();
 		for (iter; iter != trackInfos->getEndIterator(); ++iter ) {
 			title = gcnew String(((*iter).mTitle).c_str());
@@ -800,13 +833,16 @@ private: System::Void updateTitleListOutput( const CSortedTrackInfos* trackInfos
 			lbTracks->SelectedIndex = 0;
 			lbTracks->Select();
 		}
+    this->lock_trackInfos->unlockReader();
 
 		//output number of read tracks in status strip
-		this->toolStripStatLb->Text = trackInfos->getSizeOfSortedMapping().ToString()+ " tracks";
+		this->lock_trackInfos->lockReader();
+    this->toolStripStatLb->Text = trackInfos->getSizeOfSortedMapping().ToString()+ " tracks";
+    this->lock_trackInfos->unlockReader();
 }
 
 private: System::Void setButtonsEnabled(bool flag) {
-			 
+		 
 		this->btClear->Enabled = flag;
 		this->btRemove->Enabled = flag;
 		this->btAdd->Enabled = flag;
@@ -880,10 +916,23 @@ private: System::Void dragFileEnter(System::Object^  /*sender*/, System::Windows
 		 e->Effect = DragDropEffects::Copy;
 }
 
+private: void drop_files()  {
+		
+		 //System::Windows::Forms::IDataObject^ data = e->Data;
+		 /*Object^ file = e->Data->GetData("FileNameW");
+
+		 System::Array^ filenames = safe_cast<System::Array^>(file);
+		 this->openAllFiles(filenames);*/
+}
+
 //called when object was dropped in specific area
 private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::Forms::DragEventArgs^  e) {
 		
-		 //System::Windows::Forms::IDataObject^ data = e->Data;
+		/*WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::drop_files));
+    thread->start(); 
+    thread->get_instance()->Join();*/
+
+      //System::Windows::Forms::IDataObject^ data = e->Data;
 		 Object^ file = e->Data->GetData("FileNameW");
 
 		 System::Array^ filenames = safe_cast<System::Array^>(file);

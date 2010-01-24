@@ -16,4 +16,7 @@ public:
   virtual void terminate();
   virtual void suspend();
   virtual void resume();
+  Thread^ get_instance(){
+    return trd;
+  };
 };

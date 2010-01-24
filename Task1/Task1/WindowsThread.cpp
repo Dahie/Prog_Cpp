@@ -15,9 +15,15 @@ WindowsThread::~WindowsThread(void)
 {
 }
 
+void WindowsThread::start(Object^ obj)
+{
+  trd = gcnew Thread(myPThreadDelegate);
+  trd->Start(obj);
+}
+
 void WindowsThread::start()
 {
-  trd = new Thread(myThreadDelegate);
+  trd = gcnew Thread(myThreadDelegate);
   trd->Start();
 }
 
