@@ -7,6 +7,7 @@
 #include "SortedTitles.h"
 #include "Utils.h"
 #include "Indexer.h"
+#include "LockClasses.h"
 
 enum Response{
 	NO_MP3_FILE, NOT_READ, OK, ALREADY_OPENED
@@ -19,6 +20,11 @@ class CTracksController
 		MP3::CSortedTitles* sortedTitles;
 		MP3::IMP3Reader* mp3Reader;
 		Search::Indexer* indexer;
+
+    CReadWriteLock* lock_indexer;
+    CReadWriteLock* lock_mp3reader;
+    CReadWriteLock* lock_tracks;
+    CReadWriteLock* lock_sorted_titles;
 
 	public:
 		CTracksController( void );

@@ -3,8 +3,7 @@
 #include "LockClasses.h"
 
 CTrackManager::CTrackManager( void ): controller( new CTracksController() ), 
-  lock_add_track( new CReadWriteLock() ),
-  lock_remove_track( new CReadWriteLock() ),
+  lock_mapping( new CReadWriteLock() ),
   indexCount(0), indexSearch(0)
 {
 	if( (!controller) ){ 
@@ -21,8 +20,6 @@ CTrackManager::~CTrackManager( void ){
 
 int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackData ){
 	
-  lock_add_track->lockWriter();
-  
 	//pass file to controller, read ID3 tags and create mp3 object, store it in collection
 	std::string name = "";
 	Response response = this->controller->addFile(pFileName, name);
@@ -43,7 +40,9 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
 			pTrackData.mTitle = mp3audio->getTitle();
 
 			//add title to mapping container and store index in track info object
+      this->lock_mapping->lockWriter();
 			this->mapping[this->indexCount] = pTrackData.mTitle;			
+      this->lock_mapping->unlockWriter();
 			pTrackData.mIndex = this->indexCount;
 			++this->indexCount;
 			
@@ -58,8 +57,6 @@ int CTrackManager::addTrack( const string pFileName, /*out*/ CTrackInfo &pTrackD
       break;
 	}//end of switch
 
-  lock_add_track->unlockWriter();
-
 	return return_value;
 }
 
@@ -68,24 +65,28 @@ bool CTrackManager::removeTrack( int pIndex ){
 
 	bool flag = true;
 
-  
+  this->lock_mapping->lockReader();
 	if(!this->mapping.empty()){
 		std::map<unsigned int, std::string>::iterator iter = this->mapping.find(pIndex);
 		if( iter != this->mapping.end() ){
-	    this->lock_remove_track->lockWriter();	
-      if(this->mapping.size() <= 1){
+	    if(this->mapping.size() <= 1){
 				this->controller->removeAllFiles();
 			}else{
 				this->controller->removeFile(iter->second);
 			}
-      this->lock_remove_track->unlockWriter();
+      this->lock_mapping->unlockReader();
+      this->lock_mapping->lockWriter();
 			this->mapping.erase(pIndex);
+      this->lock_mapping->unlockWriter();
 			flag = true;
 		}else{
 			flag = false;
+      this->lock_mapping->unlockReader();
 		}
 	} 
+  this->lock_mapping->lockReader();
 	if(this->mapping.empty()) this->indexCount=0;
+  this->lock_mapping->unlockReader();
 	return flag;
 }
 

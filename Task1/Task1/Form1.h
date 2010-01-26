@@ -569,16 +569,23 @@ namespace Task1 {
 
 #pragma endregion
 
+private: void search_text(String^ searchstring){
+    
+		}
+
+
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
 		std::string searchterm ="";
 		MarshalString(this->tbSearch->Text, searchterm);
 
-		if(searchterm.empty()){
+    if(String::IsNullOrEmpty(this->tbSearch->Text)){
 			this->updateTitleListOutput(this->trackInfos, true);
 			this->tbSearch->Select();
 			return;
 		}
+
+    
 
 		CTrackInfo trackData;
 		//get id from trackSearch collection return -1 if search is not is collection
@@ -750,19 +757,15 @@ private: System::Void selectTrack_Click(System::Object^  sender, System::EventAr
 private: void clear_list() {
 
 		//clear all lists and GUI fields
+    this->lock_trackInfos->lockReader();
 		for(unsigned int i = 0; i < this->trackInfos->getSizeOfSortedMapping(); ++i){
 			int index = this->trackInfos->getElement(i).mIndex;
-			this->trackManager->removeTrack(index);
+      this->trackManager->removeTrack(index);
 		}
+    this->lock_trackInfos->unlockReader();
     this->lock_trackInfos->lockWriter();
     this->trackInfos->clearElements();
     this->lock_trackInfos->unlockWriter();
-
-		this->lbTracks->Items->Clear();
-		this->clearMP3Infos();
-		this->tbSearch->Text = "";
-		this->endAllSearches();
-
 }
 
 private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -771,17 +774,22 @@ private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^ 
     thread->start(); 
     thread->get_instance()->Join();
 
+    this->lbTracks->Items->Clear();
+		this->clearMP3Infos();
+		this->tbSearch->Text = "";
+		this->endAllSearches();
+
 		this->setButtonsEnabled(false);
 }
 
-private: void remove_track(String^ curItem){
+private: void remove_track(Object^ curItem){
 
 		
 
 			//String^ curItem = lbTracks->SelectedItem->ToString();
 
 			std::string name ="";
-			MarshalString(curItem, name);
+			MarshalString((String^)curItem, name);
 
 			//remove track
       this->lock_trackInfos->lockReader();

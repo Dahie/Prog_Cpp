@@ -35,8 +35,7 @@ class CTrackManager : public ITrackManager{
 		std::map<index_sz_type, MP3::CSortedTitles*> searches; // saves searches
 
     // Read/write locks
-    CReadWriteLock* lock_add_track;
-    CReadWriteLock* lock_remove_track;
+    CReadWriteLock* lock_mapping;
 
 };//class CTrackManager
 

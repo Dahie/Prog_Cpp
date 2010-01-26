@@ -18,12 +18,14 @@ WindowsThread::~WindowsThread(void)
 void WindowsThread::start(Object^ obj)
 {
   trd = gcnew Thread(myPThreadDelegate);
+  trd->SetApartmentState(ApartmentState::STA);
   trd->Start(obj);
 }
 
 void WindowsThread::start()
 {
   trd = gcnew Thread(myThreadDelegate);
+  trd->SetApartmentState(ApartmentState::STA);
   trd->Start();
 }
 
