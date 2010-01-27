@@ -127,11 +127,17 @@ enum Response CTracksController::addFile( const std::string& filePath ){
 }
 
 MP3::CMP3Audio* CTracksController::getFile( const std::string& name ){
-	return this->tracks->getTrack(name);
+  this->lock_tracks->lockReader();
+  MP3::CMP3Audio* audio = this->tracks->getTrack(name);
+  this->lock_tracks->unlockReader();
+	return audio;
 }
 
 MP3::CSortedTitles* CTracksController::getAllTitles( void ){
-	return this->sortedTitles;
+  this->lock_sorted_titles->lockReader();
+  MP3::CSortedTitles* titles = this->sortedTitles;
+  this->lock_sorted_titles->unlockReader();
+  return titles;
 }
 
 MP3::CSortedTitles* CTracksController::findTitles( const std::string& searchword ) const {
@@ -145,14 +151,21 @@ MP3::CSortedTitles* CTracksController::findTitles( const std::string& searchword
 }
 
 unsigned int CTracksController::getIndexLength() const {
-	return this->indexer->get_length();
+  this->lock_indexer->lockReader();
+  unsigned int length = this->indexer->get_length();
+  this->lock_indexer->unlockReader();
+	return length;
 }
 
 unsigned int CTracksController::getIndexCapacity() const {
-	return this->indexer->get_capacity();
+  this->lock_indexer->lockReader();
+  unsigned int capacity = this->indexer->get_capacity();
+  this->lock_indexer->unlockReader();
+  return capacity;
 }
 
 void CTracksController::outputListElements(){
+  // what does it output if the return value is void?
 	return this->indexer->outputListElements();
 }
 
@@ -176,7 +189,9 @@ void CTracksController::removeFile( const std::string& name ){
 
 
 	//remove title and all entries to words from indexer
+  this->lock_indexer->lockWriter();
 	this->indexer->remove(name);
+  this->lock_indexer->unlockWriter();
 
 	//if tracks with same title, rename them if necessary TODO: update indexer
 	if(flag){	
@@ -186,10 +201,18 @@ void CTracksController::removeFile( const std::string& name ){
 
 void CTracksController::removeAllFiles( void ){
 	//remove all tracks in both collections
+  this->lock_tracks->lockWriter();
 	this->tracks->clearTracks();
+  this->lock_tracks->unlockWriter();
+
+  this->lock_sorted_titles->lockWriter();
 	this->sortedTitles->clearTitles();
-	//remove all indizes in indexer
+  this->lock_sorted_titles->unlockWriter();
+  
+  //remove all indizes in indexer
+  this->lock_indexer->lockWriter();
 	this->indexer->clearIndices();
+  this->lock_indexer->unlockWriter();
 }
 
 void CTracksController::renameUniqueTitles( const std::string& name, const std::string& title ){
@@ -198,31 +221,44 @@ void CTracksController::renameUniqueTitles( const std::string& name, const std::
 		MP3::CTracks* help = new MP3::CTracks();
 		MP3::CSortedTitles* helpTitles = new MP3::CSortedTitles();
 
+    this->lock_tracks->lockReader();
 		MP3::CTracks::mp3_it iter = this->tracks->getBeginIterator();
 		for(iter; iter != this->tracks->getEndIterator(); ++iter){
-			if( title == iter->second->getTitle()
-        && compName < iter->first){
+			if( title == iter->second->getTitle() && compName < iter->first){
 				help->addTrack(compName, iter->second);
 				compName = iter->first;
 				helpTitles->addTitle(compName);
 			}
 		}
+    this->lock_tracks->unlockReader();
 
 		//delete all tracks with name from helpTitles
 		MP3::CSortedTitles::iterator it = helpTitles->getBeginIterator();
 		for(it; it != helpTitles->getEndIterator(); ++it){
+      this->lock_tracks->lockWriter();
 			this->tracks->eraseTrack(it->sTitleName);
-			this->sortedTitles->removeTitle(it->sTitleName);
-			this->indexer->remove(it->sTitleName);
-		}
+			this->lock_tracks->unlockWriter();
+      this->lock_sorted_titles->lockWriter();
+      this->sortedTitles->removeTitle(it->sTitleName);
+			this->lock_sorted_titles->unlockWriter();
+      this->lock_indexer->lockWriter();
+      this->indexer->remove(it->sTitleName);
+		  this->lock_indexer->unlockWriter();
+    }
 
 		//add tracks from help in both collection
 		iter = help->getBeginIterator();
 		for(iter; iter != help->getEndIterator(); ++iter){
+      this->lock_tracks->lockWriter();
 			this->tracks->addTrack(iter->first, iter->second);
-			this->sortedTitles->insertTitle(iter->first);
-			this->indexer->insert(iter->first);
-		}
+			this->lock_tracks->unlockWriter();
+      this->lock_sorted_titles->lockWriter();
+      this->sortedTitles->insertTitle(iter->first);
+			this->lock_sorted_titles->unlockWriter();
+      this->lock_indexer->lockWriter();
+      this->indexer->insert(iter->first);
+		  this->lock_indexer->unlockWriter();
+    }
 
 		delete helpTitles;
 		delete help;
