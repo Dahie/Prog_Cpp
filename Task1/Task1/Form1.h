@@ -39,18 +39,26 @@ namespace Task1 {
     CReadWriteLock* lock_trackInfos;
 		CTrackSearches* trackSearches;
   private: System::Windows::Forms::TextBox^  textBox_num_addrandom;
-  private: System::Windows::Forms::TextBox^  textBox_num_readrandom;
+
 
 
   private: System::Windows::Forms::Button^  button_start_addrandom;
 
-  private: System::Windows::Forms::Button^  button_start_readrandom;
+
 
            CReadWriteLock* lock_trackSearches;	
            CReadWriteLock* lock_adding;	
            CReadWriteLock* lock_removing;	
 	private: System::Windows::Forms::Timer^  timer1;
-			 CReadWriteLock* lock_clearing;	
+  private: System::Windows::Forms::Label^  label_randomaccess_laps;
+  private: System::Windows::Forms::TextBox^  textBox_randomaccess_laps;
+  private: System::Windows::Forms::Label^  label1;
+  private: System::Windows::Forms::Label^  label2;
+  private: System::Windows::Forms::CheckBox^  checkBox_add_threads;
+  private: System::Windows::Forms::CheckBox^  checkBox_remove_threads;
+
+
+           CReadWriteLock* lock_clearing;	
 	public:
 		Form1(void)
 		{
@@ -182,10 +190,14 @@ namespace Task1 {
       this->btAdd = (gcnew System::Windows::Forms::Button());
       this->btn_indexinfo = (gcnew System::Windows::Forms::Button());
       this->textBox_num_addrandom = (gcnew System::Windows::Forms::TextBox());
-      this->textBox_num_readrandom = (gcnew System::Windows::Forms::TextBox());
       this->button_start_addrandom = (gcnew System::Windows::Forms::Button());
-      this->button_start_readrandom = (gcnew System::Windows::Forms::Button());
       this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+      this->label_randomaccess_laps = (gcnew System::Windows::Forms::Label());
+      this->textBox_randomaccess_laps = (gcnew System::Windows::Forms::TextBox());
+      this->label1 = (gcnew System::Windows::Forms::Label());
+      this->label2 = (gcnew System::Windows::Forms::Label());
+      this->checkBox_add_threads = (gcnew System::Windows::Forms::CheckBox());
+      this->checkBox_remove_threads = (gcnew System::Windows::Forms::CheckBox());
       this->statusStrip1->SuspendLayout();
       this->gbMP3Infos->SuspendLayout();
       this->gbTracks->SuspendLayout();
@@ -562,23 +574,16 @@ namespace Task1 {
       this->btn_indexinfo->TabIndex = 30;
       this->btn_indexinfo->Text = L"Index Info";
       this->btn_indexinfo->UseVisualStyleBackColor = true;
+      this->btn_indexinfo->Visible = false;
       this->btn_indexinfo->Click += gcnew System::EventHandler(this, &Form1::btn_indexinfo_Click);
       // 
       // textBox_num_addrandom
       // 
       this->textBox_num_addrandom->Location = System::Drawing::Point(404, 287);
       this->textBox_num_addrandom->Name = L"textBox_num_addrandom";
-      this->textBox_num_addrandom->Size = System::Drawing::Size(87, 20);
+      this->textBox_num_addrandom->Size = System::Drawing::Size(41, 20);
       this->textBox_num_addrandom->TabIndex = 34;
-      this->textBox_num_addrandom->Text = L"1";
-      // 
-      // textBox_num_readrandom
-      // 
-      this->textBox_num_readrandom->Location = System::Drawing::Point(403, 375);
-      this->textBox_num_readrandom->Name = L"textBox_num_readrandom";
-      this->textBox_num_readrandom->Size = System::Drawing::Size(89, 20);
-      this->textBox_num_readrandom->TabIndex = 35;
-      this->textBox_num_readrandom->Text = L"1";
+      this->textBox_num_addrandom->Text = L"5";
       // 
       // button_start_addrandom
       // 
@@ -586,18 +591,9 @@ namespace Task1 {
       this->button_start_addrandom->Name = L"button_start_addrandom";
       this->button_start_addrandom->Size = System::Drawing::Size(88, 35);
       this->button_start_addrandom->TabIndex = 36;
-      this->button_start_addrandom->Text = L"Start Random Add";
+      this->button_start_addrandom->Text = L"Start Random Add/Remove";
       this->button_start_addrandom->UseVisualStyleBackColor = true;
       this->button_start_addrandom->Click += gcnew System::EventHandler(this, &Form1::button_start_addrandom_Click);
-      // 
-      // button_start_readrandom
-      // 
-      this->button_start_readrandom->Location = System::Drawing::Point(404, 401);
-      this->button_start_readrandom->Name = L"button_start_readrandom";
-      this->button_start_readrandom->Size = System::Drawing::Size(88, 35);
-      this->button_start_readrandom->TabIndex = 37;
-      this->button_start_readrandom->Text = L"Start Random Read";
-      this->button_start_readrandom->UseVisualStyleBackColor = true;
       // 
       // timer1
       // 
@@ -605,14 +601,74 @@ namespace Task1 {
       this->timer1->Interval = 300;
       this->timer1->Tick += gcnew System::EventHandler(this, &Form1::updateLoop);
       // 
+      // label_randomaccess_laps
+      // 
+      this->label_randomaccess_laps->AutoSize = true;
+      this->label_randomaccess_laps->Location = System::Drawing::Point(400, 360);
+      this->label_randomaccess_laps->Name = L"label_randomaccess_laps";
+      this->label_randomaccess_laps->Size = System::Drawing::Size(0, 13);
+      this->label_randomaccess_laps->TabIndex = 38;
+      // 
+      // textBox_randomaccess_laps
+      // 
+      this->textBox_randomaccess_laps->Location = System::Drawing::Point(451, 287);
+      this->textBox_randomaccess_laps->Name = L"textBox_randomaccess_laps";
+      this->textBox_randomaccess_laps->Size = System::Drawing::Size(41, 20);
+      this->textBox_randomaccess_laps->TabIndex = 39;
+      this->textBox_randomaccess_laps->Text = L"5";
+      // 
+      // label1
+      // 
+      this->label1->AutoSize = true;
+      this->label1->Location = System::Drawing::Point(402, 268);
+      this->label1->Name = L"label1";
+      this->label1->Size = System::Drawing::Size(46, 13);
+      this->label1->TabIndex = 40;
+      this->label1->Text = L"Threads";
+      // 
+      // label2
+      // 
+      this->label2->AutoSize = true;
+      this->label2->Location = System::Drawing::Point(448, 268);
+      this->label2->Name = L"label2";
+      this->label2->Size = System::Drawing::Size(30, 13);
+      this->label2->TabIndex = 41;
+      this->label2->Text = L"Laps";
+      // 
+      // checkBox_add_threads
+      // 
+      this->checkBox_add_threads->AutoSize = true;
+      this->checkBox_add_threads->Checked = true;
+      this->checkBox_add_threads->CheckState = System::Windows::Forms::CheckState::Checked;
+      this->checkBox_add_threads->Location = System::Drawing::Point(507, 287);
+      this->checkBox_add_threads->Name = L"checkBox_add_threads";
+      this->checkBox_add_threads->Size = System::Drawing::Size(102, 17);
+      this->checkBox_add_threads->TabIndex = 42;
+      this->checkBox_add_threads->Text = L"use add-threads";
+      this->checkBox_add_threads->UseVisualStyleBackColor = true;
+      // 
+      // checkBox_remove_threads
+      // 
+      this->checkBox_remove_threads->AutoSize = true;
+      this->checkBox_remove_threads->Location = System::Drawing::Point(507, 313);
+      this->checkBox_remove_threads->Name = L"checkBox_remove_threads";
+      this->checkBox_remove_threads->Size = System::Drawing::Size(119, 17);
+      this->checkBox_remove_threads->TabIndex = 43;
+      this->checkBox_remove_threads->Text = L"use remove-threads";
+      this->checkBox_remove_threads->UseVisualStyleBackColor = true;
+      // 
       // Form1
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
       this->ClientSize = System::Drawing::Size(622, 531);
-      this->Controls->Add(this->button_start_readrandom);
+      this->Controls->Add(this->checkBox_remove_threads);
+      this->Controls->Add(this->checkBox_add_threads);
+      this->Controls->Add(this->label2);
+      this->Controls->Add(this->label1);
+      this->Controls->Add(this->textBox_randomaccess_laps);
+      this->Controls->Add(this->label_randomaccess_laps);
       this->Controls->Add(this->button_start_addrandom);
-      this->Controls->Add(this->textBox_num_readrandom);
       this->Controls->Add(this->textBox_num_addrandom);
       this->Controls->Add(this->btn_indexinfo);
       this->Controls->Add(this->btAdd);
@@ -764,7 +820,7 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
 }
 
 private: System::Void add_file_controller(System::Array^ filenames, int i, bool displayPopup) { 
-           this->lock_adding->lockWriter();
+      this->lock_adding->lockWriter();
       CTrackInfo trackData;
 	  	int feedback;
       //convert String^ filename into std::string
@@ -936,8 +992,8 @@ private: System::Void setButtonsEnabled(bool flag) {
 		this->btClear->Enabled = flag;
 		this->btRemove->Enabled = flag;
 		this->btAdd->Enabled = flag;
-		this->tbSearch->Enabled = flag;
-		this->cbSearch->Enabled = flag;
+		//this->tbSearch->Enabled = flag;
+		//this->cbSearch->Enabled = flag;
 
 		this->btOpen->Enabled = !flag;
 		if(!flag)
@@ -1061,8 +1117,9 @@ private: void removing_random()  {
 
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {}
 private: System::Void button_start_addrandom_Click(System::Object^  sender, System::EventArgs^  e) {
-    signed int num_random_threads = Convert::ToInt32(this->textBox_num_addrandom->Text);
-    
+    int num_random_threads = Convert::ToInt32(this->textBox_num_addrandom->Text);
+    int num_random_laps = Convert::ToInt32(this->textBox_randomaccess_laps->Text);
+
     OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog();
 		openFileDialog1->Multiselect = true;
 		openFileDialog1->Filter = "MP3Audio *.MP3|*.mp3";
@@ -1072,41 +1129,42 @@ private: System::Void button_start_addrandom_Click(System::Object^  sender, Syst
 		// a .mp3 file was selected, open it.
 		if ( openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK ){
 
-      for(int n = 5; n < 5; ++n;) {
+      for(int n = 0; n < num_random_laps; ++n) {
+
+        this->label_randomaccess_laps->Text = "Thread lap " + n;
+
           // start adding threads
-          for(int i = 0; i < num_random_threads;++i) { 
-             // create random adding thread
-            WindowsThread^ athread = gcnew WindowsThread(gcnew ParameterizedThreadStart(this, &Form1::adding_random));
-            athread->start(openFileDialog1->FileNames); 
-            //athread->get_instance()->Join();
-            Sleep(5);
+          if(this->checkBox_add_threads->Checked == true) {
+              for(int i = 0; i < num_random_threads;++i) { 
+                   // create random adding thread
+                  WindowsThread^ athread = gcnew WindowsThread(gcnew ParameterizedThreadStart(this, &Form1::adding_random));
+                  athread->start(openFileDialog1->FileNames); 
+                  //athread->get_instance()->Join();
+                  Sleep(5);
+              }
           }
 
           // start removing threads
-			    for(int i = 0; i < num_random_threads;++i) { 
-             // create random adding thread
-            WindowsThread^ athread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::removing_random));
-            athread->start(); 
-            //athread->get_instance()->Join();
-            Sleep(5);
+          if(this->checkBox_remove_threads->Checked == true) {
+			        for(int i = 0; i < num_random_threads;++i) { 
+                   // create random adding thread
+                  WindowsThread^ athread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::removing_random));
+                  athread->start(); 
+                  //athread->get_instance()->Join();
+                  Sleep(5);
+              }
           }
           Sleep(200);
         }
+         this->label_randomaccess_laps->Text = "Threadtest concluded";
       }
    }
 
 private: System::Void updateLoop(System::Object^  sender, System::EventArgs^  e) {
-
-	//liste mit threads abfragen (l)
-
-	//wie ist status der threads, wenn thread finished aus list raus
-	//2 Liste welche sollen gelöscht werden
-	//2 schleife, in der die die gelöscht werden sollen auch geläscht werden
-            int selected_index = this->lbTracks->SelectedIndex;
-	this->updateTitleListOutput(this->trackInfos, true);
-  this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
-  this->lbTracks->SelectedIndex = selected_index;
-
+	      int selected_index = this->lbTracks->SelectedIndex;
+        this->updateTitleListOutput(this->trackInfos, true);
+        this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
+        this->lbTracks->SelectedIndex = selected_index;
 }
 
 };//class Form1
