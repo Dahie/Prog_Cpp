@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 #include "TrackManagerFactory.h"
 #include "SortedTrackInfos.h"
 #include "TrackSearches.h"
@@ -638,23 +639,23 @@ namespace Task1 {
 
 #pragma endregion
 
-private: void search_text(String^ searchstring){
+private: void search_text(){
     
-		}
+}
 
 
 private: System::Void searchField_textChanged(System::Object^  sender, System::EventArgs^  e) {
 
-		std::string searchterm ="";
-		MarshalString(this->tbSearch->Text, searchterm);
-
+		
     if(String::IsNullOrEmpty(this->tbSearch->Text)){
 			this->updateTitleListOutput(this->trackInfos, true);
 			this->tbSearch->Select();
 			return;
 		}
 
-    
+     std::string searchterm ="";
+		MarshalString(this->tbSearch->Text, searchterm);
+
 
 		CTrackInfo trackData;
 		//get id from trackSearch collection return -1 if search is not is collection
@@ -679,10 +680,13 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 			searchinfo.searchterm = searchterm;
 			searchinfo.trackInfos = searchResults;
 
+      this->lock_trackSearches->lockWriter();
 			this->trackSearches->addTrackSearch(id, searchinfo);
-			//add searchterm to dropdown list of searchfield in gui
+			this->lock_trackSearches->unlockWriter();
+      //add searchterm to dropdown list of searchfield in gui
 			//if(resultCount > 0) //add only if there are results for this searchterm
-			this->cbSearch->Items->Add(gcnew String(searchterm.c_str()));
+      
+      this->cbSearch->Items->Add(gcnew String(searchterm.c_str()));
 		}
 
 		if(!searchResults->isEmpty()){
@@ -693,7 +697,12 @@ private: System::Void searchField_textChanged(System::Object^  sender, System::E
 			this->clearMP3Infos();
 		}
 		this->tbSearch->Select();
-		
+
+    // this as writer thread
+    /*WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::search_text));
+    thread->start(); 
+    thread->get_instance()->Join();
+		*/
 }
 
 private: System::Void search_SelectClick(System::Object^  sender, System::EventArgs^  e) {
@@ -1014,7 +1023,7 @@ private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::
 
 
 private: void adding_random(Object^ files)  { 
-   srand( (int)time(NULL));
+   srand((int)time(NULL));
    int random_time = rand() % 500;
     System::Array^ filenames = (System::Array^)files;
     Thread::Sleep( random_time );
