@@ -46,6 +46,9 @@ namespace Task1 {
   private: System::Windows::Forms::Button^  button_start_readrandom;
 
            CReadWriteLock* lock_trackSearches;	
+           CReadWriteLock* lock_adding;	
+           CReadWriteLock* lock_removing;	
+           CReadWriteLock* lock_clearing;	
 	public:
 		Form1(void)
 		{
@@ -59,6 +62,10 @@ namespace Task1 {
       lock_trackInfos = new CReadWriteLock();
 			trackSearches = new CTrackSearches();
       lock_trackSearches = new CReadWriteLock();
+
+      lock_adding = new CReadWriteLock();
+      lock_removing = new CReadWriteLock();
+      lock_clearing = new CReadWriteLock();
 
 			if( (!trackManager) || (!trackInfos) || (!trackSearches) ){
 				System::Windows::Forms::MessageBox::Show("\nERROR: No memory access. Some components failed to load.\n\n"+
@@ -699,14 +706,14 @@ static void ThreadProc()
    }
 
 private: System::Void btn_indexinfo_Click(System::Object^  sender, System::EventArgs^  e) {
-     /* unsigned int length = this->tracksController->getIndexLength();
+      /*unsigned int length = this->tracksController->getIndexLength();
       unsigned int capacity = this->tracksController->getIndexCapacity();
       MessageBox::Show("Length: " + length + "\n" + "Capacity: " + capacity);
 	  this->tracksController->outputListElements();*/
  //Thread^ oThread = gcnew Thread( gcnew ThreadStart( &Form1::ThreadProc ) );
 //oThread->Start();
-  WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(&Form1::ThreadProc));
-  thread->start();
+  //WindowsThread^ thread = gcnew WindowsThread(gcnew ThreadStart(&Form1::ThreadProc));
+  //thread->start();
 }
 
 private: void open_click() {
@@ -738,8 +745,8 @@ private: System::Void btOpen_Click(System::Object^ sender, System::EventArgs^ e)
     this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
 }
 
-private: System::Void add_file_controller(System::Array^ filenames, int i) { 
-      
+private: System::Void add_file_controller(System::Array^ filenames, int i, bool displayPopup) { 
+           this->lock_adding->lockWriter();
       CTrackInfo trackData;
 	  	int feedback;
       //convert String^ filename into std::string
@@ -750,25 +757,28 @@ private: System::Void add_file_controller(System::Array^ filenames, int i) {
 			feedback = this->trackManager->addTrack(target, trackData);
 			switch(feedback){
 				case -2:{ 
-					
-					System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
-					+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
-					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+          if(displayPopup) {
+					  System::Windows::Forms::MessageBox::Show("\nSelected file is NOT a mp3 file ( *.MP3 | *.mp3 ) !\n\n\nFAILED TO LOAD:\n\n\""
+					    +filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
+					    System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+          }
 					//this->tbSearch->Text = "";
 					//lbTracks->Select();
 					break;
 				}
 				case -3:{ 
-
-					MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
-					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+          if(displayPopup) {
+					  MessageBox::Show("\nERROR: No memory access. \n\n\nFollowing file failed to load:\n\n\""+filenames->GetValue(i)->ToString()+"\"\n\n","MP3 Tagger",
+					  System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
+          }
 					//this->tbSearch->Text = "";
 					//lbTracks->Select();
 					break;
 				}
 				case INVALID_INDEX:{
-
-					MessageBox::Show("mp3-File \""+filenames->GetValue(i)->ToString()+"\" already exists");
+          if(displayPopup) {
+					  MessageBox::Show("mp3-File \""+filenames->GetValue(i)->ToString()+"\" already exists");
+          }
 					//this->tbSearch->Text = "";
 					//lbTracks->Select();
 					break;
@@ -786,11 +796,12 @@ private: System::Void add_file_controller(System::Array^ filenames, int i) {
 					break;
 				}
 			}//end of switch
-         }
+      this->lock_adding->unlockWriter();
+}
 
 private: System::Void openAllFiles(System::Array^ filenames){
     for(int i=0; i<filenames->Length; ++i){
-      add_file_controller(filenames, i);
+      add_file_controller(filenames, i, true);
 		}//end of for loop
 }
 
@@ -809,7 +820,7 @@ private: System::Void selectTrack_Click(System::Object^  sender, System::EventAr
 }
 
 private: void clear_list() {
-
+    this->lock_clearing->lockWriter();
 		//clear all lists and GUI fields
     this->lock_trackInfos->lockReader();
 		for(unsigned int i = 0; i < this->trackInfos->getSizeOfSortedMapping(); ++i){
@@ -820,6 +831,7 @@ private: void clear_list() {
     this->lock_trackInfos->lockWriter();
     this->trackInfos->clearElements();
     this->lock_trackInfos->unlockWriter();
+    this->lock_clearing->unlockWriter();
 }
 
 private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -837,7 +849,7 @@ private: System::Void btClear_Click(System::Object^  sender, System::EventArgs^ 
 }
 
 private: void remove_track(Object^ curItem){
-
+           this->lock_removing->lockWriter();
 			//String^ curItem = lbTracks->SelectedItem->ToString();
 
 			std::string name ="";
@@ -850,7 +862,7 @@ private: void remove_track(Object^ curItem){
       this->lock_trackInfos->lockWriter();
 			this->trackInfos->removeElement(name);
 			this->lock_trackInfos->unlockWriter();
-    
+      this->lock_removing->unlockWriter();
 }
 
 private: System::Void btRemoveClick(System::Object^  sender, System::EventArgs^  e) {
@@ -1006,21 +1018,40 @@ private: System::Void dragFileDrop(System::Object^  /*sender*/,System::Windows::
 
 
 private: void adding_random(Object^ files)  { 
-           srand(time(NULL));
-           int random_time = rand() % 500;
+   srand(time(NULL));
+   int random_time = rand() % 500;
     System::Array^ filenames = (System::Array^)files;
     Thread::Sleep( random_time );
     int num_files = filenames->Length;
 
-    MessageBox::Show("ThreadProc: " + random_time + " and files "+num_files+"\n" );
+    //MessageBox::Show("ThreadProc: " + random_time + " and files "+num_files+"\n" );
 
     // add file to controller
     int i = random_time % num_files;
-    add_file_controller(filenames, i);
+    add_file_controller(filenames, i, false);
 }
 
-private: static void removing_random()  { 
-       
+private: void removing_random()  { 
+           
+    srand(time(NULL));
+   int random_time = rand() % 500;
+    Thread::Sleep( random_time );
+    this->lock_removing->lockWriter();
+    int num_files = this->lbTracks->Items->Count;
+
+    //MessageBox::Show("ThreadProc: " + random_time + " and files "+num_files+"\n" );
+
+    // remove file to controller
+    if(num_files > 0) {
+      int i = random_time % num_files;
+      this->lock_trackInfos->lockReader();
+			this->trackManager->removeTrack(i);
+      this->lock_trackInfos->unlockReader();
+      /*this->lock_trackInfos->lockWriter();
+			this->trackInfos->removeElement(name);
+			this->lock_trackInfos->unlockWriter();*/
+    }
+    this->lock_removing->unlockWriter();
 }
 
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {}
@@ -1040,7 +1071,7 @@ private: System::Void button_start_addrandom_Click(System::Object^  sender, Syst
         WindowsThread^ athread = gcnew WindowsThread(gcnew ParameterizedThreadStart(this, &Form1::adding_random));
         athread->start(openFileDialog1->FileNames); 
         //athread->get_instance()->Join();
-        Thread::Sleep( 50 );
+        Sleep(500);
       }
 
 
@@ -1049,6 +1080,21 @@ private: System::Void button_start_addrandom_Click(System::Object^  sender, Syst
     this->lock_trackInfos->lockReader();
 		this->updateTitleListOutput(this->trackInfos, true);
     this->lock_trackInfos->unlockReader();*/
+
+			for(unsigned int i = 0; i < num_random_threads;++i) { 
+         // create random adding thread
+        WindowsThread^ athread = gcnew WindowsThread(gcnew ThreadStart(this, &Form1::removing_random));
+        athread->start(); 
+        //athread->get_instance()->Join();
+        Sleep(500);
+      }
+
+      
+       //show tracks in listbox
+    this->lock_trackInfos->lockReader();
+		this->updateTitleListOutput(this->trackInfos, true);
+    this->lock_trackInfos->unlockReader();
+    this->setButtonsEnabled(this->lbTracks->Items->Count>=1);
     }
    }
 };//class Form1
